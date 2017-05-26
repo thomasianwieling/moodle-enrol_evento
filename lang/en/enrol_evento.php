@@ -26,3 +26,5 @@ $string['pluginname'] = 'Evento Enrolment';
 $string['pluginname_desc'] = 'Evento Enrolment description';
 $string['enrolinstancedefaults'] = 'Defaults';
 $string['enrolinstancedefaults_desc'] = 'Defaults description';
+$string['accounttype'] = 'Accounttype';
+$string['accounttype_desc'] = 'Type of the account to create new users';

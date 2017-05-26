@@ -49,7 +49,6 @@ class enrol_evento_plugin extends enrol_plugin {
         return false;
     }
 
-
     /**
      * Return true if we can add a new instance to this course.
      *
@@ -62,13 +61,13 @@ class enrol_evento_plugin extends enrol_plugin {
         return true;
     }
 
-
     /**
      * Add new instance of enrol plugin with default settings.
      * @param stdClass $course
      * @return int id of new instance, null if can not be created
      */
     public function add_default_instance($course) {
+        // Todo? set instance fields ?.
         /*
         $expirynotify = $this->get_config('expirynotify', 0);
         if ($expirynotify == 2) {
@@ -86,7 +85,7 @@ class enrol_evento_plugin extends enrol_plugin {
             'expirythreshold' => $this->get_config('expirythreshold', 86400),
         );
         */
-        // Todo?
+
         return $this->add_instance($course, $fields);
     }
 
@@ -146,7 +145,6 @@ class enrol_evento_plugin extends enrol_plugin {
         // override if necessary Todo? or delete
         // Probably better no sync durring login
     }
-
 
     /**
      * Restore instance and map settings.
@@ -223,7 +221,6 @@ class enrol_evento_plugin extends enrol_plugin {
         role_assign($roleid, $userid, $contextid, '', 0);
     }
 
-
     /**
      * Is it possible to delete enrol instance via standard UI?
      *
@@ -245,8 +242,6 @@ class enrol_evento_plugin extends enrol_plugin {
         $context = context_course::instance($instance->courseid);
         return has_capability('enrol/evento:config', $context);
     }
-
-
 
     /**
      * We are a good plugin and don't invent our own UI/validation code path.

@@ -33,4 +33,6 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_heading('enrol_evento_defaults',
         get_string('enrolinstancedefaults', 'enrol_evento'), get_string('enrolinstancedefaults_desc', 'enrol_evento')));
 
+    $settings->add(new admin_setting_configtext('enrol_evento/accounttype',
+        new lang_string('accounttype', 'enrol_evento'), new lang_string('accounttype_desc', 'enrol_evento'), 'shibboleth', PARAM_TEXT));
 }
