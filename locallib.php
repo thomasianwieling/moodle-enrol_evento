@@ -51,6 +51,7 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
         // Init.
         $config = get_config('enrol_evento');
         $plugin = enrol_get_plugin('evento');
+        // Todo verify that the service responds to our requests.
         $evenotservice = new local_evento_evento_service();
         // Todo move this array to settings.
         // Valid Anlass-Anmeldungen for student enrolment.
@@ -81,7 +82,7 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
         $instances = array();
 
         // Selects all active enrolments in unfinished courses.
-        // No enrolment if course enddate is reached or the cours is hidden.
+        // No enrolment if course enddate is reached or the course is hidden.
         $sql = "SELECT e.*, c.idnumber, cx.id AS contextid
                 FROM {enrol} e
                 JOIN {context} cx ON (cx.instanceid = e.courseid AND cx.contextlevel = :courselevel)
@@ -106,10 +107,13 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
                 $entolledusersids = array();
 
                 // Get event id and data.
-                $event = $evenotservice->get_event_by_number(trim($ce->idnumber));
+                $anlassnbr = trim($ce->idnumber);
+                // FIXME if the enrollment mehthod has configured its own evento number, we use that one.
+                $event = $evenotservice->get_event_by_number($anlassnbr);
+                // TODO: if we get an bad response from the service, such as a timeout, we should STOP => exception.
+
                 // Get event participants enrolments.
                 $enrolments = $evenotservice->get_enrolments_by_eventid($event->idAnlass);
-
 
                 if (!is_array($enrolments)) {
                     // Create an array with one item.
@@ -136,7 +140,7 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
 
                         unset($u);
                     } catch (Exception $ex) {
-                        debugging("Enrolemnt sync of user evento personid: {$ee->idPerson} aborted with error: {$ex->message}");
+                        debugging("Enrolemnt sync of user evento personid: {$ee->idPerson} aborted with error: ". $ex->getMessage());
                         $trace->output('...user enrolment synchronisation aborted unexpected during sync of enrolment with evento personid: {$ee->idPerson}');
                     }
                 }
@@ -157,26 +161,38 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
                         $entolledusersids[] = $u->id;
                         $trace->output("enroling user {$u->id} in course {$instance->courseid} as an editingteacher", 1);
                     } catch (Exception $ex) {
-                        debugging("Enrolemnt sync of user evento personid: {$teacher->anlassLtgIdPerson} aborted with error: {$ex->message}");
+                        debugging("Enrolemnt sync of user evento personid: {$teacher->anlassLtgIdPerson} aborted with error: ". $ex->getMessage());
                         $trace->output("...user enrolment synchronisation aborted unexpected during sync of enrolment with evento personid: {$teacher->anlassLtgIdPerson}");
                     }
                 }
 
                 // Suspend users that are already enrolled in moodle, but not anymore in evento.
+                // Get moodle enrolments.
                 $allenrolledusers = $DB->get_records('user_enrolments', array('enrolid' => $ce->id, 'status' => ENROL_USER_ACTIVE), 'userid', 'userid');
-                foreach ($allenrolledusers as $enrolleduser) {
-                    try {
-                        if (!in_array($enrolleduser->userid, $entolledusersids)) {
-                            $plugin->update_user_enrol($instance, $enrolleduser->userid, ENROL_USER_SUSPENDED);
-                            $trace->output("suspending expired user {$enrolleduser->userid} in course {$instance->courseid}", 1);
+                if (!empty($allenrolledusers)) {
+                    // Suspend only, if there are enrolments in evento
+                    if (!empty($enrolments)) {
+
+                        foreach ($allenrolledusers as $enrolleduser) {
+                            try {
+                                // Suspend only, if there are enrolments in evento
+                                if (!in_array($enrolleduser->userid, $entolledusersids)) {
+                                    $plugin->update_user_enrol($instance, $enrolleduser->userid, ENROL_USER_SUSPENDED);
+                                    $trace->output("suspending expired user {$enrolleduser->userid} in course {$instance->courseid}", 1);
+                                }
+
+                            } catch (Exception $ex) {
+                                debugging("Error durring suspending of user with id: {$enrolleduser->userid} aborted with error: ". $ex->getMessage());
+                                $trace->output("...user enrolment synchronisation aborted unexpected during suspending with userid: {$enrolleduser->userid}");
+                            }
                         }
-                    } catch (Exception $ex) {
-                        debugging("Error durring suspending of user with id: {$enrolleduser->userid} aborted with error: {$ex->message}");
-                        $trace->output("...user enrolment synchronisation aborted unexpected during suspending with userid: {$enrolleduser->userid}");
+                    } else {
+                        debugging("not processing suspending, because no evento enrollments gotten for evento.idAnlass: {$event->idAnlass}");
+                        $trace->output("...not processing suspending, because no evento enrollments gotten for evento.idAnlass: {$event->idAnlass}");
                     }
                 }
             } catch (Exception $ex) {
-                debugging("Instance with id {$ce->id} aborted with error: {$ex->message}");
+                debugging("Instance with id {$ce->id} aborted with error: ". $ex->getMessage());
                 $trace->output("...user enrolment synchronisation aborted unexpected during sync of enrol instance id: {$ce->id}");
             }
         }
@@ -185,7 +201,7 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
 
         $trace->output('...user enrolment synchronisation finished.');
     } catch (Exeption $ex) {
-        debugging("Error: {$ex->message}");
+        debugging("Error: ". $ex->getMessage());
         $trace->output('...user enrolment synchronisation aborted unexpected');
         return 1;
     }
@@ -224,6 +240,7 @@ function enrol_evento_get_user($evenotservice, $eventopersonid, $username=null, 
             enrol_evento_set_user_eventoid($u->id, $eventopersonid);
         }
     }
+    // Todo remove this if
     if (!$u) {
         // Instead of shibboleth use the email for searching.
         // Remove this if condition if the searching with shibbolethid works.
@@ -233,7 +250,17 @@ function enrol_evento_get_user($evenotservice, $eventopersonid, $username=null, 
         }
     }
     if (!$u) {
-        // Create an user.
+        // Check if the shibbolethid is set.
+        // Todo an implementiation something like this.
+        /*
+        if (!property_exists($person, 'shibbolethid') && empty($person->shibbolethid)
+            || property_exists($person, 'shibbolethid') && empty($person->shibbolethid)){
+            debugging('cannot create user: shibbolethid of the person with eventoid {$eventopersonid} not set', DEBUG_DEVELOPER);
+            // Todo throw an Exeption... instead of return null
+            return null;
+        }
+        */
+        // Create a user.
         require_once($CFG->dirroot . "/user/lib.php");
         $config = get_config('enrol_evento');
 
