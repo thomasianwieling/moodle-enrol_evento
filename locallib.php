@@ -53,9 +53,8 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
         $plugin = enrol_get_plugin('evento');
         // Todo verify that the service responds to our requests.
         $evenotservice = new local_evento_evento_service();
-        // Todo move this array to settings.
-        // Valid Anlass-Anmeldungen for student enrolment.
-        $enrolstateids = array(20208, 20215, 20225, 20240, 20245, 20270, 20275, 20281, 20282, 20284, 20286, 20288);
+        // Valid Evento enrolmentstate for student enrolment.
+        $enrolstateids = explode(",", preg_replace('/\s+/', '', $config->evenrolmentstate));
 
         // Unfortunately this may take a long time, execution can be interrupted safely here.
         core_php_time_limit::raise();
@@ -114,11 +113,7 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
 
                 // Get event participants enrolments.
                 $enrolments = $evenotservice->get_enrolments_by_eventid($event->idAnlass);
-
-                if (!is_array($enrolments)) {
-                    // Create an array with one item.
-                    $enrolments = array(1 => $enrolments);
-                }
+                $enrolments = to_array($enrolments);
 
                 // Enrol students.
                 foreach ($enrolments as $ee) {
@@ -139,19 +134,21 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
                         }
 
                         unset($u);
+                    } catch (SoapFault $fault) {
+                        debugging("Soapfault : ". $fault->__toString());
+                        $trace->output("...user enrolment synchronisation aborted unexpected with a soapfault during sync of the enrolment with evento personid: {$ee->idPerson}");
                     } catch (Exception $ex) {
+                        debugging("Enrolemnt sync of user evento personid: {$ee->idPerson} aborted with error: ". $ex->getMessage());
+                        $trace->output('...user enrolment synchronisation aborted unexpected during sync of enrolment with evento personid: {$ee->idPerson}');
+                    } catch (Throwable $ex) {
                         debugging("Enrolemnt sync of user evento personid: {$ee->idPerson} aborted with error: ". $ex->getMessage());
                         $trace->output('...user enrolment synchronisation aborted unexpected during sync of enrolment with evento personid: {$ee->idPerson}');
                     }
                 }
 
                 // Enrol teachers.
-                $eventteachers = array();
-                if (!is_array($event->array_EventoAnlassLeitung)) {
-                    $eventteachers[0] = $event->array_EventoAnlassLeitung;
-                } else {
-                    $eventteachers = $event->array_EventoAnlassLeitung;
-                }
+                $eventteachers = to_array($event->array_EventoAnlassLeitung);
+
                 foreach ($eventteachers as $teacher) {
                     try {
                         // Get or create the moodle user.
@@ -160,7 +157,13 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
                         $plugin->enrol_user($instance, $u->id, $eteacherroleid, $timestart, $timeend, ENROL_USER_ACTIVE);
                         $entolledusersids[] = $u->id;
                         $trace->output("enroling user {$u->id} in course {$instance->courseid} as an editingteacher", 1);
+                    } catch (SoapFault $fault) {
+                        debugging("Soapfault : ". $fault->__toString());
+                        $trace->output("...user enrolment synchronisation aborted unexpected with a soapfault during sync of the enrolment with evento personid: {$ee->idPerson}");
                     } catch (Exception $ex) {
+                        debugging("Enrolemnt sync of user evento personid: {$teacher->anlassLtgIdPerson} aborted with error: ". $ex->getMessage());
+                        $trace->output("...user enrolment synchronisation aborted unexpected during sync of enrolment with evento personid: {$teacher->anlassLtgIdPerson}");
+                    } catch (Throwable $ex) {
                         debugging("Enrolemnt sync of user evento personid: {$teacher->anlassLtgIdPerson} aborted with error: ". $ex->getMessage());
                         $trace->output("...user enrolment synchronisation aborted unexpected during sync of enrolment with evento personid: {$teacher->anlassLtgIdPerson}");
                     }
@@ -180,8 +183,10 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
                                     $plugin->update_user_enrol($instance, $enrolleduser->userid, ENROL_USER_SUSPENDED);
                                     $trace->output("suspending expired user {$enrolleduser->userid} in course {$instance->courseid}", 1);
                                 }
-
                             } catch (Exception $ex) {
+                                debugging("Error durring suspending of user with id: {$enrolleduser->userid} aborted with error: ". $ex->getMessage());
+                                $trace->output("...user enrolment synchronisation aborted unexpected during suspending with userid: {$enrolleduser->userid}");
+                            } catch (Throwable $ex) {
                                 debugging("Error durring suspending of user with id: {$enrolleduser->userid} aborted with error: ". $ex->getMessage());
                                 $trace->output("...user enrolment synchronisation aborted unexpected during suspending with userid: {$enrolleduser->userid}");
                             }
@@ -194,6 +199,9 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
             } catch (Exception $ex) {
                 debugging("Instance with id {$ce->id} aborted with error: ". $ex->getMessage());
                 $trace->output("...user enrolment synchronisation aborted unexpected during sync of enrol instance id: {$ce->id}");
+            } catch (Throwable $ex) {
+                debugging("Instance with id {$ce->id} aborted with error: ". $ex->getMessage());
+                $trace->output("...user enrolment synchronisation aborted unexpected during sync of enrol instance id: {$ce->id}");
             }
         }
         $rs->close();
@@ -201,6 +209,10 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
 
         $trace->output('...user enrolment synchronisation finished.');
     } catch (Exeption $ex) {
+        debugging("Error: ". $ex->getMessage());
+        $trace->output('...user enrolment synchronisation aborted unexpected');
+        return 1;
+    } catch (Throwable $ex) {
         debugging("Error: ". $ex->getMessage());
         $trace->output('...user enrolment synchronisation aborted unexpected');
         return 1;
@@ -214,60 +226,68 @@ function enrol_evento_sync(progress_trace $trace, $courseid = null) {
  *
  * @param local_evento_evento_service $evenotservice
  * @param int $eventopersonid
+ * @param bool $isstudent get the student Account
  * @param int $username
  * @param int $email
  * @param int $firstname
  * @param int $lastname
  * @return a fieldset object for the user
  */
-function enrol_evento_get_user($evenotservice, $eventopersonid, $username=null, $email=null, $firstname=null, $lastname=null) {
+function enrol_evento_get_user($evenotservice, $eventopersonid, $isstudent=true, $username=null, $email=null, $firstname=null, $lastname=null) {
     global $DB, $CFG;
 
-    // Todo permission check.
-    $u = enrol_evento_get_user_by_eventoid($eventopersonid);
+    // Get the Active Directory User by evento ID.
+    $adusers = to_array($evenotservice->get_ad_accounts_by_evento_personid($eventopersonid, true, $isstudent));
+    if (!empty($adusers)) {
+        if (count($adusers) == 1) {
+            $aduser = reset($adusers);
+        } else if (count($adusers) > 1) {
+            throw new moodle_exception('toomanyadusersfound', 'local_evento', '',
+                $eventopersonid, " Got too many Active Directory accounts for {$$eventopersonid}");
+        }
+    } else {
+        throw new moodle_exception('cannotfindaduser', 'local_evento', '', $eventopersonid,
+            "No Active Directory account for {$$eventopersonid}");
+    }
+    // Get moodle users by the user eventoid field.
+    $ul = enrol_evento_get_users_by_eventoid($eventopersonid);
+    if (!empty($ul)) {
+        if (count($ul) == 1) {
+            // Only one user, so take this.
+            $u = reset($ul);
+            // check if the user matches with the aduser
+            $shibbolethid = $evenotservice->sid_to_shibbolethid($aduser->objectSid);
+            if ($u->username != $shibbolethid) {
+                $u = null; // not the same useraccount
+            }
+        }
+    }
 
-    if (!$u) {
+    // Get the moodle user by the username.
+    if (!isset($u)) {
         if (!isset($username) OR !isset($email) OR !isset($firstname) OR !isset($lastname)) {
+            // Get person details from evento.
             $person = $evenotservice->get_person_by_id($eventopersonid);
-            // todo get the shibbolet id from $person or ldap
-            $username = (string)$eventopersonid; // $person->shibbolethid;
+            $shibbolethid = $evenotservice->sid_to_shibbolethid($aduser->objectSid);
+            $username = $shibbolethid;
             $email = $person->personeMail;
             $firstname = $person->personVorname;
             $lastname = $person->personNachname;
         }
         $u = enrol_evento_get_user_by_username($username);
-        if ($u) {
+        if (isset($u)) {
             enrol_evento_set_user_eventoid($u->id, $eventopersonid);
         }
     }
-    // Todo remove this if
-    if (!$u) {
-        // Instead of shibboleth use the email for searching.
-        // Remove this if condition if the searching with shibbolethid works.
-        $u = $DB->get_record('user', array('email' => $email));
-        if ($u) {
-            enrol_evento_set_user_eventoid($u->id, $eventopersonid);
-        }
-    }
-    if (!$u) {
-        // Check if the shibbolethid is set.
-        // Todo an implementiation something like this.
-        /*
-        if (!property_exists($person, 'shibbolethid') && empty($person->shibbolethid)
-            || property_exists($person, 'shibbolethid') && empty($person->shibbolethid)){
-            debugging('cannot create user: shibbolethid of the person with eventoid {$eventopersonid} not set', DEBUG_DEVELOPER);
-            // Todo throw an Exeption... instead of return null
-            return null;
-        }
-        */
-        // Create a user.
+
+    // Create a user.
+    if (!isset($u)) {
         require_once($CFG->dirroot . "/user/lib.php");
         $config = get_config('enrol_evento');
 
         $usernew = new stdClass();
         $usernew->auth = $config->accounttype;
-        // $usernew->username = $person->shibbolethid;
-        $usernew->username = (string)$eventopersonid;
+        $usernew->username = $username;
         $usernew->email = $email;
         $usernew->firstname = $firstname;
         $usernew->lastname = $lastname;
@@ -285,7 +305,7 @@ function enrol_evento_get_user($evenotservice, $eventopersonid, $username=null, 
 
         enrol_evento_set_user_eventoid($usernew->id, $eventopersonid);
         $u = $DB->get_record('user', array('id' => $usernew->id));
-        debugging('user created with username: {$usernew->username}', DEBUG_DEVELOPER);
+        debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
     }
 
     return $u;
@@ -299,8 +319,6 @@ function enrol_evento_get_user($evenotservice, $eventopersonid, $username=null, 
  */
 function enrol_evento_get_user_eventoid($userid) {
     global $DB;
-
-    // Todo permission check.
 
     $sql = 'SELECT data
         FROM {user_info_data} uid
@@ -316,15 +334,13 @@ function enrol_evento_get_user_eventoid($userid) {
 }
 
 /**
- * Obtains the user by an eventoid if it is set.
+ * Obtains a list of users by an eventoid if it is set.
  *
  * @param string $eventoid
- * @return a fieldset object for the user
+ * @return an array of fieldset objects for the user
  */
-function enrol_evento_get_user_by_eventoid($eventoid) {
+function enrol_evento_get_users_by_eventoid($eventoid) {
     global $DB;
-
-    // Todo permission check.
 
     $sql = 'SELECT u.*
         FROM {user} u
@@ -335,9 +351,9 @@ function enrol_evento_get_user_by_eventoid($eventoid) {
 
     $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
 
-    $user = $DB->get_record_sql($sql, $sqlparams);
+    $userlist = $DB->get_records_sql($sql, $sqlparams);
 
-    return $user;
+    return $userlist;
 }
 
 /**
@@ -349,11 +365,9 @@ function enrol_evento_get_user_by_eventoid($eventoid) {
 function enrol_evento_get_user_by_username($username) {
     global $DB;
 
-    // Todo permission check.
-
     $user = $DB->get_record('user', array('username' => $username));
 
-    return $user;
+    return ($user == false) ? null : $user;
 }
 
 /**
@@ -366,7 +380,6 @@ function enrol_evento_get_user_by_username($username) {
 function enrol_evento_set_user_eventoid($userid, $eventoid) {
     global $DB;
 
-    // Todo permission check.
     $returnvalue = false;
 
     // Gets an existing user info data eventoid.
@@ -408,6 +421,23 @@ function enrol_evento_set_user_eventoid($userid, $eventoid) {
             }
         }
     }
-
     return $returnvalue;
 }
+
+/**
+ * Create an array if the value is not already one.
+ *
+ * @param var $value
+ * @return array of the $value
+ */
+function to_array($value) {
+    $returnarray = array();
+    if (is_array($value)) {
+        $returnarray = $value;
+    } else if (!is_null($value)) {
+        $returnarray[0] = $value;
+    }
+    return $returnarray;
+}
+
+

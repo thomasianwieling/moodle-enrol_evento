@@ -26,13 +26,17 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
 
-    //--- general settings -----------------------------------------------------------------------------------
+    // --- general settings -----------------------------------------------------------------------------------
     $settings->add(new admin_setting_heading('enrol_evento_settings', '', get_string('pluginname_desc', 'enrol_evento')));
 
-    //--- enrol instance defaults ----------------------------------------------------------------------------
+    // --- enrol instance defaults ----------------------------------------------------------------------------
     $settings->add(new admin_setting_heading('enrol_evento_defaults',
         get_string('enrolinstancedefaults', 'enrol_evento'), get_string('enrolinstancedefaults_desc', 'enrol_evento')));
 
     $settings->add(new admin_setting_configtext('enrol_evento/accounttype',
         new lang_string('accounttype', 'enrol_evento'), new lang_string('accounttype_desc', 'enrol_evento'), 'shibboleth', PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('enrol_evento/evenrolmentstate',
+        new lang_string('evenrolmentstate', 'enrol_evento'), new lang_string('evenrolmentstate_desc', 'enrol_evento'),
+             '20208, 20215, 20225, 20270, 20275, 20281, 20282, 20284', PARAM_TEXT));
 }

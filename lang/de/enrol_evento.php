@@ -21,14 +21,14 @@
  * @copyright  2017, HTW Chur {@link http://www.htwchur.ch}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['accounttype'] = 'Accounttype';
-$string['accounttype_desc'] = 'Type of the account to create new users';
-$string['enrolinstancedefaults'] = 'Defaults';
-$string['enrolinstancedefaults_desc'] = 'Defaults description';
-$string['eventosync'] = 'Evento synchronisation';
-$string['evenrolmentstate'] = 'Enrolmentstate';
-$string['evenrolmentstate_desc'] = 'Valid evento enrolment state. Comma separated input: 20332, 32223, 434';
+$string['accounttype'] = 'Accounttyp';
+$string['accounttype_desc'] = 'Moodle-Accounttyp um neue Benutzer zu erstellen';
+$string['enrolinstancedefaults'] = 'Standardwerte';
+$string['enrolinstancedefaults_desc'] = 'Standardwerte Beschreibung';
+$string['eventosync'] = 'Evento Synchronisation';
+$string['evenrolmentstate'] = 'Einschreibestati';
+$string['evenrolmentstate_desc'] = 'Gultige Evento Stati für die Einschreibung. Komma getrennte Eingabe: 20332, 32223, 434';
 $string['pluginname'] = 'Evento Enrolment';
-$string['pluginname_desc'] = 'Evento Enrolment description';
+$string['pluginname_desc'] = 'Evento Enrolment Beschreibung';
 $string['toomanyadusersfound'] = 'Too many Active Directory users found';
 $string['cannotfindaduser'] = 'No Active Directory users found';

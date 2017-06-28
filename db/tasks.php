@@ -15,20 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Evento enrolment plugin
+ * Definition of Evento enrolment scheduled tasks.
  *
  * @package    enrol_evento
  * @copyright  2017 HTW Chur Roger Barras
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
-defined('MOODLE_INTERNAL') || die;
-
-$plugin->version   = 2017062602; // The current module version (Date: YYYYMMDDXX)
-$plugin->requires  = 2016120500; // Requires this Moodle version
-$plugin->component = 'enrol_evento'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity  = MATURITY_BETA;
-$plugin->release   = "1.0"; // User-friendly version number.
-$plugin->dependencies = array(
-    'local_evento' => 2017062602
+$tasks = array(
+    array(
+        'classname' => '\enrol_evento\task\evento_member_sync_task',
+        'blocking' => 0,
+        'minute' => '5',
+        'hour' => '23',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    )
 );
