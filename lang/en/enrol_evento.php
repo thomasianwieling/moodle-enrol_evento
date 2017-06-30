@@ -23,10 +23,12 @@
  */
 $string['accounttype'] = 'Accounttype';
 $string['accounttype_desc'] = 'Type of the account to create new users';
-$string['customcoursenumber'] = 'Evento "Event number"';
+$string['customcoursenumber'] = 'Alternative Evento "Event number"';
 $string['customcoursenumber_help'] = 'Define an alternative Evento "Event number" for the enrolemnt. Default is the course id number in the course setting';
 $string['enrolinstancedefaults'] = 'Defaults';
 $string['enrolinstancedefaults_desc'] = 'Defaults description';
+$string['enrolteachers'] = 'Enrol teachers';
+$string['enrolteachers_help'] = 'Enrols all managers (teacher, supervisor, ...) of Evento into the course as a teacher';
 $string['eventosync'] = 'Evento synchronisation';
 $string['evenrolmentstate'] = 'Enrolmentstate';
 $string['evenrolmentstate_desc'] = 'Valid evento enrolment state. Comma separated input: 20332, 32223, 434';

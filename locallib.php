@@ -60,6 +60,8 @@ class enrol_evento_user_sync{
     protected $studentroleid;
     // soapfaultcodes for stop execution
     protected $stopsoapfaultcodes = array('HTTP', 'soapenv:Server', 'Server');
+    // array of all active ad-useraccounts
+    protected $allactiveadaccounts = array();
 
     /**
      * Constructor
@@ -96,15 +98,15 @@ class enrol_evento_user_sync{
                 return 2;
             }
 
+            // Unfortunately this may take a long time, execution can be interrupted safely here.
+            core_php_time_limit::raise();
+            raise_memory_limit(MEMORY_HUGE);
+
             if (!$this->eventoservice->init_call()) {
                 // webservice not available
                 $this->trace->output("Evento webservice not available");
                 return 2;
             }
-
-            // Unfortunately this may take a long time, execution can be interrupted safely here.
-            core_php_time_limit::raise();
-            raise_memory_limit(MEMORY_HUGE);
 
             $this->trace->output('Starting evento enrolment synchronisation...');
 
@@ -112,6 +114,7 @@ class enrol_evento_user_sync{
             $now = time();
             $this->timestart = make_timestamp(date('Y', $now), date('m', $now), date('d', $now), 0, 0, 0);
             $this->timeend = 0;
+            $instances = array();
 
             $params = array('now1' => $now, 'now2' => $now, 'now3' => $now, 'courselevel' => CONTEXT_COURSE, 'enabled' => ENROL_INSTANCE_ENABLED);
             $coursesql = "";
@@ -119,9 +122,6 @@ class enrol_evento_user_sync{
                 $coursesql = "AND e.courseid = :courseid";
                 $params['courseid'] = $courseid;
             }
-
-            $instances = array();
-
             // Selects all active enrolments in unfinished courses.
             // No enrolment if course enddate is reached or the course is hidden.
             $sql = "SELECT e.*, c.idnumber, cx.id AS contextid
@@ -154,7 +154,6 @@ class enrol_evento_user_sync{
                         $anlassnbr = trim($instance->customtext1);
                     }
                     $event = $this->eventoservice->get_event_by_number($anlassnbr);
-                    // TODO: if we get an bad response from the service, such as a timeout, we should STOP => exception.
 
                     // Get event participants enrolments.
                     $enrolments = $this->eventoservice->get_enrolments_by_eventid($event->idAnlass);
@@ -182,23 +181,25 @@ class enrol_evento_user_sync{
 
                     // Enrol teachers.
                     $eventteachers = to_array($event->array_EventoAnlassLeitung);
-
-                    foreach ($eventteachers as $teacher) {
-                        try {
-                            $this->enrol_teacher($teacher->anlassLtgIdPerson, $instance);
-                        } catch (SoapFault $fault) {
-                            debugging("Soapfault : ". $fault->__toString());
-                            $this->trace->output("...user enrolment synchronisation aborted unexpected with a soapfault during sync of the enrolment with evento personid: {$ee->idPerson}");
-                            if (in_array($fault->faultcode, $this->stopsoapfaultcodes)) {
-                                // Stop execution
-                                return 1;
+                    // Enrol teachers allowed?
+                    if ($instance->customint1 == 1) {
+                        foreach ($eventteachers as $teacher) {
+                            try {
+                                $this->enrol_teacher($teacher->anlassLtgIdPerson, $instance);
+                            } catch (SoapFault $fault) {
+                                debugging("Soapfault : ". $fault->__toString());
+                                $this->trace->output("...user enrolment synchronisation aborted unexpected with a soapfault during sync of the enrolment with evento personid: {$ee->idPerson}");
+                                if (in_array($fault->faultcode, $this->stopsoapfaultcodes)) {
+                                    // Stop execution
+                                    return 1;
+                                }
+                            } catch (Exception $ex) {
+                                debugging("Enrolemnt sync of user evento personid: {$teacher->anlassLtgIdPerson} aborted with error: ". $ex->getMessage());
+                                $this->trace->output("...user enrolment synchronisation aborted unexpected during sync of enrolment with evento personid: {$teacher->anlassLtgIdPerson}");
+                            } catch (Throwable $ex) {
+                                debugging("Enrolemnt sync of user evento personid: {$teacher->anlassLtgIdPerson} aborted with error: ". $ex->getMessage());
+                                $this->trace->output("...user enrolment synchronisation aborted unexpected during sync of enrolment with evento personid: {$teacher->anlassLtgIdPerson}");
                             }
-                        } catch (Exception $ex) {
-                            debugging("Enrolemnt sync of user evento personid: {$teacher->anlassLtgIdPerson} aborted with error: ". $ex->getMessage());
-                            $this->trace->output("...user enrolment synchronisation aborted unexpected during sync of enrolment with evento personid: {$teacher->anlassLtgIdPerson}");
-                        } catch (Throwable $ex) {
-                            debugging("Enrolemnt sync of user evento personid: {$teacher->anlassLtgIdPerson} aborted with error: ". $ex->getMessage());
-                            $this->trace->output("...user enrolment synchronisation aborted unexpected during sync of enrolment with evento personid: {$teacher->anlassLtgIdPerson}");
                         }
                     }
 
@@ -233,7 +234,7 @@ class enrol_evento_user_sync{
                     debugging("Soapfault : ". $fault->__toString());
                     $this->trace->output("...user enrolment synchronisation aborted unexpected with a soapfault during sync of enrol instance id: {$ce->id}");
                     if (in_array($fault->faultcode, $this->stopsoapfaultcodes)) {
-                        // Stop execution
+                        // Stop execution.
                         return 1;
                     }
                 } catch (Exception $ex) {
@@ -306,10 +307,40 @@ class enrol_evento_user_sync{
     }
 
     /**
+     * Get an aduser by evento personid
+     * default is the student account
+     *
+     * @param string $eventopersonid evento idPerson
+     * @param bool $isstudent get the student account (default), otherwise you will get lecturer or employeeaccount
+     * @param obj $instance evento enrolment dataset
+     */
+    protected function get_ad_user($eventopersonid, $isstudent=true) {
+        $result = null;
+        if (empty($this->allactiveadaccounts)) {
+            $this->allactiveadaccounts = $this->eventoservice->get_all_ad_accounts(true);
+        }
+        // Filter ad-users.
+        if (isset($eventopersonid)) {
+            $result = array_filter($this->allactiveadaccounts,
+                                function ($var) use ($isstudent, $eventopersonid) {
+                                    if ($isstudent) {
+                                        $isstudentaccount = '1';
+                                    } else {
+                                        $isstudentaccount = '0';
+                                    }
+                                    return (($var->idPerson == $eventopersonid) && ($var->isStudentAccount == $isstudentaccount));
+                                }
+            );
+        }
+
+        return $result;
+    }
+
+    /**
      * Obtains the moodle user by an evento id
      *
      * @param int $eventopersonid
-     * @param bool $isstudent get the student Account
+     * @param bool $isstudent get the student account
      * @param int $username
      * @param int $email
      * @param int $firstname
@@ -320,7 +351,7 @@ class enrol_evento_user_sync{
         global $DB, $CFG;
 
         // Get the Active Directory User by evento ID.
-        $adusers = to_array($this->eventoservice->get_ad_accounts_by_evento_personid($eventopersonid, true, $isstudent));
+        $adusers = to_array($this->get_ad_user($eventopersonid, $isstudent));
         if (!empty($adusers)) {
             if (count($adusers) == 1) {
                 $aduser = reset($adusers);

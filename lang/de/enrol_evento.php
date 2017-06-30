@@ -23,10 +23,12 @@
  */
 $string['accounttype'] = 'Accounttyp';
 $string['accounttype_desc'] = 'Moodle-Accounttyp um neue Benutzer zu erstellen';
-$string['customcoursenumber'] = 'Evento Anlassnummer';
-$string['customcoursenumber_help'] = 'Alternative Evento "Anlass nummer" für die Einschreibung. Standard ist die Kurs-Id in den Kurseinstellungen';
+$string['customcoursenumber'] = 'Alternative Evento-Anlassnummer';
+$string['customcoursenumber_help'] = 'Alternative Evento "Anlassnummer" für die Einschreibung. Standard ist die Kurs-Id in den Kurseinstellungen';
 $string['enrolinstancedefaults'] = 'Standardwerte';
 $string['enrolinstancedefaults_desc'] = 'Standardwerte Beschreibung';
+$string['enrolteachers'] = 'Leiter einschreiben';
+$string['enrolteachers_help'] = 'Schreibt Leitungspersonen (Dozenten, Assistent, ...) aus Evento in den Kurs als Dozent ein';
 $string['eventosync'] = 'Evento Synchronisation';
 $string['evenrolmentstate'] = 'Einschreibestati';
 $string['evenrolmentstate_desc'] = 'Gultige Evento Stati für die Einschreibung. Komma getrennte Eingabe: 20332, 32223, 434';

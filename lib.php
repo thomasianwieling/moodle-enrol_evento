@@ -268,6 +268,8 @@ class enrol_evento_plugin extends enrol_plugin {
     public function edit_instance_form($instance, MoodleQuickForm $mform, $context) {
         global $CFG;
 
+        $config = get_config('enrol_evento');
+
         // Instance name.
         $nameattribs = array('maxlength' => '255');
         $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'), $nameattribs);
@@ -280,6 +282,12 @@ class enrol_evento_plugin extends enrol_plugin {
         $mform->setType('customtext1', PARAM_TEXT);
         $mform->addRule('customtext1', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
         $mform->addHelpButton('customtext1', 'customcoursenumber', 'enrol_evento');
+
+        // Enrol teachers.
+        $mform->addElement('advcheckbox', 'customint1', get_string('enrolteachers', 'enrol_evento'), '',
+                array('optional' => true, 'group' => null), array(0, 1));
+        $mform->addHelpButton('customint1', 'enrolteachers', 'enrol_evento');
+        $mform->setDefault('customint1', $config->enrolteachers);
     }
 
     /**
