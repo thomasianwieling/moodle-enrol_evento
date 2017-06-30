@@ -1,6 +1,8 @@
 # Evento Enrolment
 
-Todo
+Enrolment plugin for evento user enrolment.
+
+Required is the local evento plugin "local_evento" for the evento webservice access.
 
 ## License
 

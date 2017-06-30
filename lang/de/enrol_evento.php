@@ -23,6 +23,8 @@
  */
 $string['accounttype'] = 'Accounttyp';
 $string['accounttype_desc'] = 'Moodle-Accounttyp um neue Benutzer zu erstellen';
+$string['customcoursenumber'] = 'Evento Anlassnummer';
+$string['customcoursenumber_help'] = 'Alternative Evento "Anlass nummer" für die Einschreibung. Standard ist die Kurs-Id in den Kurseinstellungen';
 $string['enrolinstancedefaults'] = 'Standardwerte';
 $string['enrolinstancedefaults_desc'] = 'Standardwerte Beschreibung';
 $string['eventosync'] = 'Evento Synchronisation';

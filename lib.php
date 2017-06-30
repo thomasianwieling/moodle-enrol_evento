@@ -114,7 +114,6 @@ class enrol_evento_plugin extends enrol_plugin {
 
     /**
      * Sync all evento course links.
-     * Wraps the locallib
      *
      * @param progress_trace $trace
      * @param int $courseid one course, empty mean all
@@ -124,8 +123,15 @@ class enrol_evento_plugin extends enrol_plugin {
         global $CFG;
 
         require_once("$CFG->dirroot/enrol/evento/locallib.php");
+        $syncstart = microtime(true);
+        $usersync = new enrol_evento_user_sync();
 
-        $result = enrol_evento_sync($trace, $courseid);
+        $result = $usersync->user_sync($trace, $courseid);
+        $syncend = microtime(true);
+        $synctime = $syncend - $syncstart;
+        $debugmessage = "Evento enrolment user syncronisation process time: {$synctime}";
+        debugging($debugmessage, DEBUG_DEVELOPER);
+        $trace->output($debugmessage);
         $trace->finished();
 
         return $result;
@@ -142,8 +148,7 @@ class enrol_evento_plugin extends enrol_plugin {
      * @return void
      */
     public function sync_user_enrolments($user) {
-        // override if necessary Todo? or delete
-        // Probably better no sync durring login
+        // Probably better no sync durring login.
     }
 
     /**
@@ -250,6 +255,31 @@ class enrol_evento_plugin extends enrol_plugin {
      */
     public function use_standard_editing_ui() {
         return true;
+    }
+
+    /**
+     * Add elements to the edit instance form.
+     *
+     * @param stdClass $instance
+     * @param MoodleQuickForm $mform
+     * @param context $context
+     * @return bool
+     */
+    public function edit_instance_form($instance, MoodleQuickForm $mform, $context) {
+        global $CFG;
+
+        // Instance name.
+        $nameattribs = array('maxlength' => '255');
+        $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'), $nameattribs);
+        $mform->setType('name', PARAM_TEXT);
+        $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
+
+        // Custom evento eventnumber.
+        $options = array('optional' => true, 'maxlength' => '255');
+        $mform->addElement('text', 'customtext1', get_string('customcoursenumber', 'enrol_evento'), $options);
+        $mform->setType('customtext1', PARAM_TEXT);
+        $mform->addRule('customtext1', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
+        $mform->addHelpButton('customtext1', 'customcoursenumber', 'enrol_evento');
     }
 
     /**

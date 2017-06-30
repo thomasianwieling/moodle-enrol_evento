@@ -23,6 +23,8 @@
  */
 $string['accounttype'] = 'Accounttype';
 $string['accounttype_desc'] = 'Type of the account to create new users';
+$string['customcoursenumber'] = 'Evento "Event number"';
+$string['customcoursenumber_help'] = 'Define an alternative Evento "Event number" for the enrolemnt. Default is the course id number in the course setting';
 $string['enrolinstancedefaults'] = 'Defaults';
 $string['enrolinstancedefaults_desc'] = 'Defaults description';
 $string['eventosync'] = 'Evento synchronisation';

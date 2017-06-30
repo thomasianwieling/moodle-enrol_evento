@@ -34,4 +34,14 @@ $capabilities = array(
             'manager' => CAP_ALLOW,
         )
     ),
+
+    /* Enrol anybody. */
+    'enrol/evento:enrol' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'manager' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+        )
+    ),
 );
