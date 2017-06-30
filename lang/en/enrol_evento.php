@@ -33,6 +33,6 @@ $string['eventosync'] = 'Evento synchronisation';
 $string['evenrolmentstate'] = 'Enrolmentstate';
 $string['evenrolmentstate_desc'] = 'Valid evento enrolment state. Comma separated input: 20332, 32223, 434';
 $string['pluginname'] = 'Evento Enrolment';
-$string['pluginname_desc'] = 'Evento Enrolment description';
+$string['pluginname_desc'] = 'Enrolment of modules in Evento';
 $string['toomanyadusersfound'] = 'Too many Active Directory users found';
 $string['cannotfindaduser'] = 'No Active Directory users found';
