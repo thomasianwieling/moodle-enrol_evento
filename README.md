@@ -1,8 +1,20 @@
 # Evento Enrolment
-
 Enrolment plugin for evento user enrolment.
+With this plugin it is possible to automatic enrol students based on the Evento data.
 
-Required is the local evento plugin "local_evento" for the evento webservice access.
+Features:
+
+ * Enrol students and teacher based on the Evento module
+ * Suspend student and teacher, if they do not have anymore a vaild ernolment
+ * Enrol based on the "Anlassnummer" from different Evento-modules in a course
+ * Enrol a class in a course
+ * Name the enrolment method
+ * Exclude teacher enrolment
+ * Daily synchronisation by a task
+
+## Installation and Configuration
+Requires the local_evento Plugin for the Evento Webservice access.
+No special configuration needed for the standard use case.
 
 ## License
 
