@@ -177,6 +177,7 @@ class enrol_evento_user_sync{
                                                  . " during sync of the enrolment with evento personid: {$ee->idPerson} ; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}");
                             if (in_array($fault->faultcode, $this->stopsoapfaultcodes)) {
                                 // Stop execution
+                                $this->trace->finished();
                                 return 1;
                             }
                         } catch (Exception $ex) {
@@ -205,6 +206,7 @@ class enrol_evento_user_sync{
                                                     . " with evento personid: {$teacher->anlassLtgIdPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}");
                                 if (in_array($fault->faultcode, $this->stopsoapfaultcodes)) {
                                     // Stop execution
+                                    $this->trace->finished();
                                     return 1;
                                 }
                             } catch (Exception $ex) {
@@ -259,6 +261,7 @@ class enrol_evento_user_sync{
                                         . "sync of enrol instance id: {$ce->id}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}");
                     if (in_array($fault->faultcode, $this->stopsoapfaultcodes)) {
                         // Stop execution.
+                        $this->trace->finished();
                         return 1;
                     }
                 } catch (Exception $ex) {
@@ -278,16 +281,20 @@ class enrol_evento_user_sync{
         } catch (SoapFault $fault) {
             debugging("Error Soapfault: ". $fault->__toString());
             $this->trace->output("...user enrolment synchronisation aborted unexpected with a soapfault");
+            $this->trace->finished();
             return 1;
         } catch (Exeption $ex) {
             debugging("Error: ". $ex->getMessage());
             $this->trace->output('...user enrolment synchronisation aborted unexpected');
+            $this->trace->finished();
             return 1;
         } catch (Throwable $ex) {
             debugging("Error: ". $ex->getMessage());
             $this->trace->output('...user enrolment synchronisation aborted unexpected');
+            $this->trace->finished();
             return 1;
         }
+        $this->trace->finished();
         return 0;
     }
 

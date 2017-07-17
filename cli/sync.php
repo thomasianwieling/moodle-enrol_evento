@@ -62,6 +62,7 @@ if ($options['help']) {
 Options:
 -v, --verbose         Print verbose progress information
 -h, --help            Print out this help
+--courseid            Course id to sync
 
 Example:
 \$ sudo -u www-data /usr/bin/php enrol/evento/cli/sync.php
@@ -84,6 +85,11 @@ if (empty($options['verbose'])) {
     $trace = new text_progress_trace();
 }
 
-$result = $plugin->sync($trace);
+$courseid = null;
+if ($options['courseid']) {
+    $courseid = $options['courseid'];
+}
+
+$result = $plugin->sync($trace, $courseid);
 
 exit($result);
