@@ -49,7 +49,7 @@ require(__DIR__.'/../../../config.php');
 require_once("$CFG->libdir/clilib.php");
 
 // Now get cli options.
-list($options, $unrecognized) = cli_get_params(array('verbose' => false, 'help' => false), array('v' => 'verbose', 'h' => 'help'));
+list($options, $unrecognized) = cli_get_params(array('verbose' => false, 'help' => false, 'courseid' => false), array('v' => 'verbose', 'h' => 'help'));
 
 if ($unrecognized) {
     $unrecognized = implode("\n  ", $unrecognized);
@@ -86,7 +86,7 @@ if (empty($options['verbose'])) {
 }
 
 $courseid = null;
-if ($options['courseid']) {
+if (!empty($options['courseid'])) {
     $courseid = $options['courseid'];
 }
 

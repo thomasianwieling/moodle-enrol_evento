@@ -117,9 +117,9 @@ class enrol_evento_user_sync{
             $this->timeend = 0;
             $instances = array();
 
-            $params = array('now1' => $now, 'now2' => $now, 'now3' => $now, 'courselevel' => CONTEXT_COURSE, 'enabled' => ENROL_INSTANCE_ENABLED);
+            $params = array('now1' => $now, 'now2' => $now, 'now3' => $now, 'now4' => $now, 'courselevel' => CONTEXT_COURSE, 'enabled' => ENROL_INSTANCE_ENABLED);
             $coursesql = "";
-            if ($courseid) {
+            if (!empty($courseid)) {
                 $coursesql = "AND e.courseid = :courseid";
                 $params['courseid'] = $courseid;
             }
@@ -128,9 +128,11 @@ class enrol_evento_user_sync{
             $sql = "SELECT e.*, c.idnumber, cx.id AS contextid
                     FROM {enrol} e
                     JOIN {context} cx ON (cx.instanceid = e.courseid AND cx.contextlevel = :courselevel)
-                    JOIN {course} c ON (c.id = e.courseid AND (c.enddate = 0 OR (c.enddate > 0 AND c.enddate >= :now1)) AND c.visible = 1)
-                    WHERE e.enrol = 'evento' AND (e.enrolenddate = 0 OR (e.enrolenddate > 0 AND e.enrolenddate >= :now2))
-                        AND (e.enrolstartdate = 0 OR (e.enrolstartdate > 0 AND e.enrolstartdate <= :now3))
+                    JOIN {course} c ON (c.id = e.courseid AND
+                                    (((c.enddate = 0 OR (c.enddate > 0 AND c.enddate >= :now1)) AND c.visible = 1)
+                                    OR (c.startdate >= :now2)))
+                    WHERE e.enrol = 'evento' AND (e.enrolenddate = 0 OR (e.enrolenddate > 0 AND e.enrolenddate >= :now3))
+                        AND (e.enrolstartdate = 0 OR (e.enrolstartdate > 0 AND e.enrolstartdate <= :now4))
                         AND e.status = :enabled
                         $coursesql";
             $rs = $DB->get_recordset_sql($sql, $params);
@@ -152,7 +154,8 @@ class enrol_evento_user_sync{
 
                     // Nothing to sync?
                     if (empty($anlassnbr)) {
-                        return 0;
+                        debugging("No 'anlassnummer' set for courseid: {$ce->id}", DEBUG_DEVELOPER);
+                        continue;
                     }
 
                     // Timestamps for enrolemnts.
@@ -162,6 +165,10 @@ class enrol_evento_user_sync{
                     $this->entolledusersids = array();
 
                     $event = $this->eventoservice->get_event_by_number($anlassnbr);
+                    if (empty($event)) {
+                        debugging("No Evento event found for idnumber: {$anlassnbr}". $anlassnbr, DEBUG_DEVELOPER);
+                        continue;
+                    }
 
                     // Get event participants enrolments.
                     $enrolments = $this->eventoservice->get_enrolments_by_eventid($event->idAnlass);
