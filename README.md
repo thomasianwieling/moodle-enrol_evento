@@ -5,7 +5,7 @@ With this plugin it is possible to automatic enrol students based on the Evento 
 Features:
 
  * Enrol students and teacher based on the Evento module
- * Suspend student and teacher, if they do not have anymore a vaild ernolment
+ * Suspend student and teacher, if they do not have a vaild enrolment anymore
  * Enrol based on the "Anlassnummer" from different Evento-modules in a course
  * Enrol a class in a course
  * Name the enrolment method
