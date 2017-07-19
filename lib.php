@@ -67,26 +67,22 @@ class enrol_evento_plugin extends enrol_plugin {
      * @return int id of new instance, null if can not be created
      */
     public function add_default_instance($course) {
-        // Todo? set instance fields ?.
-        /*
-        $expirynotify = $this->get_config('expirynotify', 0);
-        if ($expirynotify == 2) {
-            $expirynotify = 1;
-            $notifyall = 1;
-        } else {
-            $notifyall = 0;
-        }
-        $fields = array(
-            'status'          => $this->get_config('status'),
-            'roleid'          => $this->get_config('roleid', 0),
-            'enrolperiod'     => $this->get_config('enrolperiod', 0),
-            'expirynotify'    => $expirynotify,
-            'notifyall'       => $notifyall,
-            'expirythreshold' => $this->get_config('expirythreshold', 86400),
-        );
-        */
+        $fields = $this->get_instance_defaults();
 
         return $this->add_instance($course, $fields);
+    }
+
+    /**
+     * Returns defaults for new instances.
+     * @return array
+     */
+    public function get_instance_defaults() {
+        $fields = array();
+        $fields['name']            = "";
+        $fields['status']          = 0;
+        $fields['customint1']      = $this->get_config('enrolteachers');
+
+        return $fields;
     }
 
     /**
@@ -256,6 +252,7 @@ class enrol_evento_plugin extends enrol_plugin {
     public function use_standard_editing_ui() {
         return true;
     }
+
 
     /**
      * Add elements to the edit instance form.

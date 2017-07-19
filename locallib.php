@@ -166,7 +166,7 @@ class enrol_evento_user_sync{
 
                     $event = $this->eventoservice->get_event_by_number($anlassnbr);
                     if (empty($event)) {
-                        debugging("No Evento event found for idnumber: {$anlassnbr}". $anlassnbr, DEBUG_DEVELOPER);
+                        debugging("No Evento event found for idnumber: {$anlassnbr}", DEBUG_DEVELOPER);
                         continue;
                     }
 
@@ -203,7 +203,7 @@ class enrol_evento_user_sync{
                     // Enrol teachers.
                     $eventteachers = to_array($event->array_EventoAnlassLeitung);
                     // Enrol teachers allowed?
-                    if ($instance->customint1 == 1) {
+                    if ($instance->customint1 == 1 || is_null($instance->customint1)) {
                         foreach ($eventteachers as $teacher) {
                             try {
                                 $this->enrol_teacher($teacher->anlassLtgIdPerson, $instance);
