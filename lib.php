@@ -73,6 +73,31 @@ class enrol_evento_plugin extends enrol_plugin {
     }
 
     /**
+     * Checks if an instance exists with the same eventnumber
+     *
+     * @param stdClass $course
+     * @param string evento event number "anlassnummer"
+     * @return boolean
+     */
+    public function instance_exists_by_eventnumber($course, $idnumber) {
+        global $DB;
+
+        $result = false;
+        $where = "courseid = :courseid AND enrol = :enrol AND UPPER(" . $DB->sql_compare_text('customtext1', 100) . ") = UPPER(:customtext1) ";
+        // check if standard instance is set
+        if ($course->idnumber == $idnumber) {
+            if ($DB->record_exists_select('enrol', $where, array('courseid' => $course->id, 'enrol' => $this->get_name(), 'customtext1' => ""))) {
+                $result = true;
+            } else {
+                $result = $DB->record_exists_select('enrol', $where, array('courseid' => $course->id, 'enrol' => $this->get_name(), 'customtext1' => $idnumber));
+            }
+        } else {
+            $result = $DB->record_exists_select('enrol', $where, array('courseid' => $course->id, 'enrol' => $this->get_name(), 'customtext1' => $idnumber));
+        }
+        return $result;
+    }
+
+    /**
      * Returns defaults for new instances.
      * @return array
      */
@@ -81,20 +106,20 @@ class enrol_evento_plugin extends enrol_plugin {
         $fields['name']            = "";
         $fields['status']          = 0;
         $fields['customint1']      = $this->get_config('enrolteachers');
+        $fields['customtext1']     = "";
 
         return $fields;
     }
 
     /**
-     * Update instance of enrol plugin.
-     * @param stdClass $instance
-     * @param stdClass $data modified instance fields
-     * @return boolean
+     * Sets the custom course number in the fields.
+     * @param array of enrolment fields
+     * @param string custom evento event number
+     * @return array
      */
-    public function update_instance($instance, $data) {
-
-        // Todo ? delete me if no overriding.
-        return parent::update_instance($instance, $data);
+    public function set_custom_coursenumber($fields, $customcoursenumber) {
+        $fields['customtext1']     = $customcoursenumber;
+        return $fields;
     }
 
     /**
@@ -274,7 +299,7 @@ class enrol_evento_plugin extends enrol_plugin {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
 
         // Custom evento eventnumber.
-        $options = array('optional' => true, 'maxlength' => '255');
+        $options = array('optional' => true, 'maxlength' => '100');
         $mform->addElement('text', 'customtext1', get_string('customcoursenumber', 'enrol_evento'), $options);
         $mform->setType('customtext1', PARAM_TEXT);
         $mform->addRule('customtext1', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
