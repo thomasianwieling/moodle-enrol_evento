@@ -27,39 +27,14 @@ defined('MOODLE_INTERNAL') || die();
 function xmldb_enrol_evento_upgrade($oldversion) {
     global $DB;
 
+    /*
     if ($oldversion < 2017070303) {
 
         upgrade_plugin_savepoint(true, 2017070303, 'enrol', 'evento');
 
-        // Check if user definied field exists
-        $uifid = $DB->get_records('user_info_field', array('shortname' => ENROL_EVENTO_UIF_EVENTOID));
-
-        if (empty($uifid)) {
-            // Inserts new user_info_data item.
-            $item = new \stdClass();
-            $item->shortname = ENROL_EVENTO_UIF_EVENTOID;
-            $item->name = "Evento ID";
-            $item->datatype = 'text';
-            $item->description = "<p>Evento ID for enrol_evento plugin</p>";
-            $item->descriptionformat = FORMAT_HTML;
-            $item->categoryid = 1;
-            $item->required = 0;
-            $item->locked = 1;
-            $item->visible = 0;
-            $item->forceunique = 0;
-            $item->signup = 0;
-            $item->defaultdata = '';
-            $item->defaultdataformat = FORMAT_MOODLE;
-            $item->param1 = 30;
-            $item->param2 = 2048;
-            $item->param3 = 0;
-            $item->param4 = '';
-            $item->param5 = '';
-
-            $profiledef = new profile_define_base();
-            $profiledef->define_save($item);
-        }
+        // My upgrade code here.
     }
+    */
 
     return true;
 }
