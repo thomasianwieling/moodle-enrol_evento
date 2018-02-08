@@ -267,6 +267,7 @@ class enrol_evento_user_sync{
 
                     // Finally sync groups if option is set
                     if (isset($ce->customint2) && ($ce->customint2 > 0)) {
+                        require_once("{$CFG->dirroot}/group/lib.php");
                         $affectedusers = groups_sync_with_enrolment('evento', $ce->courseid);
                         foreach ($affectedusers['removed'] as $gm) {
                             $this->trace->output("removing user from group: $gm->userid ==> $gm->courseid - $gm->groupname");
