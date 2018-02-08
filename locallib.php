@@ -243,7 +243,16 @@ class enrol_evento_user_sync{
                                     if (!in_array($enrolleduser->userid, $this->entolledusersids)) {
                                         $this->plugin->update_user_enrol($instance, $enrolleduser->userid, ENROL_USER_SUSPENDED);
                                         $this->trace->output("suspending expired user {$enrolleduser->userid} in course {$instance->courseid}", 1);
+                                        // Finally sync cohort if option is set
+                                        if (isset($ce->customint3) && ($ce->customint3 > 0)) {
+                                            if (has_capability('moodle/cohort:assign', context_system::instance())) {
+                                                require_once($CFG->dirroot.'/cohort/lib.php');
+                                                cohort_remove_member($ce->customint3, $enrolleduser->userid);
+                                                $this->trace->output("removing user from cohort: {$enrolleduser->userid} ==> {$ce->customint3}");
+                                            }
+                                        }
                                     }
+
                                 } catch (Exception $ex) {
                                     debugging("Error durring suspending of user with id: {$enrolleduser->userid}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
                                             . " aborted with error: ". $ex->getMessage());
@@ -263,13 +272,15 @@ class enrol_evento_user_sync{
                         }
                     }
 
-                    // Finally sync groups.
-                    $affectedusers = groups_sync_with_enrolment('evento', $ce->courseid);
-                    foreach ($affectedusers['removed'] as $gm) {
-                        $this->trace->output("removing user from group: $gm->userid ==> $gm->courseid - $gm->groupname");
-                    }
-                    foreach ($affectedusers['added'] as $ue) {
-                        $this->trace->output("adding user to group: $ue->userid ==> $ue->courseid - $ue->groupname");
+                    // Finally sync groups if option is set
+                    if (isset($ce->customint2) && ($ce->customint2 > 0)) {
+                        $affectedusers = groups_sync_with_enrolment('evento', $ce->courseid);
+                        foreach ($affectedusers['removed'] as $gm) {
+                            $this->trace->output("removing user from group: $gm->userid ==> $gm->courseid - $gm->groupname");
+                        }
+                        foreach ($affectedusers['added'] as $ue) {
+                            $this->trace->output("adding user to group: $ue->userid ==> $ue->courseid - $ue->groupname");
+                        }
                     }
 
                 } catch (SoapFault $fault) {
@@ -332,6 +343,15 @@ class enrol_evento_user_sync{
             $this->plugin->enrol_user($instance, $u->id, $this->studentroleid, $this->timestart, $this->timeend, ENROL_USER_ACTIVE);
             $this->entolledusersids[] = $u->id;
             $this->trace->output("enroling user {$u->id} in course {$instance->courseid} as a student", 1);
+
+            // Finally sync cohort if option is set.
+            if (isset($instance->customint3) && ($instance->customint3 > 0)) {
+                if (has_capability('moodle/cohort:assign', context_system::instance())) {
+                    require_once($CFG->dirroot.'/cohort/lib.php');
+                    cohort_add_member($instance->customint3, $u->id);
+                    $this->trace->output("adding user to cohort: {$u->id} ==> {$instance->customint3}");
+                }
+            }
         }
     }
 
@@ -348,6 +368,15 @@ class enrol_evento_user_sync{
         $this->plugin->enrol_user($instance, $u->id, $this->eteacherroleid, $this->timestart, $this->timeend, ENROL_USER_ACTIVE);
         $this->entolledusersids[] = $u->id;
         $this->trace->output("enroling user {$u->id} in course {$instance->courseid} as an editingteacher", 1);
+
+        // Finally sync cohort if option is set.
+        if (isset($instance->customint3) && ($instance->customint3 > 0)) {
+            if (has_capability('moodle/cohort:assign', context_system::instance())) {
+                require_once($CFG->dirroot.'/cohort/lib.php');
+                cohort_add_member($instance->customint3, $u->id);
+                $this->trace->output("adding user to cohort: {$u->id} ==> {$instance->customint3}");
+            }
+        }
     }
 
     /**
@@ -575,10 +604,10 @@ function to_array($value) {
 }
 
 /**
- * Create a new group with the course's name.
+ * Create a new group
  *
  * @param int $courseid
- * @param int $linkedcourseid
+ * @param string $newgroupname
  * @return int $groupid Group ID for this cohort.
  */
 function enrol_evento_create_new_group($courseid, $newgroupname) {
@@ -603,4 +632,25 @@ function enrol_evento_create_new_group($courseid, $newgroupname) {
     $groupid = groups_create_group($groupdata);
 
     return $groupid;
+}
+
+/**
+ * Create a new cohort
+ *
+ * @param int $contextid
+ * @param string $newcohortname
+ * @return int $cohortid Cohort ID for this cohort.
+ */
+function enrol_evento_create_new_cohort($contextid, $newcohortname) {
+    global $DB, $CFG;
+
+    require_once($CFG->dirroot.'/cohort/lib.php');
+
+    $data = new stdClass();
+    $data->name = $newcohortname;
+    $data->contextid = $contextid;
+
+    $cohortid = cohort_add_cohort($data);
+
+    return $cohortid;
 }

@@ -25,9 +25,14 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * ENROL_EVENTO_CREATE_GROUP constant for automatically creating a group for a meta course.
+ * ENROL_EVENTO_CREATE_GROUP constant for automatically creating a group for an evento enrolment.
  */
 define('ENROL_EVENTO_CREATE_GROUP', -1);
+
+/**
+ * ENROL_EVENTO_CREATE_COHORT constant for automatically creating a cohort for an evento enrolment.
+ */
+define('ENROL_EVENTO_CREATE_COHORT', -1);
 
 class enrol_evento_plugin extends enrol_plugin {
 
@@ -138,6 +143,7 @@ class enrol_evento_plugin extends enrol_plugin {
 
         require_once("$CFG->dirroot/enrol/evento/locallib.php");
 
+        // Create new group?
         if (!empty($data->customint2) && $data->customint2 == ENROL_EVENTO_CREATE_GROUP) {
             $context = context_course::instance($instance->courseid);
             require_capability('moodle/course:managegroups', $context);
@@ -156,6 +162,19 @@ class enrol_evento_plugin extends enrol_plugin {
             }
             $groupid = enrol_evento_create_new_group($instance->courseid, $newgroupname);
             $data->customint2 = $groupid;
+        }
+
+        // Create new cohort?
+        if (!empty($data->customint3) && $data->customint3 == ENROL_EVENTO_CREATE_COHORT) {
+            if (!isset($context)) {
+                $context = context_course::instance($instance->courseid);
+            }
+            require_capability('moodle/cohort:manage', $context);
+            // Only create new cohort if cohort name not empty
+            if (!empty($data->customtext3)) {
+                $cohortid = enrol_evento_create_new_cohort($data->customint4, $data->customtext3);
+                $data->customint3 = $cohortid;
+            }
         }
 
         $result = parent::update_instance($instance, $data);
@@ -338,6 +357,53 @@ class enrol_evento_plugin extends enrol_plugin {
     }
 
     /**
+     * Return an array of valid options for the cohorts.
+     *
+     * @param stdClass $instance
+     * @param context $context
+     * @return array
+     */
+    protected function get_cohort_options($instance, $context) {
+        global $DB, $CFG;
+
+        require_once($CFG->dirroot . '/cohort/lib.php');
+
+        $cohorts = array();
+        $cohorts = array(0 => get_string('none'));
+
+        if (has_capability('moodle/cohort:manage', $context)) {
+            $cohorts[ENROL_EVENTO_CREATE_COHORT] = get_string('createcohort', 'enrol_evento');
+        }
+        $allcohorts = cohort_get_available_cohorts($context, 0, 0, 0);
+        foreach ($allcohorts as $c) {
+            $cohorts[$c->id] = format_string($c->name);
+        }
+
+        return $cohorts;
+    }
+
+    protected function get_category_options($currentcontextid) {
+        global $CFG;
+        require_once($CFG->libdir. '/coursecatlib.php');
+        $displaylist = coursecat::make_categories_list('moodle/cohort:manage');
+        $options = array();
+        $syscontext = context_system::instance();
+        if (has_capability('moodle/cohort:manage', $syscontext)) {
+            $options[$syscontext->id] = $syscontext->get_context_name();
+        }
+        foreach ($displaylist as $cid => $name) {
+            $context = context_coursecat::instance($cid);
+            $options[$context->id] = $name;
+        }
+        // Always add current - this is not likely, but if the logic gets changed it might be a problem.
+        if (!isset($options[$currentcontextid])) {
+            $context = context::instance_by_id($currentcontextid, MUST_EXIST);
+            $options[$context->id] = $syscontext->get_context_name();
+        }
+        return $options;
+    }
+
+    /**
      * Add elements to the edit instance form.
      *
      * @param stdClass $instance
@@ -351,6 +417,8 @@ class enrol_evento_plugin extends enrol_plugin {
         $config = get_config('enrol_evento');
         $groups = $this->get_group_options($context);
         $course  = get_course($instance->courseid);
+        $cohorts = $this->get_cohort_options($instance, $context);
+        $categories = $this->get_category_options($context->id);
 
         // Instance name.
         $nameattribs = array('maxlength' => '255', 'size' => '40');
@@ -400,6 +468,33 @@ class enrol_evento_plugin extends enrol_plugin {
             )
         ));
         $mform->addHelpButton('groupgroup', 'addtogroup', 'enrol_evento');
+
+        // Cohort
+        $mform->addElement('header', 'cohortheader', get_string('cohortheader', 'enrol_evento'));
+        $groupcohort = array();
+        $groupcohort[] =& $mform->createElement('select', 'customint3', get_string('addtocohort', 'enrol_evento'), $cohorts);
+
+        // New groupname
+        $options = array('size' => '30', 'maxlength' => '100', '');
+        // Reset the form data, if the value is not.
+        if (isset($instance->customint3) && ($instance->customint3 != ENROL_EVENTO_CREATE_COHORT)) {
+            $instance->customtext3 = '';
+        }
+        $groupcohort[] =& $mform->createElement('text', 'customtext3', get_string('newcohortname', 'enrol_evento'), $options);
+        $mform->addGroup($groupcohort, 'groupcohort',  get_string('addtocohort', 'enrol_evento'),
+            array('&nbsp;&nbsp;&nbsp;' . get_string('newcohortname', 'enrol_evento')), false);
+        $mform->setType('customtext3', PARAM_TEXT);
+        $mform->disabledIf('customtext3', 'customint3', 'neq', ENROL_EVENTO_CREATE_COHORT);
+        $mform->addGroupRule('groupcohort', array(
+            'customtext3' => array(
+                array(get_string('maximumchars', '', 100), 'maxlength', 100, 'server')
+            )
+        ));
+        $mform->addHelpButton('groupcohort', 'addtocohort', 'enrol_evento');
+
+        $mform->addElement('select', 'customint4', get_string('addtocontext', 'enrol_evento'), $categories);
+        $mform->disabledIf('customint4', 'customint3', 'neq', ENROL_EVENTO_CREATE_COHORT);
+        $mform->addHelpButton('customint4', 'addtocontext', 'enrol_evento');
     }
 
     /**

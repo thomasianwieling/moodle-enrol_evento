@@ -23,9 +23,15 @@
  */
 $string['accounttype'] = 'Accounttype';
 $string['accounttype_desc'] = 'Type of the account to create new users';
+$string['addtocontext'] = 'Category';
+$string['addtocontext_help'] = 'Die globale Gruppe in diesem Kursbereich erstellen';
 $string['addtogroup'] = 'Add to group';
 $string['addtogroup_help'] = 'Adding the participant from this enrolment methode to an existing or a new group';
+$string['addtocohort'] = 'Add to cohort';
+$string['addtocohort_help'] = 'Adding the participant from this enrolment methode to an existing or a new cohort';
+$string['cohortheader'] = 'Cohort';
 $string['creategroup'] = 'Create new group';
+$string['createcohort'] = 'Create new cohort';
 $string['customcoursenumber'] = 'Evento "Event number"';
 $string['customcoursenumber_help'] = 'Define an alternative Evento "Event number" for the enrolemnt. Default is the course id number in the course setting';
 $string['defaultgroupnametext'] = '{$a->name} {$a->increment}';
@@ -38,6 +44,7 @@ $string['eventosync'] = 'Evento synchronisation';
 $string['evenrolmentstate'] = 'Enrolmentstate';
 $string['evenrolmentstate_desc'] = 'Valid evento enrolment state. Comma separated input: 20332, 32223, 434';
 $string['newgroupname'] = 'New group';
+$string['newcohortname'] = 'New cohort';
 $string['pluginname'] = 'Evento Enrolment';
 $string['pluginname_desc'] = 'Enrolment of modules in Evento';
 $string['toomanyadusersfound'] = 'Too many Active Directory users found';
