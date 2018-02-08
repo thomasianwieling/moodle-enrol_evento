@@ -23,15 +23,21 @@
  */
 $string['accounttype'] = 'Accounttyp';
 $string['accounttype_desc'] = 'Moodle-Accounttyp um neue Benutzer zu erstellen';
-$string['customcoursenumber'] = 'Alternative Evento-Anlassnummer';
+$string['addtogroup'] = 'Zu Gruppe hinzufügen';
+$string['addtogroup_help'] = 'Teilnehmer von dieser Einschreibung in eine bestehende oder neue Gruppe hinzufügen.';
+$string['creategroup'] = 'Neue Gruppe anlegen';
+$string['customcoursenumber'] = 'Evento-Anlassnummer';
 $string['customcoursenumber_help'] = 'Alternative Evento "Anlassnummer" für die Einschreibung. Standard ist die Kurs-Id in den Kurseinstellungen';
+$string['defaultgroupnametext'] = '{$a->name} {$a->increment}';
 $string['enrolinstancedefaults'] = 'Standardwerte';
 $string['enrolinstancedefaults_desc'] = 'Standardwerte Beschreibung';
-$string['enrolteachers'] = 'Leiter einschreiben';
-$string['enrolteachers_help'] = 'Schreibt Leitungspersonen (Dozenten, Assistent, ...) aus Evento in den Kurs als Dozent ein';
+$string['enrolteachers'] = 'Evento-Anlassleiter als Dozent einschreiben';
+$string['enrolteachers_help'] = 'Schreibt alle Leitungspersonen (Dozenten, Assistent, ...) aus Evento in den Kurs als Dozent ein';
+$string['evento:config'] = 'Konfiguriere Evento Einschreibemethode';
 $string['eventosync'] = 'Evento Synchronisation';
 $string['evenrolmentstate'] = 'Einschreibestati';
 $string['evenrolmentstate_desc'] = 'Gültige Evento Stati für die Einschreibung. Komma getrennte Eingabe: 20332, 32223, 434';
+$string['newgroupname'] = 'Neuer Gruppename';
 $string['pluginname'] = 'Evento Einschreibung';
 $string['pluginname_desc'] = 'Einschreibung aus Modulen in Evento';
 $string['toomanyadusersfound'] = 'Too many Active Directory users found';

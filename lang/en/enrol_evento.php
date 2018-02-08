@@ -23,15 +23,21 @@
  */
 $string['accounttype'] = 'Accounttype';
 $string['accounttype_desc'] = 'Type of the account to create new users';
-$string['customcoursenumber'] = 'Alternative Evento "Event number"';
+$string['addtogroup'] = 'Add to group';
+$string['addtogroup_help'] = 'Adding the participant from this enrolment methode to an existing or a new group';
+$string['creategroup'] = 'Create new group';
+$string['customcoursenumber'] = 'Evento "Event number"';
 $string['customcoursenumber_help'] = 'Define an alternative Evento "Event number" for the enrolemnt. Default is the course id number in the course setting';
+$string['defaultgroupnametext'] = '{$a->name} {$a->increment}';
 $string['enrolinstancedefaults'] = 'Defaults';
 $string['enrolinstancedefaults_desc'] = 'Defaults description';
-$string['enrolteachers'] = 'Enrol teachers';
+$string['enrolteachers'] = 'Enrol all event managers as a teacher';
 $string['enrolteachers_help'] = 'Enrols all managers (teacher, supervisor, ...) of Evento into the course as a teacher';
+$string['evento:config'] = 'Configure evento enrol instances';
 $string['eventosync'] = 'Evento synchronisation';
 $string['evenrolmentstate'] = 'Enrolmentstate';
 $string['evenrolmentstate_desc'] = 'Valid evento enrolment state. Comma separated input: 20332, 32223, 434';
+$string['newgroupname'] = 'New group';
 $string['pluginname'] = 'Evento Enrolment';
 $string['pluginname_desc'] = 'Enrolment of modules in Evento';
 $string['toomanyadusersfound'] = 'Too many Active Directory users found';

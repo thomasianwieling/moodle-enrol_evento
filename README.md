@@ -8,6 +8,7 @@ Features:
  * Suspend student and teacher, if they do not have a vaild enrolment anymore
  * Enrol based on the "Anlassnummer" from different Evento-modules in a course
  * Enrol a class in a course
+ * Enrol into a group
  * Name the enrolment method
  * Exclude teacher enrolment
  * Daily synchronisation by a task
