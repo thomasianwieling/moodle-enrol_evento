@@ -201,7 +201,9 @@ class enrol_evento_user_sync{
                     }
 
                     // Enrol teachers.
-                    $eventteachers = to_array($event->array_EventoAnlassLeitung);
+                    if (isset($event->array_EventoAnlassLeitung)) {
+                        $eventteachers = to_array($event->array_EventoAnlassLeitung);
+                    }
                     // Enrol teachers allowed?
                     if ($instance->customint1 == 1 || is_null($instance->customint1)) {
                         foreach ($eventteachers as $teacher) {
