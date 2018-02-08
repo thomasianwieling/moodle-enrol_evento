@@ -35,7 +35,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configtext('enrol_evento/evenrolmentstate',
         new lang_string('evenrolmentstate', 'enrol_evento'), new lang_string('evenrolmentstate_desc', 'enrol_evento'),
              '20208, 20215, 20225, 20270, 20275, 20281, 20282, 20284, 20510, 20520, 20545, ' .
-             '21300, 21310, 21330, 21350, 21352, 21355, 21380', PARAM_TEXT, 200));
+             '21300, 21310, 21330, 21350, 21352, 21355, 21380', PARAM_TEXT, 100));
 
     // --- enrol instance defaults ----------------------------------------------------------------------------
     $settings->add(new admin_setting_heading('enrol_evento_defaults',
