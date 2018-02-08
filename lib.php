@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * ENROL_EVENTO_CREATE_GROUP constant for automatically creating a group for a meta course.
+ * ENROL_EVENTO_CREATE_GROUP constant for automatically creating a group.
  */
 define('ENROL_EVENTO_CREATE_GROUP', -1);
 

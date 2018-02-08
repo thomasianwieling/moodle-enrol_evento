@@ -263,13 +263,15 @@ class enrol_evento_user_sync{
                         }
                     }
 
-                    // Finally sync groups.
-                    $affectedusers = groups_sync_with_enrolment('evento', $ce->courseid);
-                    foreach ($affectedusers['removed'] as $gm) {
-                        $this->trace->output("removing user from group: $gm->userid ==> $gm->courseid - $gm->groupname");
-                    }
-                    foreach ($affectedusers['added'] as $ue) {
-                        $this->trace->output("adding user to group: $ue->userid ==> $ue->courseid - $ue->groupname");
+                    // Finally sync groups if option is set
+                    if (isset($ce->customint2) && ($ce->customint2 > 0)) {
+                        $affectedusers = groups_sync_with_enrolment('evento', $ce->courseid);
+                        foreach ($affectedusers['removed'] as $gm) {
+                            $this->trace->output("removing user from group: $gm->userid ==> $gm->courseid - $gm->groupname");
+                        }
+                        foreach ($affectedusers['added'] as $ue) {
+                            $this->trace->output("adding user to group: $ue->userid ==> $ue->courseid - $ue->groupname");
+                        }
                     }
 
                 } catch (SoapFault $fault) {
@@ -575,11 +577,10 @@ function to_array($value) {
 }
 
 /**
- * Create a new group with the course's name.
+ * Create a new group
  *
  * @param int $courseid
- * @param int $linkedcourseid
- * @return int $groupid Group ID for this cohort.
+ * @param string $newgroupname
  */
 function enrol_evento_create_new_group($courseid, $newgroupname) {
     global $DB, $CFG;
