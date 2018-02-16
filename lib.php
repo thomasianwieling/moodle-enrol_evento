@@ -55,6 +55,41 @@ class enrol_evento_plugin extends enrol_plugin {
     }
 
     /**
+     * Add new instance of enrol plugin.
+     * @param object $course
+     * @param array $fields instance fields
+     * @return int id of last instance, null if can not be created
+     */
+    public function add_instance($course, array $fields = null) {
+        global $CFG;
+
+        require_once("$CFG->dirroot/enrol/evento/locallib.php");
+
+        if (!empty($fields['customint2']) && $fields['customint2'] == ENROL_EVENTO_CREATE_GROUP) {
+            $context = context_course::instance($instance->courseid);
+            require_capability('moodle/course:managegroups', $context);
+            // Is the new group name empty set to the name or to the alternative evento number
+            // or to the course id number
+            if (empty($fields['customtext2'])) {
+                if (!empty($data->name)) {
+                    $newgroupname = $fields['name'];
+                } else if (!empty($fields['customtext1'])) {
+                    $newgroupname = $fields['customtext1'];
+                } else {
+                    $newgroupname = $fields['idnumber'];
+                }
+            } else {
+                $newgroupname = $fields['customtext2'];
+            }
+            $groupid = enrol_evento_create_new_group($course->id, $newgroupname);
+            $fields['customint2'] = $groupid;
+        }
+        $result = parent::add_instance($course, $fields);
+
+        return $result;
+    }
+
+    /**
      * Return true if we can add a new instance to this course.
      *
      * @param int $courseid
