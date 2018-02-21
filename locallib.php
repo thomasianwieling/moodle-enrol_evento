@@ -183,7 +183,7 @@ class enrol_evento_user_sync{
                             $this->trace->output("...user enrolment synchronisation aborted unexpected with a soapfault"
                                                  . " during sync of the enrolment with evento personid: {$ee->idPerson} ; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}");
                             if (in_array($fault->faultcode, $this->stopsoapfaultcodes)) {
-                                // Stop execution
+                                // Stop execution.
                                 $this->trace->finished();
                                 return 1;
                             }
@@ -214,7 +214,7 @@ class enrol_evento_user_sync{
                                 $this->trace->output("...user enrolment synchronisation aborted unexpected with a soapfault during sync of the enrolment"
                                                     . " with evento personid: {$teacher->anlassLtgIdPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}");
                                 if (in_array($fault->faultcode, $this->stopsoapfaultcodes)) {
-                                    // Stop execution
+                                    // Stop execution.
                                     $this->trace->finished();
                                     return 1;
                                 }
@@ -607,4 +607,34 @@ function enrol_evento_create_new_group($courseid, $newgroupname) {
     $groupid = groups_create_group($groupdata);
 
     return $groupid;
+}
+
+/**
+ * Create a new grouping
+ *
+ * @param int $courseid
+ * @param string $newgroupingname
+ */
+function enrol_evento_create_new_grouping($courseid, $newgroupingname) {
+    global $DB, $CFG;
+
+    require_once($CFG->dirroot.'/group/lib.php');
+
+    $a = new stdClass();
+    $a->name = $newgroupingname;
+    $a->increment = '';
+    $inc = 1;
+    $groupingname = trim(get_string('defaultgroupnametext', 'enrol_evento', $a));
+    // Check to see if the grouping name already exists in this course. Add an incremented number if it does.
+    while ($DB->record_exists('groupings', array('name' => $groupingname, 'courseid' => $courseid))) {
+        $a->increment = '(' . (++$inc) . ')';
+        $groupingname = trim(get_string('defaultgroupnametext', 'enrol_evento', $a));
+    }
+    // Create a new group for the course meta sync.
+    $groupingdata = new stdClass();
+    $groupingdata->courseid = $courseid;
+    $groupingdata->name = $groupingname;
+    $groupingid = groups_create_grouping($groupingdata);
+
+    return $groupingid;
 }

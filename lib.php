@@ -29,10 +29,17 @@ defined('MOODLE_INTERNAL') || die();
  */
 define('ENROL_EVENTO_CREATE_GROUP', -1);
 
+/**
+ * ENROL_EVENTO_CREATE_GROUPING constant for automatically creating a grouping.
+ */
+define('ENROL_EVENTO_CREATE_GROUPING', -1);
+
+
 class enrol_evento_plugin extends enrol_plugin {
 
     protected $lasternoller = null;
     protected $lasternollerinstanceid = 0;
+
 
     public function roles_protected() {
         // Users may tweak the roles later.
@@ -64,26 +71,43 @@ class enrol_evento_plugin extends enrol_plugin {
         global $CFG;
 
         require_once("$CFG->dirroot/enrol/evento/locallib.php");
+        require_once($CFG->dirroot.'/group/lib.php');
+        $groupingid = null;
+        $groupid = null;
 
-        if (!empty($fields['customint2']) && $fields['customint2'] == ENROL_EVENTO_CREATE_GROUP) {
-            $context = context_course::instance($instance->courseid);
+        // New grouping.
+        if (!empty($fields['customint3']) && $fields['customint3'] == ENROL_EVENTO_CREATE_GROUPING
+            && !empty($fields['customint2']) && $fields['customint2'] == ENROL_EVENTO_CREATE_GROUP) {
+            $context = context_course::instance($course->id);
             require_capability('moodle/course:managegroups', $context);
-            // Is the new group name empty set to the name or to the alternative evento number
-            // or to the course id number
+            if (empty($fields['customtext3'])) {
+                $newgroupingname = $this->get_default_groupingname($data);
+            } else {
+                $newgroupingname = $fields['customtext3'];
+            }
+            $groupingid = enrol_evento_create_new_grouping($course->id, $newgroupingname);
+            $fields['customint3'] = $groupingid;
+        }
+
+        // New group.
+        if (!empty($fields['customint2']) && $fields['customint2'] == ENROL_EVENTO_CREATE_GROUP) {
+            $context = context_course::instance($course->id);
+            require_capability('moodle/course:managegroups', $context);
+
             if (empty($fields['customtext2'])) {
-                if (!empty($data->name)) {
-                    $newgroupname = $fields['name'];
-                } else if (!empty($fields['customtext1'])) {
-                    $newgroupname = $fields['customtext1'];
-                } else {
-                    $newgroupname = $fields['idnumber'];
-                }
+                $newgroupname = $this->get_default_groupname((object) $fields);
             } else {
                 $newgroupname = $fields['customtext2'];
             }
             $groupid = enrol_evento_create_new_group($course->id, $newgroupname);
             $fields['customint2'] = $groupid;
         }
+
+        // Assign new Group to new Grouping.
+        if (isset($groupingid) && isset($groupid)) {
+            groups_assign_grouping($groupingid, $groupid);
+        }
+
         $result = parent::add_instance($course, $fields);
 
         return $result;
@@ -138,15 +162,54 @@ class enrol_evento_plugin extends enrol_plugin {
     }
 
     /**
+     * Return a default name for a new group
+     *
+     * @param stdClass $data instance fields
+     * @return string
+     */
+    private function get_default_groupname($data) {
+        // Is the new group name empty set to the name or to the alternative evento number
+        // or to the plugin name
+        if (!empty($data->name)) {
+            $newgroupname = $data->name;
+        } else if (!empty($data->customtext1)) {
+            // Evento event number.
+            $newgroupname = $data->customtext1;
+        } else {
+            // Course plugin name
+            $newgroupname = get_string('pluginname', 'enrol_evento');
+        }
+
+        return $newgroupname;
+    }
+
+    /**
+     * Return a default name for a new grouping
+     *
+     * @param stdClass $data instance fields
+     * @return string
+     */
+    private function get_default_groupingname($data) {
+        // At the moment the same like the default groupname.
+        return $this->get_default_groupname($data);
+    }
+
+    /**
      * Returns defaults for new instances.
      * @return array
      */
     public function get_instance_defaults() {
         $fields = array();
-        $fields['name']            = "";
-        $fields['status']          = 0;
+        $fields['name']            = get_string('pluginname', 'enrol_evento');
+        $fields['status']          = ENROL_INSTANCE_ENABLED;
+        // Option Enrol teachers.
         $fields['customint1']      = $this->get_config('enrolteachers');
+        // Evento "Anlassnummer".
         $fields['customtext1']     = "";
+        // Init new group name.
+        $fields['customtext2']     = $fields['name'];
+        // Init new grouping name.
+        $fields['customtext3']     = $fields['name'];
 
         return $fields;
     }
@@ -172,25 +235,40 @@ class enrol_evento_plugin extends enrol_plugin {
         global $CFG;
 
         require_once("$CFG->dirroot/enrol/evento/locallib.php");
+        require_once($CFG->dirroot.'/group/lib.php');
+        $groupingid = null;
+        $groupid = null;
 
+        // New grouping.
+        if (!empty($data->customint3) && $data->customint3 == ENROL_EVENTO_CREATE_GROUPING
+            && !empty($data->customint2) && $data->customint2 == ENROL_EVENTO_CREATE_GROUP) {
+            $context = context_course::instance($instance->courseid);
+            require_capability('moodle/course:managegroups', $context);
+            if (empty($data->customtext3)) {
+                $newgroupingname = $this->get_default_groupingname($data);
+            } else {
+                $newgroupingname = $data->customtext3;
+            }
+            $groupingid = enrol_evento_create_new_grouping($instance->courseid, $newgroupingname);
+            $data->customint3 = $groupingid;
+        }
+
+        // New group.
         if (!empty($data->customint2) && $data->customint2 == ENROL_EVENTO_CREATE_GROUP) {
             $context = context_course::instance($instance->courseid);
             require_capability('moodle/course:managegroups', $context);
-            // Is the new group name empty set to the name or to the alternative evento number
-            // or to the course id number
             if (empty($data->customtext2)) {
-                if (!empty($data->name)) {
-                    $newgroupname = $data->name;
-                } else if (!empty($data->customtext1)) {
-                    $newgroupname = $data->customtext1;
-                } else {
-                    $newgroupname = $context->idnumber;
-                }
+                $newgroupname = $this->get_default_groupname($data);
             } else {
                 $newgroupname = $data->customtext2;
             }
             $groupid = enrol_evento_create_new_group($instance->courseid, $newgroupname);
             $data->customint2 = $groupid;
+        }
+
+        // Assign new group to grouping.
+        if (isset($groupid) && ($data->customint3 > 0)) {
+            groups_assign_grouping($data->customint3, $groupid);
         }
 
         $result = parent::update_instance($instance, $data);
@@ -373,6 +451,24 @@ class enrol_evento_plugin extends enrol_plugin {
     }
 
     /**
+     * Return an array of valid options for the groupings.
+     *
+     * @param context $coursecontext
+     * @return array
+     */
+    protected function get_groupings_options($coursecontext) {
+        $groupings = array(0 => get_string('none'));
+        $courseid = $coursecontext->instanceid;
+        if (has_capability('moodle/course:managegroups', $coursecontext)) {
+            $groupings[ENROL_EVENTO_CREATE_GROUPING] = get_string('creategrouping', 'enrol_evento');
+        }
+        foreach (groups_get_all_groupings($courseid) as $grouping) {
+            $groupings[$grouping->id] = format_string($grouping->name, true, array('context' => $coursecontext));
+        }
+        return $groupings;
+    }
+
+    /**
      * Add elements to the edit instance form.
      *
      * @param stdClass $instance
@@ -385,13 +481,14 @@ class enrol_evento_plugin extends enrol_plugin {
 
         $config = get_config('enrol_evento');
         $groups = $this->get_group_options($context);
+        $groupings = $this->get_groupings_options($context);
         $course  = get_course($instance->courseid);
 
         // Instance name.
         $nameattribs = array('maxlength' => '255', 'size' => '40');
         $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'), $nameattribs);
         $mform->setType('name', PARAM_TEXT);
-        $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
+        $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->setDefault('name', get_string('pluginname', 'enrol_evento'));
         if (empty($instance->name)) {
             $instance->name = get_string('pluginname', 'enrol_evento');
@@ -401,7 +498,7 @@ class enrol_evento_plugin extends enrol_plugin {
         $options = array('size' => '40', 'maxlength' => '100');
         $mform->addElement('text', 'customtext1', get_string('customcoursenumber', 'enrol_evento'), $options);
         $mform->setType('customtext1', PARAM_TEXT);
-        $mform->addRule('customtext1', get_string('maximumchars', '', 100), 'maxlength', 100, 'server');
+        $mform->addRule('customtext1', get_string('maximumchars', '', 100), 'maxlength', 100, 'client');
         $mform->addHelpButton('customtext1', 'customcoursenumber', 'enrol_evento');
         $mform->setDefault('customtext1', $course->idnumber);
         if (empty($instance->customtext1)) {
@@ -414,16 +511,12 @@ class enrol_evento_plugin extends enrol_plugin {
         $mform->addHelpButton('customint1', 'enrolteachers', 'enrol_evento');
         $mform->setDefault('customint1', $config->enrolteachers);
 
-        // Group
+        // Group.
         $groupgroup = array();
         $groupgroup[] =& $mform->createElement('select', 'customint2', get_string('addtogroup', 'enrol_evento'), $groups);
 
-        // New groupname
+        // New group name.
         $options = array('size' => '30', 'maxlength' => '100', '');
-        // Reset the form data, if the value is not.
-        if (isset($instance->customint2) && ($instance->customint2 != ENROL_EVENTO_CREATE_GROUP)) {
-            $instance->customtext2 = '';
-        }
         $groupgroup[] =& $mform->createElement('text', 'customtext2', get_string('newgroupname', 'enrol_evento'), $options);
         $mform->addGroup($groupgroup, 'groupgroup',  get_string('addtogroup', 'enrol_evento'),
             array('&nbsp;&nbsp;&nbsp;' . get_string('newgroupname', 'enrol_evento')), false);
@@ -431,10 +524,32 @@ class enrol_evento_plugin extends enrol_plugin {
         $mform->disabledIf('customtext2', 'customint2', 'neq', ENROL_EVENTO_CREATE_GROUP);
         $mform->addGroupRule('groupgroup', array(
             'customtext2' => array(
-                array(get_string('maximumchars', '', 100), 'maxlength', 100, 'server')
+                array(get_string('maximumchars', '', 100), 'maxlength', 100, 'client')
             )
         ));
         $mform->addHelpButton('groupgroup', 'addtogroup', 'enrol_evento');
+
+        // Grouping.
+        $groupgrouping = array();
+        $groupgrouping[] =& $mform->createElement('select', 'customint3', get_string('addtogrouping', 'enrol_evento'), $groupings);
+
+        // New grouping name.
+        $options = array('size' => '30', 'maxlength' => '100', '');
+        $groupgrouping[] =& $mform->createElement('text', 'customtext3', get_string('newgroupingname', 'enrol_evento'), $options);
+        $mform->addGroup($groupgrouping, 'groupgrouping',  get_string('addtogrouping', 'enrol_evento'),
+            array('&nbsp;&nbsp;&nbsp;' . get_string('newgroupingname', 'enrol_evento')), false);
+        $mform->setType('customtext3', PARAM_TEXT);
+        $mform->disabledIf('customtext3', 'customint3', 'neq', ENROL_EVENTO_CREATE_GROUPING);
+        $mform->addGroupRule('groupgrouping', array(
+            'customtext3' => array(
+                array(get_string('maximumchars', '', 100), 'maxlength', 100, 'client')
+            )
+        ));
+        $mform->addHelpButton('groupgrouping', 'addtogrouping', 'enrol_evento');
+        // Disable Grouping if not set
+
+        $mform->disabledIf('customint3', 'customint2', 'neq', ENROL_EVENTO_CREATE_GROUP);
+        $mform->disabledIf('customtext3', 'customint2', 'neq', ENROL_EVENTO_CREATE_GROUP);
     }
 
     /**
