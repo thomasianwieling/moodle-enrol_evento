@@ -58,7 +58,7 @@ class evento_member_sync_task extends \core\task\scheduled_task {
 
         // Instance of enrol_evento_plugin.
         $plugin = enrol_get_plugin('evento');
-        $result = $plugin->sync(new \null_progress_trace());
+        $result = $plugin->sync(new \text_progress_trace());
         return $result;
 
     }
