@@ -188,12 +188,12 @@ class enrol_evento_user_sync{
                                 return 1;
                             }
                         } catch (Exception $ex) {
-                            debugging("Enrolemnt sync of user evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
+                            debugging("Enrolment sync of user evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
                                     . " aborted with error: ". $ex->getMessage());
                             $this->trace->output("...user enrolment synchronisation aborted unexpected during sync of enrolment"
                                                 . " with evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}");
                         } catch (Throwable $ex) {
-                            debugging("Enrolemnt sync of user evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
+                            debugging("Enrolment sync of user evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
                                     . " aborted with error: ". $ex->getMessage());
                             $this->trace->output("...user enrolment synchronisation aborted unexpected during sync of enrolment"
                                                 . " with evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}");
@@ -234,6 +234,7 @@ class enrol_evento_user_sync{
 
                     // Suspend users that are already enrolled in moodle, but not anymore in evento.
                     // Get moodle enrolments.
+                    $allenrolledusers = array();
                     $allenrolledusers = $DB->get_records('user_enrolments', array('enrolid' => $ce->id, 'status' => ENROL_USER_ACTIVE), 'userid', 'userid');
                     if (!empty($allenrolledusers)) {
                         // Suspend only, if there are enrolments in evento.
@@ -243,8 +244,18 @@ class enrol_evento_user_sync{
                                 try {
                                     // Check, if the user is not enrolled by this task.
                                     if (!in_array($enrolleduser->userid, $this->entolledusersids)) {
-                                        $this->plugin->update_user_enrol($instance, $enrolleduser->userid, ENROL_USER_SUSPENDED);
-                                        $this->trace->output("suspending expired user {$enrolleduser->userid} in course {$instance->courseid}", 1);
+                                        // Workaround for if evento id for a user changed in evento but not yet in the Active Directory.
+                                        // Not suspending users, if there is no AD account available, there might be a data inconsistency,
+                                        // This will still suspend disabled accounts.
+                                        $aduser = to_array($this->get_ad_user($this->get_eventoid_by_userid($enrolleduser->userid)));
+                                        if ((!empty($aduser)) && (count($aduser) >= 1)) {
+                                            // Suspend User of available AD account.
+                                            $this->plugin->update_user_enrol($instance, $enrolleduser->userid, ENROL_USER_SUSPENDED);
+                                            $this->trace->output("suspending expired user {$enrolleduser->userid} in course {$instance->courseid}", 1);
+                                        } else {
+                                            $this->trace->output("warning: not suspending expired user {$enrolleduser->userid} in course {$instance->courseid} " .
+                                                                "because no response of the Ad Service for this user", 1);
+                                        }
                                     }
                                 } catch (Exception $ex) {
                                     debugging("Error durring suspending of user with id: {$enrolleduser->userid}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
@@ -360,26 +371,36 @@ class enrol_evento_user_sync{
      * default is the student account
      *
      * @param string $eventopersonid evento idPerson
-     * @param bool $isstudent get the student account (default), otherwise you will get lecturer or employeeaccount
-     * @param obj $instance evento enrolment dataset
+     * @param bool $isstudent optional; get the student account (default), otherwise you will get lecturer or employee accounts
+     *                        ; set null if you like to get all accounts
+     * @param array of ad users
      */
-    protected function get_ad_user($eventopersonid, $isstudent=true) {
+    protected function get_ad_user($eventopersonid, $isstudent=null) {
         $result = null;
         if (empty($this->allactiveadaccounts)) {
             $this->allactiveadaccounts = $this->eventoservice->get_all_ad_accounts(true);
         }
         // Filter ad-users.
         if (isset($eventopersonid)) {
+            // Filter personid.
             $result = array_filter($this->allactiveadaccounts,
-                                function ($var) use ($isstudent, $eventopersonid) {
-                                    if ($isstudent) {
-                                        $isstudentaccount = '1';
-                                    } else {
-                                        $isstudentaccount = '0';
-                                    }
-                                    return (($var->idPerson == $eventopersonid) && ($var->isStudentAccount == $isstudentaccount));
+                                function ($var) use ($eventopersonid) {
+                                    return (($var->idPerson == $eventopersonid));
                                 }
             );
+            // Filter student, lecturer or employee.
+            if (isset($isstudent)) {
+                $result = array_filter($result,
+                                    function ($var) use ($isstudent) {
+                                        if ($isstudent) {
+                                            $isstudentaccount = '1';
+                                        } else {
+                                            $isstudentaccount = '0';
+                                        }
+                                        return (($var->isStudentAccount == $isstudentaccount));
+                                    }
+                );
+            }
         }
 
         return $result;
@@ -490,6 +511,33 @@ class enrol_evento_user_sync{
         $userlist = $DB->get_records_sql($sql, $sqlparams);
 
         return $userlist;
+    }
+
+    /**
+     * Obtains the evento id of a user, if it is set
+     *
+     * @param int $userid
+     * @return string eventoid of the user (person)
+     */
+    protected function get_eventoid_by_userid($userid) {
+        global $DB;
+        $result = null;
+
+        $sql = 'SELECT u.id, uid.data
+            FROM {user} u
+            INNER JOIN {user_info_data} uid ON uid.userid = u.id
+            INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id
+            WHERE uif.shortname = :eventoidshortname
+            AND u.id = :userid';
+
+        $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'userid' => (int)$userid);
+
+        $user = $DB->get_record_sql($sql, $sqlparams);
+        if (isset($user)) {
+            $result = $user->data;
+        }
+
+        return $result;
     }
 
     /**
