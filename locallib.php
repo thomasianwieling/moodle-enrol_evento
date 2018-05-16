@@ -238,8 +238,8 @@ class enrol_evento_user_sync{
                     $allenrolledusers = array();
                     $allenrolledusers = $DB->get_records('user_enrolments', array('enrolid' => $ce->id, 'status' => ENROL_USER_ACTIVE), 'userid', 'userid');
                     if (!empty($allenrolledusers)) {
-                        // Suspend only, if there are enrolments in evento.
-                        if (!empty($enrolments)) {
+                        // Suspend only, if there are enrolments in evento. Or there are teachers in the module.
+                        if (!empty($enrolments) || !empty($eventteachers)) {
 
                             foreach ($allenrolledusers as $enrolleduser) {
                                 try {
