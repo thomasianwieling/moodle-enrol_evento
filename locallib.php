@@ -201,6 +201,7 @@ class enrol_evento_user_sync{
                     }
 
                     // Enrol teachers.
+                    $eventteachers = array();
                     if (isset($event->array_EventoAnlassLeitung)) {
                         $eventteachers = to_array($event->array_EventoAnlassLeitung);
                     }
