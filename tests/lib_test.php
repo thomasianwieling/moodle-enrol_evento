@@ -30,10 +30,14 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @package    enrol_evento
  * @category   phpunit
- * @copyright  2017 HTW Chur Roger Barras
+ * @copyright  2018 HTW Chur Thomas Wieling
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class enrol_evento_lib_testcase extends advanced_testcase {
+ <?php
 
-
-}
+ class mod_myplugin_sample_basic_testcase extends basic_testcase {
+     public function test_equals() {
+         $a = 1 + 2;
+         $this->assertEquals(3, $a);
+     }
+ }
