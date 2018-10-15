@@ -15,20 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Unit tests for activities completed by classification.
+ * Unit-Test for enrolment plugin
  *
- * @package   enrol evento
- * @copyright 2018 HTW Chur Thomas Wieling
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    enrol_evento
+ * @copyright  2018 HTW Chur Thomas Wieling
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 
- /** This class contains the test cases for the functions in editlib.php. */
- class mod_myplugin_sample_testcase extends advanced_testcase {
-      public function test_adding() {
-          $this->assertEquals(2, 1+2);
-      }
-  }
- ?>
+ class mod_myplugin_sample_basic_testcase extends basic_testcase {
+     public function test_equals() {
+         $a = 1 + 2;
+         $this->assertEquals(3, $a);
+     }
+ }
+?>
