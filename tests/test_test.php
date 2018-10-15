@@ -24,13 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Unit tests for activities completed by classification.
- *
- * @package   core_analytics
- * @copyright 2017 David Monllaó {@link http://www.davidmonllao.com}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 
  /** This class contains the test cases for the functions in editlib.php. */
  class mod_myplugin_sample_testcase extends advanced_testcase {
