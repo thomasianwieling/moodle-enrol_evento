@@ -41,6 +41,7 @@ defined('MOODLE_INTERNAL') || die();
    public function test_create_evento_course()
    {
      global $DB;
+
      $this->resetAfterTest(true);
      $this->assertFalse(is_siteadmin());   // by default no user is logged-in
      $this->setUser(2);                    // switch $USER
@@ -48,6 +49,8 @@ defined('MOODLE_INTERNAL') || die();
      $category2 = $this->getDataGenerator()->create_category(array('name'=>'Hello'));
      $this->assertArrayHasKey('name', ['name' => 'Hello']);
      $this->getDataGenerator()->create_course(array('name'=>'hallo', 'category'=>$category2->id));
+     $this->config = get_config('enrol_evento');
+     $plugin = enrol_get_plugin('evento');
    }
  }
 ?>
