@@ -48,5 +48,10 @@ defined('MOODLE_INTERNAL') || die();
      $category2 = $this->getDataGenerator()->create_category(array('name'=>'Some subcategory'));
      $this->getDataGenerator()->create_course(array('name'=>'Some course', 'category'=>$category2->id));
      }
+
+     public function test_create_user()
+     {
+       $user1 = $this->getDataGenerator()->create_user(array('email'=>'user1@example.com', 'username'=>'user1'));
+     }
  }
 ?>
