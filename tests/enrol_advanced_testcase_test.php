@@ -27,29 +27,27 @@ defined('MOODLE_INTERNAL') || die();
 
  class mod_myplugin_sample_basic_testcase extends advanced_testcase {
 
-   //Testfunction must be right
-   public function test_adding()
-   {
-       $this->assertEquals(3, 1+2);
-   }
-
    public function test_create_course_category()
    {
-    global $DB;
-    $this->resetAfterTest(false);
-    $this->assertFalse(is_siteadmin());   // by default no user is logged-in
-    $this->setUser(2);                    // switch $USER
-    $this->assertTrue(is_siteadmin());    // admin is logged-in now
-    $category1 = $this->getDataGenerator()->create_category();
-    $category2 = $this->getDataGenerator()->create_category(array('name'=>'Some subcategory', 'parent'=>$category1->id));
-  }
-
-    public function test_create_course()
-    {
      global $DB;
-     $this->resetAfterTest(false);
+     $this->resetAfterTest(true);
+     $this->assertFalse(is_siteadmin());   // by default no user is logged-in
+     $this->setUser(2);                    // switch $USER
+     $this->assertTrue(is_siteadmin());    // admin is logged-in now
      $category2 = $this->getDataGenerator()->create_category(array('name'=>'Some subcategory'));
-     $this->getDataGenerator()->create_course(array('name'=>'Some course', 'category'=>$category2->id));
-     }
+   }
+
+
+   public function test_create_evento_course()
+   {
+     global $DB;
+     $this->resetAfterTest(true);
+     $this->assertFalse(is_siteadmin());   // by default no user is logged-in
+     $this->setUser(2);                    // switch $USER
+     $this->assertTrue(is_siteadmin());    // admin is logged-in no
+     $category2 = $this->getDataGenerator()->create_category(array('name'=>'Hello'));
+     $this->assertArrayHasKey('name', ['name' => 'Hello']);
+     $this->getDataGenerator()->create_course(array('name'=>'hallo', 'category'=>$category2->id));
+   }
  }
 ?>
