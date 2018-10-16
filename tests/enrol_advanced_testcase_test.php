@@ -33,18 +33,13 @@ defined('MOODLE_INTERNAL') || die();
        $this->assertEquals(3, 1+2);
    }
 
-   public function test_deleting()
+   public function test_create_course()
    {
     global $DB;
-    $this->resetAfterTest(true);
-    $DB->delete_records('user');
-    $this->assertEmpty($DB->get_records('user'));
-    }
-
-    public function test_user_table_was_reset()
-    {
-      global $DB;
-      $this->assertEquals(2, $DB->count_records('user', array()));
+    $this->resetAfterTest(false);
+    $category1 = $this->getDataGenerator()->create_category();
+    $category2 = $this->getDataGenerator()->create_category(array('name'=>'Testcouse', 'parent'=>$category1->id));
+    $course = $this->getDataGenerator()->create_course(array('name'=>'Some course', 'category'=>$category2->id));
     }
  }
 ?>
