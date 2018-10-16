@@ -46,7 +46,7 @@ defined('MOODLE_INTERNAL') || die();
      global $DB;
      $this->resetAfterTest(false);
      $category2 = $this->getDataGenerator()->create_category(array('name'=>'Some subcategory'));
-     $course2 = $this->getDataGenerator()->create_course(array('name'=>'Some course', 'category'=>$category1->id));
+     $this->getDataGenerator()->create_course(array('name'=>'Some course', 'category'=>$category1->id));
      }
  }
 ?>
