@@ -37,9 +37,12 @@ defined('MOODLE_INTERNAL') || die();
    {
     global $DB;
     $this->resetAfterTest(false);
+    $this->assertFalse(is_siteadmin());   // by default no user is logged-in
+    $this->setUser(2);                    // switch $USER
+    $this->assertTrue(is_siteadmin());    // admin is logged-in now
     $category1 = $this->getDataGenerator()->create_category();
-     $category2 = $this->getDataGenerator()->create_category(array('name'=>'Some subcategory', 'parent'=>$category1->id));
-    }
+    $category2 = $this->getDataGenerator()->create_category(array('name'=>'Some subcategory', 'parent'=>$category1->id));
+  }
 
     public function test_create_course()
     {
@@ -47,11 +50,6 @@ defined('MOODLE_INTERNAL') || die();
      $this->resetAfterTest(false);
      $category2 = $this->getDataGenerator()->create_category(array('name'=>'Some subcategory'));
      $this->getDataGenerator()->create_course(array('name'=>'Some course', 'category'=>$category2->id));
-     }
-
-     public function test_create_user()
-     {
-       $user1 = $this->getDataGenerator()->create_user(array('email'=>'user1@example.com', 'username'=>'user1'));
      }
  }
 ?>
