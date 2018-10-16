@@ -33,13 +33,21 @@ defined('MOODLE_INTERNAL') || die();
        $this->assertEquals(3, 1+2);
    }
 
-   public function test_create_course()
+   public function test_create_course_category()
    {
     global $DB;
     $this->resetAfterTest(false);
     $category1 = $this->getDataGenerator()->create_category();
-    $category2 = $this->getDataGenerator()->create_category(array('name'=>'Testcouse', 'parent'=>$category1->id));
-    $course = $this->getDataGenerator()->create_course(array('name'=>'Some course', 'category'=>$category2->id));
+     $category2 = $this->getDataGenerator()->create_category(array('name'=>'Some subcategory', 'parent'=>$category1->id));
     }
+
+    public function test_create_course()
+    {
+     global $DB;
+     $this->resetAfterTest(false);
+     $course1 = $this->getDataGenerator()->create_course();
+     $category = $this->getDataGenerator()->create_category();
+     $course2 = $this->getDataGenerator()->create_course(array('name'=>'Some course', 'category'=>$category->id));
+     }
  }
 ?>
