@@ -30,32 +30,31 @@ defined('MOODLE_INTERNAL') || die();
    public function test_create_course_category()
    {
      global $DB;
-     $this->resetAfterTest(false);
+     $this->resetAfterTest(true);
      $this->assertFalse(is_siteadmin());   // by default no user is logged-in
      $this->setUser(2);                    // switch $USER
      $this->assertTrue(is_siteadmin());    // admin is logged-in now
      $course = $this->getDataGenerator()->create_course();
      $user = $this->getDataGenerator()->create_user();
      $this->getDataGenerator()->enrol_user($user->id, $course->id);
-     var_dump($course);
-//     $this->getDataGenerator()->enrol_user($userid, $courseid, $teacherroleid);
-//     $this->getDataGenerator()->enrol_user($userid, $courseid, $teacherroleid, 'manual');
+     $courses = get_courses();
+     $this->assertEquals(2, count($courses));
+     $user1 = $DB->get_record('user', array('id'=>$user->id));
+     $this->assertEquals($user1, $user);
    }
 
-/*
-   public function test_create_evento_course()
-   {
-     global $DB;
 
-     $this->resetAfterTest(true);
-     $this->assertFalse(is_siteadmin());   // by default no user is logged-in
-     $this->setUser(2);                    // switch $USER
-     $this->assertTrue(is_siteadmin());    // admin is logged-in no
-     $category2 = $this->getDataGenerator()->create_category(array('name'=>'Hello'));
-     $this->assertArrayHasKey('name', ['name' => 'Hello']);
-     $this->getDataGenerator()->create_course(array('name'=>'hallo', 'category'=>$category2->id));
+
+   public function test_create_evento_user()
+   {
+     $eventopersonid = 142826;
+     global $DB;
+     global $CFG;
+     require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $this->config = get_config('enrol_evento');
      $plugin = enrol_get_plugin('evento');
-   }*/
+     $user = enrol_evento_user_sync::get_user($eventopersonid, $isstudent=true, $username=null);
+//     var_dump($user);
+   }
  }
 ?>
