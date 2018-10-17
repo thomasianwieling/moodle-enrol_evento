@@ -34,8 +34,9 @@ defined('MOODLE_INTERNAL') || die();
      $this->assertFalse(is_siteadmin());   // by default no user is logged-in
      $this->setUser(2);                    // switch $USER
      $this->assertTrue(is_siteadmin());    // admin is logged-in now
+     $course = $this->getDataGenerator()->create_course();
      $user = $this->getDataGenerator()->create_user();
-     $this->getDataGenerator()->enrol_user($user->id, $courseid);
+     $this->getDataGenerator()->enrol_user($user->id, $course->id);
 //     $this->getDataGenerator()->enrol_user($userid, $courseid, $teacherroleid);
 //     $this->getDataGenerator()->enrol_user($userid, $courseid, $teacherroleid, 'manual');
    }
