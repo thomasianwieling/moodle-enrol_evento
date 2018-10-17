@@ -37,7 +37,7 @@ defined('MOODLE_INTERNAL') || die();
      $course = $this->getDataGenerator()->create_course();
      $user = $this->getDataGenerator()->create_user();
      $this->getDataGenerator()->enrol_user($user->id, $course->id);
-     $this->get_user($course->id);
+     $this->get_enrolments($course->id);
 //     $this->getDataGenerator()->enrol_user($userid, $courseid, $teacherroleid);
 //     $this->getDataGenerator()->enrol_user($userid, $courseid, $teacherroleid, 'manual');
    }
