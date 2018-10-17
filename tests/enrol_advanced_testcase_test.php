@@ -25,19 +25,22 @@
 defined('MOODLE_INTERNAL') || die();
 
 
- class mod_myplugin_sample_basic_testcase extends advanced_testcase {
+ class mod_evento_advanced_testcase extends advanced_testcase {
 
    public function test_create_course_category()
    {
      global $DB;
-     $this->resetAfterTest(true);
+     $this->resetAfterTest(false);
      $this->assertFalse(is_siteadmin());   // by default no user is logged-in
      $this->setUser(2);                    // switch $USER
      $this->assertTrue(is_siteadmin());    // admin is logged-in now
-     $category2 = $this->getDataGenerator()->create_category(array('name'=>'Some subcategory'));
+     $this->getDataGenerator()->create_category(array('name'=>'Coursecategory'));
+     $category = $DB->get_record('course_categories',array('id'=>$COURSE->category));
+     echo $category->name;
+
    }
 
-
+/*
    public function test_create_evento_course()
    {
      global $DB;
@@ -51,6 +54,6 @@ defined('MOODLE_INTERNAL') || die();
      $this->getDataGenerator()->create_course(array('name'=>'hallo', 'category'=>$category2->id));
      $this->config = get_config('enrol_evento');
      $plugin = enrol_get_plugin('evento');
-   }
+   }*/
  }
 ?>
