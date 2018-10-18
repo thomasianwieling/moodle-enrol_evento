@@ -24,8 +24,33 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
+require_once($CFG->dirroot . '/enrol/evento/classes/task/evento_member_sync_task.php');
+require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
 
  class mod_evento_advanced_testcase extends advanced_testcase {
+
+   /** @var stdClass Plugin. */
+   private $plugin;
+
+   /*Enable evento enrol plugin*/
+   private function enable_plugin()
+   {
+     $this->assertFalse(enrol_is_enabled('evento'));            // disabled by default
+     $plugin = enrol_get_plugin('evento');                      // correct enrol instance
+     $this->assertInstanceOf('enrol_evento_plugin', $plugin);
+     return $plugin;
+   }
+
+   /*Basic test for enabling plugin*/
+   public function test_basics()
+   {
+     $this->assertFalse(enrol_is_enabled('evento'));
+     $plugin = $this->enable_plugin();
+     $this->assertEquals($plugin->get_name(), 'evento');
+   }
+
+
 
    public function test_create_course_category()
    {
@@ -44,17 +69,12 @@ defined('MOODLE_INTERNAL') || die();
    }
 
 
-
    public function test_create_evento_user()
    {
-     $eventopersonid = 142826;
      global $DB;
-     global $CFG;
-     require_once($CFG->dirroot . '/enrol/evento/locallib.php');
-     $this->config = get_config('enrol_evento');
-     $plugin = enrol_get_plugin('evento');
-     $user = enrol_evento_user_sync::get_user($eventopersonid, $isstudent=true, $username=null);
-//     var_dump($user);
+     $this->resetAfterTest(true);
+     $this->enable_plugin();
+     $eventoenrolplugin= task::get_name();
    }
  }
 ?>
