@@ -27,6 +27,9 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/enrol/evento/classes/task/evento_member_sync_task.php');
 require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
+require_once($CFG->dirroot . '/enrol/evento/locallib.php');
+
+
 
  class mod_evento_advanced_testcase extends advanced_testcase {
 
@@ -42,15 +45,15 @@ require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
      return $plugin;
    }
 
-   /*Basic test for enabling plugin*/
+   /*Basic test if plugin is enabled*/
    public function test_basics()
    {
      $this->assertFalse(enrol_is_enabled('evento'));
      $plugin = $this->enable_plugin();
+     $this->plugin = enrol_get_plugin('evento');
      $this->assertEquals($plugin->get_name(), 'evento');
+     $this->assertNotEmpty($this->plugin);
    }
-
-
 
    public function test_create_course_category()
    {
@@ -73,8 +76,41 @@ require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
    {
      global $DB;
      $this->resetAfterTest(true);
-     $this->enable_plugin();
-     $eventoenrolplugin= task::get_name();
+     $this->assertFalse(enrol_is_enabled('evento'));
+     $plugin = $this->enable_plugin();
+     $evento = new enrol_evento\task\evento_member_sync_task();
+     $name = $evento->get_name();
+     $this->assertEquals($name, 'Evento synchronisation');
+     $record = new stdClass();
+     $record->id = 1772;
+     $record->value = '*****';
+     $DB->update_record('config_plugins', $record, $bulk=false);
+     $record = new stdClass();
+     $record->id = 1771;
+     $record->value = 'eventowsblc';
+     $DB->update_record('config_plugins', $record, $bulk=false);
+     $record = new stdClass();
+     $record->id = 1770;
+     $record->value = 'http://service.webservice.htwchur.ch';
+     $DB->update_record('config_plugins', $record, $bulk=false);
+     $record = new stdClass();
+     $record->id = 1768;
+     $record->value = 'https://ws.fh-htwchur.ch/eventowsblc/services/EventoWebservice';
+     $DB->update_record('config_plugins', $record, $bulk=false);
+     $record = new stdClass();
+     $record->id = 1769;
+     $record->value = 'evento_webservice_v1_.wsdl';
+     $records = $DB->get_record('config_plugins', array('id' => 1770), '*', MUST_EXIST);
+     //var_dump($records);
+
+     $locallib = new enrol_evento_user_sync_exposed();
+     $locallib->get_user(136995, $isstudent=true, $username=null);
+
+
+
+
+
+
    }
  }
 ?>
