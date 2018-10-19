@@ -485,7 +485,7 @@ class enrol_evento_user_sync{
 
             $this->set_user_eventoid($usernew->id, $eventopersonid);
             $u = $DB->get_record('user', array('id' => $usernew->id));
-            debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
+            printf("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
         }
 
         return $u;
@@ -686,4 +686,16 @@ function enrol_evento_create_new_grouping($courseid, $newgroupingname) {
     $groupingid = groups_create_grouping($groupingdata);
 
     return $groupingid;
+}
+
+
+
+
+
+class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
+{
+  public function get_user($eventopersonid, $isstudent=true, $username=null)
+  {
+    enrol_evento_user_sync::get_user($eventopersonid, $isstudent=true, $username=null);
+  }
 }
