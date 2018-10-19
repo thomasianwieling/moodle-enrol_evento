@@ -122,6 +122,7 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
 
    public function test_get_ad_user()
    {
+     $locallib = new enrol_evento_user_sync_exposed();
      $eventoid = 136995;
      $locallib->get_ad_user_exposed($eventopersonid, $isstudent=null);
 
