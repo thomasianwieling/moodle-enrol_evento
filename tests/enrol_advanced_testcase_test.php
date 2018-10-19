@@ -77,7 +77,7 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      global $DB;
 
      /*Reset after Test */
-     $this->resetAfterTest(true);
+     $this->resetAfterTest(false);
 
      $this->assertFalse(enrol_is_enabled('evento'));
      $plugin = $this->enable_plugin();
@@ -101,6 +101,18 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $eventopersonid = 136995;
      $person = $locallib->get_ad_user_exposed($eventopersonid, $isstudent=null);
      $this->assertEquals($person[724]->sAMAccountName, '****');
+   }
+
+   public function test_get_users_by_eventoid()
+   {
+     $this->resetAfterTest(false);
+
+     /*Get AD user*/
+     $locallib = new enrol_evento_user_sync_exposed();
+     $eventopersonid = 141701;
+     $person = $locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
+     $this->assertEquals($person[178000]->email, '****');
+
    }
 
  }
