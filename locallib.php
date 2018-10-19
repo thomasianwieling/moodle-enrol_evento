@@ -443,7 +443,11 @@ class enrol_evento_user_sync{
             $usernew->id = user_create_user($usernew, false, false);
             $this->set_user_eventoid($usernew->id, $eventopersonid);
             $u = $DB->get_record('user', array('id' => $usernew->id));
-            debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
+            /*Uncomment for testing*/
+//            debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
+            /*uncomment for Testing*/
+            $tmp = 'user created with username:';
+            fwrite(STDERR, print_r($tmp . print_r($usernew->username,TRUE) , TRUE));
         }
         return $u;
     }
@@ -617,12 +621,12 @@ function enrol_evento_create_new_grouping($courseid, $newgroupingname) {
 
 class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
 {
-  public function get_user($eventopersonid, $isstudent=true, $username=null)
+  public function get_user_exposed($eventopersonid, $isstudent=true, $username=null)
   {
-    enrol_evento_user_sync::get_user($eventopersonid, $isstudent=true, $username=null);
+    parent::get_user($eventopersonid, $isstudent=true, $username=null);
   }
-  public function get_ad_user($eventopersonid, $isstudent=null)
+  public function get_ad_user_exposed($eventopersonid, $isstudent=null)
   {
-    enrol_evento_user_sync::get_ad_user($eventopersonid, $isstudent=null);
+    parent::get_ad_user($eventopersonid, $isstudent=null);
   }
 }
