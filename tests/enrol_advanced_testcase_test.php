@@ -29,7 +29,7 @@ require_once($CFG->dirroot . '/enrol/evento/classes/task/evento_member_sync_task
 require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
 require_once($CFG->dirroot . '/enrol/evento/locallib.php');
 
-
+/*TESTCASE*/
 
  class mod_evento_advanced_testcase extends advanced_testcase {
 
