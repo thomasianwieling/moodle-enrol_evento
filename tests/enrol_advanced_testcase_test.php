@@ -103,6 +103,8 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $this->assertEquals($person[724]->sAMAccountName, '****');
    }
 
+   /*Get user by evento id test*/
+
    public function test_get_users_by_eventoid()
    {
      $this->resetAfterTest(false);
