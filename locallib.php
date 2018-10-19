@@ -372,6 +372,7 @@ class enrol_evento_user_sync{
                 );
             }
         }
+
         return $result;
     }
     /**
@@ -444,10 +445,10 @@ class enrol_evento_user_sync{
             $this->set_user_eventoid($usernew->id, $eventopersonid);
             $u = $DB->get_record('user', array('id' => $usernew->id));
             /*Uncomment for testing*/
-            debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
+            //debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
             /*uncomment for Testing*/
-          //  $tmp = 'user created with username:';
-          //  fwrite(STDERR, print_r($tmp . print_r($usernew->username,TRUE) , TRUE));
+            $tmp = 'user created with username:';
+            fwrite(STDERR, print_r($tmp . print_r($usernew->username,TRUE) , TRUE));
         }
         return $u;
     }
@@ -627,6 +628,11 @@ class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
   }
   public function get_ad_user_exposed($eventopersonid, $isstudent=null)
   {
-    parent::get_ad_user($eventopersonid, $isstudent=null);
+    return parent::get_ad_user($eventopersonid, $isstudent=null);
   }
+  public function get_users_by_eventoid_exposed($eventoid)
+  {
+    return parent::get_users_by_eventoid($eventoid);
+  }
+
 }
