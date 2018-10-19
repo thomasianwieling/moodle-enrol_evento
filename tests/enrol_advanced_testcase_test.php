@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -30,7 +32,7 @@ require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
 require_once($CFG->dirroot . '/enrol/evento/locallib.php');
 
 
-
+ /*Testclass for evento enrol*/
  class mod_evento_advanced_testcase extends advanced_testcase {
 
    /** @var stdClass Plugin. */
