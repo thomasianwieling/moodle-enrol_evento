@@ -701,4 +701,8 @@ class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
   {
     enrol_evento_user_sync::get_user($eventopersonid, $isstudent=true, $username=null);
   }
+  public function get_ad_user($eventopersonid, $isstudent=null)
+  {
+    enrol_evento_user_sync::get_ad_user($eventopersonid, $isstudent=null);
+  }
 }
