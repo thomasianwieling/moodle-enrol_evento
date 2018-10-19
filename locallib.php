@@ -444,10 +444,10 @@ class enrol_evento_user_sync{
             $this->set_user_eventoid($usernew->id, $eventopersonid);
             $u = $DB->get_record('user', array('id' => $usernew->id));
             /*Uncomment for testing*/
-//            debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
+            debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
             /*uncomment for Testing*/
-            $tmp = 'user created with username:';
-            fwrite(STDERR, print_r($tmp . print_r($usernew->username,TRUE) , TRUE));
+          //  $tmp = 'user created with username:';
+          //  fwrite(STDERR, print_r($tmp . print_r($usernew->username,TRUE) , TRUE));
         }
         return $u;
     }
