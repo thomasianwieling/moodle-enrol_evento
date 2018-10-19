@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * Evento enrolment plugin local library file.
  *
@@ -21,24 +20,18 @@
  * @copyright  2017 HTW Chur Roger Barras
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
-
 require_once($CFG->dirroot . '/user/selector/lib.php');
 require_once($CFG->dirroot . '/enrol/locallib.php');
-
 /**
  * Name of the user info field for the eventoid
  */
 define('ENROL_EVENTO_UIF_EVENTOID', 'eventoid');
-
-
 /**
  * Class definition for the whole syncronisation process.
  *
  */
 class enrol_evento_user_sync{
-
     // trace reference to null_progress_trace
     protected $trace;
     // evento WS reference to local_evento_evento_service
@@ -63,7 +56,6 @@ class enrol_evento_user_sync{
     protected $stopsoapfaultcodes = array('HTTP', 'soapenv:Server', 'Server');
     // array of all active ad-useraccounts
     protected $allactiveadaccounts = array();
-
     /**
      * Constructor
      *
@@ -79,7 +71,6 @@ class enrol_evento_user_sync{
         // Valid Evento enrolmentstate for student enrolment.
         $this->enrolstateids = explode(",", preg_replace('/\s+/', '', $this->config->evenrolmentstate));
     }
-
     /**
      * Sync all evento course links.
      *
@@ -89,7 +80,6 @@ class enrol_evento_user_sync{
      */
     public function user_sync(progress_trace $trace, $courseid = null) {
         global $CFG, $DB, $USER;
-
         try {
             // Init.
             $this->trace = $trace;
@@ -98,25 +88,20 @@ class enrol_evento_user_sync{
                 $this->trace->finished();
                 return 2;
             }
-
             // Unfortunately this may take a long time, execution can be interrupted safely here.
             core_php_time_limit::raise();
             raise_memory_limit(MEMORY_HUGE);
-
             if (!$this->eventoservice->init_call()) {
                 // webservice not available
                 $this->trace->output("Evento webservice not available");
                 return 2;
             }
-
             $this->trace->output('Starting evento enrolment synchronisation...');
-
             // Init the time start and end for new enrolments.
             $now = time();
             $this->timestart = make_timestamp(date('Y', $now), date('m', $now), date('d', $now), 0, 0, 0);
             $this->timeend = 0;
             $instances = array();
-
             $params = array('now1' => $now, 'now2' => $now, 'now3' => $now, 'now4' => $now, 'courselevel' => CONTEXT_COURSE, 'enabled' => ENROL_INSTANCE_ENABLED);
             $coursesql = "";
             if (!empty($courseid)) {
@@ -136,7 +121,6 @@ class enrol_evento_user_sync{
                         AND e.status = :enabled
                         $coursesql";
             $rs = $DB->get_recordset_sql($sql, $params);
-
             // Iterate over each evento enrol instance.
             foreach ($rs as $ce) {
                 try {
@@ -144,36 +128,30 @@ class enrol_evento_user_sync{
                         $instances[$ce->id] = $DB->get_record('enrol', array('id' => $ce->id));
                     }
                     $instance = $instances[$ce->id];
-
                     // Get event id and data.
                     if (empty($instance->customtext1)) {
                         $anlassnbr = trim($ce->idnumber);
                     } else {
                         $anlassnbr = trim($instance->customtext1);
                     }
-
                     // Nothing to sync?
                     if (empty($anlassnbr)) {
                         debugging("No 'anlassnummer' set for courseid: {$ce->courseid}", DEBUG_DEVELOPER);
                         continue;
                     }
-
                     // Timestamps for enrolemnts.
                     $this->timestart = $ce->enrolstartdate;
                     $this->timeend = $ce->enrolenddate;
                     // Array of ids of active enrolled users.
                     $this->entolledusersids = array();
-
                     $event = $this->eventoservice->get_event_by_number($anlassnbr);
                     if (empty($event)) {
                         debugging("No Evento event found for idnumber: {$anlassnbr}", DEBUG_DEVELOPER);
                         continue;
                     }
-
                     // Get event participants enrolments.
                     $enrolments = $this->eventoservice->get_enrolments_by_eventid($event->idAnlass);
                     $enrolments = to_array($enrolments);
-
                     // Enrol students.
                     foreach ($enrolments as $ee) {
                         try {
@@ -199,7 +177,6 @@ class enrol_evento_user_sync{
                                                 . " with evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}");
                         }
                     }
-
                     // Enrol teachers.
                     $eventteachers = array();
                     if (isset($event->array_EventoAnlassLeitung)) {
@@ -232,7 +209,6 @@ class enrol_evento_user_sync{
                             }
                         }
                     }
-
                     // Suspend users that are already enrolled in moodle, but not anymore in evento.
                     // Get moodle enrolments.
                     $allenrolledusers = array();
@@ -240,7 +216,6 @@ class enrol_evento_user_sync{
                     if (!empty($allenrolledusers)) {
                         // Suspend only, if there are enrolments in evento. Or there are teachers in the module.
                         if (!empty($enrolments) || !empty($eventteachers)) {
-
                             foreach ($allenrolledusers as $enrolleduser) {
                                 try {
                                     // Check, if the user is not enrolled by this task.
@@ -276,7 +251,6 @@ class enrol_evento_user_sync{
                                             . " evento.idAnlass: {$event->idAnlass}; courseid: {$ce->courseid}");
                         }
                     }
-
                     // Finally sync groups if option is set
                     if (isset($ce->customint2) && ($ce->customint2 > 0)) {
                         require_once("{$CFG->dirroot}/group/lib.php");
@@ -288,7 +262,6 @@ class enrol_evento_user_sync{
                             $this->trace->output("adding user to group: $ue->userid ==> $ue->courseid - $ue->groupname");
                         }
                     }
-
                 } catch (SoapFault $fault) {
                     debugging("Soapfault : ". $fault->__toString());
                     $this->trace->output("...user enrolment synchronisation aborted unexpected with a soapfault during "
@@ -310,7 +283,6 @@ class enrol_evento_user_sync{
             }
             $rs->close();
             unset($instances);
-
             $this->trace->output('...user enrolment synchronisation finished.');
         } catch (SoapFault $fault) {
             debugging("Error Soapfault: ". $fault->__toString());
@@ -331,7 +303,6 @@ class enrol_evento_user_sync{
         $this->trace->finished();
         return 0;
     }
-
     /**
      * Checks and enrols a student by an evento enrolment dataset
      * thorws Exceptions on failure
@@ -351,7 +322,6 @@ class enrol_evento_user_sync{
             $this->trace->output("enroling user {$u->id} in course {$instance->courseid} as a student", 1);
         }
     }
-
     /**
      * Enrol a teacher, thorws Exceptions on failure
      *
@@ -366,7 +336,6 @@ class enrol_evento_user_sync{
         $this->entolledusersids[] = $u->id;
         $this->trace->output("enroling user {$u->id} in course {$instance->courseid} as an editingteacher", 1);
     }
-
     /**
      * Get an aduser by evento personid
      * default is the student account
@@ -403,10 +372,8 @@ class enrol_evento_user_sync{
                 );
             }
         }
-
         return $result;
     }
-
     /**
      * Obtains the moodle user by an evento id
      *
@@ -417,10 +384,6 @@ class enrol_evento_user_sync{
      */
     protected function get_user($eventopersonid, $isstudent=true, $username=null) {
         global $DB, $CFG;
-
-
-
-
         // Get the Active Directory User by evento ID.
         $adusers = to_array($this->get_ad_user($eventopersonid, $isstudent));
         if (!empty($adusers)) {
@@ -447,7 +410,6 @@ class enrol_evento_user_sync{
                 }
             }
         }
-
         // Get the moodle user by the username.
         if (!isset($u)) {
             $shibbolethid = $this->eventoservice->sid_to_shibbolethid($aduser->objectSid);
@@ -456,44 +418,35 @@ class enrol_evento_user_sync{
                 $this->set_user_eventoid($u->id, $eventopersonid);
             }
         }
-
         // Create a user.
         if (!isset($u)) {
             require_once($CFG->dirroot . "/user/lib.php");
-
             // Get person details from evento.
             $person = $this->eventoservice->get_person_by_id($eventopersonid);
             $username = $shibbolethid;
             $email = $person->personeMail;
             $firstname = $person->personVorname;
             $lastname = $person->personNachname;
-
             $usernew = new stdClass();
             $usernew->auth = $this->config->accounttype;
             $usernew->username = $username;
             $usernew->email = $email;
             $usernew->firstname = $firstname;
             $usernew->lastname = $lastname;
-
             $usernew->confirmed = 1;
             $usernew->interests = "";
             // Moodle wants more for valid users.
             $usernew->timecreated = time();
-
             $usernew->mnethostid = $CFG->mnet_localhost_id; // Always local user.
             $usernew->password = AUTH_PASSWORD_NOT_CACHED;  // Because of Shibboleth.
-
             // Finally create the user.
             $usernew->id = user_create_user($usernew, false, false);
-
             $this->set_user_eventoid($usernew->id, $eventopersonid);
             $u = $DB->get_record('user', array('id' => $usernew->id));
-            printf("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
+            debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
         }
-
         return $u;
     }
-
     /**
      * Obtains a list of users by an eventoid if it is set.
      *
@@ -502,21 +455,16 @@ class enrol_evento_user_sync{
      */
     protected function get_users_by_eventoid($eventoid) {
         global $DB;
-
         $sql = 'SELECT u.*
             FROM {user} u
             INNER JOIN {user_info_data} uid ON uid.userid = u.id
             INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id
             WHERE uif.shortname = :eventoidshortname
             AND uid.data = :eventoid';
-
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
-
         $userlist = $DB->get_records_sql($sql, $sqlparams);
-
         return $userlist;
     }
-
     /**
      * Obtains the evento id of a user, if it is set
      *
@@ -526,24 +474,19 @@ class enrol_evento_user_sync{
     protected function get_eventoid_by_userid($userid) {
         global $DB;
         $result = null;
-
         $sql = 'SELECT u.id, uid.data
             FROM {user} u
             INNER JOIN {user_info_data} uid ON uid.userid = u.id
             INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id
             WHERE uif.shortname = :eventoidshortname
             AND u.id = :userid';
-
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'userid' => (int)$userid);
-
         $user = $DB->get_record_sql($sql, $sqlparams);
         if (isset($user)) {
             $result = $user->data;
         }
-
         return $result;
     }
-
     /**
      * Obtains the user by username (shibbolethid).
      *
@@ -552,12 +495,9 @@ class enrol_evento_user_sync{
      */
     protected function get_user_by_username($username) {
         global $DB;
-
         $user = $DB->get_record('user', array('username' => $username));
-
         return ($user == false) ? null : $user;
     }
-
     /**
      * Sets or inserts the user defined field eventoid, if it exists.
      *
@@ -567,20 +507,15 @@ class enrol_evento_user_sync{
      */
     protected function set_user_eventoid($userid, $eventoid) {
         global $DB;
-
         $returnvalue = false;
-
         // Gets an existing user info data eventoid.
         $sql = 'SELECT uid.id
             FROM {user_info_data} uid
             INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id
             WHERE uif.shortname = :eventoid
             AND uid.userid = :userid';
-
         $sqlparams = array('eventoid' => ENROL_EVENTO_UIF_EVENTOID, 'userid' => $userid);
-
         $uid = $DB->get_field_sql($sql, $sqlparams);
-
         if ($uid) {
             // Update.
             $returnvalue = $DB->set_field('user_info_data', 'data', $eventoid, array('id' => $uid));
@@ -590,11 +525,8 @@ class enrol_evento_user_sync{
             $sql = 'SELECT uif.id
                 FROM {user_info_field} uif
                 WHERE uif.shortname = :eventoid';
-
             $sqlparams = array('eventoid' => ENROL_EVENTO_UIF_EVENTOID);
-
             $uifid = $DB->get_field_sql($sql, $sqlparams);
-
             if ($uifid) {
                 // Inserts new user_info_data item.
                 $item = new \stdClass();
@@ -602,7 +534,6 @@ class enrol_evento_user_sync{
                 $item->fieldid = $uifid;
                 $item->data = (string)$eventoid;
                 $item->dataformat = 0;
-
                 $uiditem = $DB->insert_record('user_info_data', $item);
                 if ($uiditem) {
                     $returnvalue = true;
@@ -611,10 +542,7 @@ class enrol_evento_user_sync{
         }
         return $returnvalue;
     }
-
 }
-
-
 /**
  * Create an array if the value is not already one.
  *
@@ -630,7 +558,6 @@ function to_array($value) {
     }
     return $returnarray;
 }
-
 /**
  * Create a new group
  *
@@ -639,9 +566,7 @@ function to_array($value) {
  */
 function enrol_evento_create_new_group($courseid, $newgroupname) {
     global $DB, $CFG;
-
     require_once($CFG->dirroot.'/group/lib.php');
-
     $a = new stdClass();
     $a->name = $newgroupname;
     $a->increment = '';
@@ -657,10 +582,8 @@ function enrol_evento_create_new_group($courseid, $newgroupname) {
     $groupdata->courseid = $courseid;
     $groupdata->name = $groupname;
     $groupid = groups_create_group($groupdata);
-
     return $groupid;
 }
-
 /**
  * Create a new grouping
  *
@@ -669,9 +592,7 @@ function enrol_evento_create_new_group($courseid, $newgroupname) {
  */
 function enrol_evento_create_new_grouping($courseid, $newgroupingname) {
     global $DB, $CFG;
-
     require_once($CFG->dirroot.'/group/lib.php');
-
     $a = new stdClass();
     $a->name = $newgroupingname;
     $a->increment = '';
@@ -687,7 +608,6 @@ function enrol_evento_create_new_grouping($courseid, $newgroupingname) {
     $groupingdata->courseid = $courseid;
     $groupingdata->name = $groupingname;
     $groupingid = groups_create_grouping($groupingdata);
-
     return $groupingid;
 }
 
