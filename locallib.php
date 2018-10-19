@@ -631,6 +631,6 @@ class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
   }
   public function get_users_by_eventoid_exposed($eventopersonid, $isstudent=null)
   {
-    return parent::get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
+    return parent::get_users_by_eventoid($eventopersonid, $isstudent=null);
   }
 }
