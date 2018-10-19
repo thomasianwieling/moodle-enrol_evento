@@ -617,7 +617,7 @@ function enrol_evento_create_new_grouping($courseid, $newgroupingname) {
 
 
 
-
+/*Just for Testcase*/
 
 class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
 {
@@ -627,6 +627,10 @@ class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
   }
   public function get_ad_user_exposed($eventopersonid, $isstudent=null)
   {
-    parent::get_ad_user($eventopersonid, $isstudent=null);
+    return parent::get_ad_user($eventopersonid, $isstudent=null);
+  }
+  public function get_users_by_eventoid_exposed($eventopersonid, $isstudent=null)
+  {
+    return parent::get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
   }
 }
