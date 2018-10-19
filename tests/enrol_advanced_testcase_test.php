@@ -45,34 +45,34 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      return $plugin;
    }
 
-   private function soap_credential()
+/*   private function soap_credential()
    {
      /*password record*/
-     $record_pw = new stdClass();
+/*     $record_pw = new stdClass();
      $record_pw->id = 1772;
      $record_pw->value = '*****';
      $DB->update_record('config_plugins', $record_pw, $bulk=false);
 
      /*username record*/
-     $record_username = new stdClass();
+/*     $record_username = new stdClass();
      $record_username->name = 'wsusername';
      $record_username->value = 'eventowsblc';
      $DB->update_record('config_plugins', $record_username, $bulk=false);
 
      /*uri record*/
-     $record_uri = new stdClass();
+/*     $record_uri = new stdClass();
      $record_uri->id = 1770;
      $record_uri->value = 'http://service.webservice.htwchur.ch';
      $DB->update_record('config_plugins', $record_uri, $bulk=false);
 
      /*location record (URL)*/
-     $record_url = new stdClass();
+/*     $record_url = new stdClass();
      $record_url->id = 1768;
      $record_url->value = 'https://ws.fh-htwchur.ch/eventowsblc/services/EventoWebservice';
      $DB->update_record('config_plugins', $record_url, $bulk=false);
 
      /*wsdl record*/
-     $record_wsdl = new stdClass();
+/*     $record_wsdl = new stdClass();
      $record_wsdl->id = 1769;
      $record_wsdl->value = 'evento_webservice_v1_1.wsdl';
    }
@@ -110,7 +110,7 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $this->resetAfterTest(true);
      $this->assertFalse(enrol_is_enabled('evento'));
      $plugin = $this->enable_plugin();
-     $this->soap_credential();
+//     $this->soap_credential();
      $evento = new enrol_evento\task\evento_member_sync_task();
      $name = $evento->get_name();
      $this->assertEquals($name, 'Evento synchronisation');
