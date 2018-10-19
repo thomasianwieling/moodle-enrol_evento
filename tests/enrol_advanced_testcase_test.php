@@ -115,18 +115,18 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $name = $evento->get_name();
      $this->assertEquals($name, 'Evento synchronisation');
 
-     $eventoid = 136995;
+     //$eventoid = 136995;
      $locallib = new enrol_evento_user_sync_exposed();
      $user = $locallib->get_user(136995, $isstudent=true, $username=null);
      var_dump($user);
    }
-
+/*
    public function test_get_ad_user()
    {
      $eventoid = 136995;
      $locallib->get_ad_user($eventopersonid, $isstudent=null);
 
-   }
+   }*/
 
  }
 ?>
