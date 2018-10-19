@@ -102,7 +102,7 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $locallib = new enrol_evento_user_sync_exposed();
      $eventopersonid = 136995;
      $person = $locallib->get_ad_user_exposed($eventopersonid, $isstudent=null);
-     $this->assertEquals($person[724]->sAMAccountName, 'kramernadine');
+     $this->assertEquals($person[724]->sAMAccountName, '****');
    }
 
    public function test_get_users_by_eventoid()
@@ -113,7 +113,7 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $locallib = new enrol_evento_user_sync_exposed();
      $eventopersonid = 141701;
      $person = $locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
-     $this->assertEquals($person[178000]->email, 'cornelius.riegger@stud.htwchur.ch');
+     $this->assertEquals($person[178000]->email, '****');
 
    }
 
