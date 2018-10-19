@@ -418,6 +418,9 @@ class enrol_evento_user_sync{
     protected function get_user($eventopersonid, $isstudent=true, $username=null) {
         global $DB, $CFG;
 
+
+
+
         // Get the Active Directory User by evento ID.
         $adusers = to_array($this->get_ad_user($eventopersonid, $isstudent));
         if (!empty($adusers)) {
