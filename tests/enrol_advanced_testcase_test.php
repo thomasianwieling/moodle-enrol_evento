@@ -114,13 +114,13 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $eventopersonid = 141701;
      $person = $locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
      $user = reset($person);
-     $this->assertEquals($person->email, '****');
+     $this->assertEquals($user->email, '****');
 
    }
 
 
    /**
-    * @depends testOne
+    * @depends test_get_users_by_eventoid()
     */
 
    public function  test_get_eventoid_by_userid()
