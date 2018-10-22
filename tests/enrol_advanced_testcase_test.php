@@ -130,13 +130,13 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
       $this->assertEquals($eventopersonid, $personbyid);
     }
 
-    public function test_get_user_by_username($username)
+    public function test_get_user_by_username()
     {
-      this->resetAfterTest(false);
+      $this->resetAfterTest(false);
       $locallib = new enrol_evento_user_sync_exposed();
-      $username = "2460181390-1097805571-3701207438-39544@fh-htwchur.ch";
+      $username = "****";
       $person = $locallib->get_user_by_username_exposed($username);
-      var_dump($user);
+      $this->assertEquals($person->username, $username);
     }
 
  }
