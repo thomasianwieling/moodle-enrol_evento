@@ -139,5 +139,26 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
       $this->assertEquals($person->username, $username);
     }
 
+    public function test_enrol_teacher($eventopersonid, $instance)
+    {
+      $course = $DB->get_record('course', array('id' => $courseid));
+    }
+
+    public function test_user_sync()
+    {
+      global $DB;
+      $this->enable_plugin()
+      $this->resetAfterTest(false);
+      $course = $this->getDataGenerator()->create_course(array('fullname'=>'Evento', 'idnumber'=>'mod.mmpAUKATE1.HS18_BS.001'));
+      //$evento =  new enrol_evento\task\evento_member_sync_task();
+      //$evento->execute();
+      //    $this->count_enrolled_users();
+      //var_dump($course);
+      //$locallib = new enrol_evento_user_sync_exposed();
+      //$locallib->user_sync(progress_trace $trace, $courseid = $course->idnumber);
+          sleep(30);
+        }
+
  }
+
 ?>
