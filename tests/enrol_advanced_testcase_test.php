@@ -113,8 +113,28 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $locallib = new enrol_evento_user_sync_exposed();
      $eventopersonid = 141701;
      $person = $locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
-     $this->assertEquals($person[178000]->email, '****');
+     $user = reset($person);
+     $this->assertEquals($person->email, '****');
 
+   }
+
+
+   /**
+    * @depends testOne
+    */
+
+   public function  test_get_eventoid_by_userid()
+   {
+     $this->resetAfterTest(false);
+
+     /*Get AD user*/
+     $locallib = new enrol_evento_user_sync_exposed();
+     $eventopersonid = 141701;
+     get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
+    // $person = $locallib->get_eventoid_by_userid_exposed($userid);
+     $user = reset($person);
+    // $this->assertEquals($person[178000]->person, '****');
+    var_dump($user);
    }
 
  }
