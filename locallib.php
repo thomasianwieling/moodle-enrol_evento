@@ -637,4 +637,8 @@ class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
   {
     return parent:: get_eventoid_by_userid($userid);
   }
+  public function get_user_by_username_exposed($username)
+  {
+    return parent::get_user_by_username($username);
+  }
 }
