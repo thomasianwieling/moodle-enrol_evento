@@ -126,7 +126,7 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $this->resetAfterTest(false);
      $eventopersonid = 136995;
      $person = $this->locallib->get_ad_user_exposed($eventopersonid, $isstudent=null);
-     $this->assertEquals($person[723]->sAMAccountName, 'kramernadine');
+     $this->assertEquals($person[723]->sAMAccountName, '*****');
    }
 
    /*Get user by evento id test*/
@@ -138,7 +138,7 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      $eventopersonid = 141703;
      $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
      $user = reset($person);
-     $this->assertEquals($user->email, 'milena.burch@stud.htwchur.ch');
+     $this->assertEquals($user->email, '*****');
 
    }
 
@@ -158,7 +158,7 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
     {
       $this->resetAfterTest(true);
 
-      $username = "2460181390-1097805571-3701207438-51315@fh-htwchur.ch";
+      $username = "****";
       $person = $this->locallib->get_user_by_username_exposed($username);
       $this->assertEquals($person->username, $username);
     }
