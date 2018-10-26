@@ -90,6 +90,13 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
      set_config('enrol_plugins_enabled', implode(',', $enabled));
    }
 
+   protected function get_enroled_user($id)
+   {
+     global $DB;
+     $this->user_enrolment = $DB->get_record('enrol', array('courseid'=>$this->course1->id, 'enrol'=>'evento'), '*', MUST_EXIST);
+     $this->enrolments = $DB->count_records('user_enrolments', array('enrolid'=>$this->user_enrolment->id));
+   }
+
    /*Basic test if plugin is enabled*/
    public function test_basics()
    {
@@ -167,25 +174,20 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
     public function test_user_sync()
     {
       global $DB;
-      $this->resetAfterTest(true);
+      $this->resetAfterTest(false);
       $this->create_moodle_course();
       $this->enable_plugin();
       /*create Object trace and enrol*/
       $trace = new null_progress_trace();
       $enrol = new enrol_evento_user_sync;
-
       /*Get the evento enrol plugin*/
       $plugin = 'evento';
       $evento_plugin = enrol_get_plugin($plugin);
-
-
       $courses = $DB->get_recordset_select('course', 'category > 0', null, '', 'id');
-
       foreach ($courses as $course)
       {
         $instanceid = null;
         $instances = enrol_get_instances($course->id, true);
-
         foreach ($instances as $inst)
         {
           if ($inst->enrol == $plugin)
@@ -208,15 +210,13 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
           ($instanceid);
         }
       }
-
       /*Enrol Users into courses*/
       $enrol->user_sync($trace, $courseid =null);
-
       /*Get user enrolment record to count enrolments*/
-      $user_enrolment = $DB->get_record('enrol', array('courseid'=>$this->course1->id, 'enrol'=>'evento'), '*', MUST_EXIST);
-      $enrolments = $DB->count_records('user_enrolments', array('enrolid'=>$user_enrolment->id));
-      $this->assertEquals($enrolments, 34, "34 Einschreibungen");
+      $this->get_enroled_user($this->course1->id);
+      $this->assertEquals($this->enrolments, 34, "34 Einschreibungen");
     }
+
 
     public function test_update_student_enrolment()
     {
