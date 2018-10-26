@@ -220,15 +220,29 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
 
     public function test_update_student_enrolment()
     {
+
       global $DB;
-      $this->resetAfterTest(true);
+      $this->resetAfterTest(false);
       $eventoenrolstate = 20520;
       $eventopersonid =  143423;
-      $id = $DB->delete_records('user_enrolments', array('userid'=>168021));
-      $id = $DB->get_record('user_enrolments', array('userid'=>168021));
-      $instance = $DB->get_record('enrol', array('id' => 258006));
+
+      /*Get course settings*/
+      $course = $DB->get_record('course', array('idnumber'=>'mod.mmpAUKATE1.HS18_BS.001'));
+      $this->get_enroled_user($course->id);
+
+      /*Delete a user to re-enrol after*/
+      $DB->delete_records('user_enrolments', array('userid'=>168021));
+      $DB->get_record('user_enrolments', array('userid'=>168021));
+
+      /*Get enrolment instance of course*/
+      $instance = $DB->get_record('enrol', array('id' => $this->user_enrolment->id));
+
+      /*re-enrol user*/
       $this->locallib->update_student_enrolment_exposed($eventopersonid, $eventoenrolstate, $instance);
-      $enrolments1 = $DB->count_records('user_enrolments', array('enrolid'=>258
+
+      /*Count users*/
+      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 34);
+
     }
 
     public function test_enrol_teacher()
