@@ -217,6 +217,19 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
       $enrolments = $DB->count_records('user_enrolments', array('enrolid'=>$user_enrolment->id));
       $this->assertEquals($enrolments, 34, "34 Einschreibungen");
     }
+
+    public function test_update_student_enrolment()
+    {
+      global $DB;
+      $this->resetAfterTest(true);
+      $eventoenrolstate = 20520;
+      $eventopersonid =  143423;
+      $id = $DB->delete_records('user_enrolments', array('userid'=>168021));
+      $id = $DB->get_record('user_enrolments', array('userid'=>168021));
+      $instance = $DB->get_record('enrol', array('id' => 258006));
+      $this->locallib->update_student_enrolment_exposed($eventopersonid, $eventoenrolstate, $instance);
+      $enrolments1 = $DB->count_records('user_enrolments', array('enrolid'=>258
+    }
  }
 
 ?>
