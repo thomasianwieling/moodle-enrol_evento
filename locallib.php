@@ -614,31 +614,3 @@ function enrol_evento_create_new_grouping($courseid, $newgroupingname) {
     $groupingid = groups_create_grouping($groupingdata);
     return $groupingid;
 }
-
-
-
-/*Just for Testcase*/
-
-class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
-{
-  public function get_user_exposed($eventopersonid, $isstudent=true, $username=null)
-  {
-    parent::get_user($eventopersonid, $isstudent=true, $username=null);
-  }
-  public function get_ad_user_exposed($eventopersonid, $isstudent=null)
-  {
-    return parent::get_ad_user($eventopersonid, $isstudent=null);
-  }
-  public function get_users_by_eventoid_exposed($eventopersonid, $isstudent=null)
-  {
-    return parent::get_users_by_eventoid($eventopersonid, $isstudent=null);
-  }
-  public function  get_eventoid_by_userid_exposed($userid)
-  {
-    return parent:: get_eventoid_by_userid($userid);
-  }
-  public function get_user_by_username_exposed($username)
-  {
-    return parent::get_user_by_username($username);
-  }
-}
