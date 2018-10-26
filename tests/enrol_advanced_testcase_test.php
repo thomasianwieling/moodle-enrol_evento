@@ -230,6 +230,18 @@ require_once($CFG->dirroot . '/enrol/evento/locallib.php');
       $this->locallib->update_student_enrolment_exposed($eventopersonid, $eventoenrolstate, $instance);
       $enrolments1 = $DB->count_records('user_enrolments', array('enrolid'=>258
     }
+
+    public function test_enrol_teacher()
+    {
+      global $DB;
+      $this->resetAfterTest(false);
+      $id = $DB->delete_records('user_enrolments', array('userid'=>168033));
+      $enrolments1 = $DB->count_records('user_enrolments', array('enrolid'=>258006));
+      $id = $DB->get_record('user_enrolments', array('userid'=>168033));
+      $instance = $DB->get_record('enrol', array('id' => 258006));
+      $eventopersonid =  117828;
+      $teacher = $this->locallib->enrol_teacher_exposed($eventopersonid, $instance);
+    }
  }
 
 ?>
