@@ -69,5 +69,9 @@ class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
     $this->trace = new null_progress_trace();
     return parent::enrol_teacher($eventopersonid, $instance);
   }
+  public function set_user_eventoid_exposed($userid, $eventoid);
+  {
+    return parent::set_user_eventoid($userid, $eventoid);
+  }
 }
 ?>

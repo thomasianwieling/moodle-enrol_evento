@@ -252,5 +252,23 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
       $teacher = $this->locallib->enrol_teacher_exposed($eventopersonid, $instance);
       $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 34);
     }
+
+    public function test_set_user_eventoid()
+    {
+      $this->resetAfterTest(false);
+
+      /*Create the user for test*/
+      $user = $this->getDataGenerator()->create_user();
+      $eventoid = 12345;
+
+      /*set evento*/
+      $this->locallib->set_user_eventoid_exposed($user->id, $eventoid);
+
+      /*Get the user by eventoid to control*/
+      $user_evento = $this->locallib->get_users_by_eventoid_exposed($eventoid, $isstudent=null);
+      $this->assertEquals(current($user_evento)->id, $user->id);
+
+
+    }
   }
 ?>
