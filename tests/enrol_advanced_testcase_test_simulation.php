@@ -23,8 +23,8 @@
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/enrol/evento/classes/task/evento_member_sync_task.php');
-//require_once($CFG->dirroot . '/enrol/evento/tests/local_evento_service_simulation.php');
-require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
+require_once($CFG->dirroot . '/enrol/evento/tests/local_evento_service_simulation.php');
+//require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
 require_once($CFG->dirroot . '/enrol/evento/locallib.php');
 require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
 
@@ -51,9 +51,6 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
    /** @var stdClass Plugin. */
    private $enrolments;
 
-   private $passvalue;
-
-
    protected function setUp()
    {
      /*Create Moodle categories*/
@@ -62,9 +59,9 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
      /*Create Object $locallib*/
      $this->locallib = new enrol_evento_user_sync_exposed();
    }
+   /*Create courses*/
    protected function create_moodle_course()
    {
-     /*Create courses*/
      $this->course1 = $this->getDataGenerator()->create_course(array('category'=>$this->cat1->id, 'idnumber' => 'mod.mmpAUKATE1.HS18_BS.001'));
    }
    /*Enable plugin method*/
@@ -83,14 +80,13 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
      $enabled = array_keys($enabled);
      set_config('enrol_plugins_enabled', implode(',', $enabled));
    }
-
+   /*get enroled user from course*/
    protected function get_enroled_user($id)
    {
      global $DB;
      $this->user_enrolment = $DB->get_record('enrol', array('courseid'=>$id, 'enrol'=>'evento'), '*', MUST_EXIST);
      $this->enrolments = $DB->count_records('user_enrolments', array('enrolid'=>$this->user_enrolment->id));
    }
-
    /*Basic test if plugin is enabled*/
    public function test_basics()
    {
@@ -116,13 +112,12 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
      $this->assertEquals($name, 'Evento synchronisation');
      /*Get new user*/
      $eventoperson = $this->locallib->get_user_exposed(141703, $isstudent=true, $username=null);
-     $eventoperson = $this->locallib->get_user_exposed(117828, $isstudent=null, $username=null);
+     $eventoperson = $this->locallib->get_user_exposed(143440, $isstudent=true, $username=null);
    }
    public function test_get_ad_user()
    {
-     sleep(10);
      $this->resetAfterTest(false);
-     $eventopersonid = 117828;
+     $eventopersonid = 141703;
      $person = $this->locallib->get_ad_user_exposed($eventopersonid, $isstudent=null);
      $this->assertEquals(current($person)->sAMAccountName, 'MaxMuster');
    }
@@ -130,7 +125,6 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
    public function test_get_users_by_eventoid()
    {
      $this->resetAfterTest(false);
-     /*Get AD user*/
      $eventopersonid = 141703;
      $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
      $user = reset($person);
@@ -197,63 +191,52 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
       $enrol->user_sync($trace, $courseid =null);
       /*Get user enrolment record to count enrolments*/
       $this->get_enroled_user($this->course1->id);
-      $this->assertEquals($this->enrolments, 2, "Einschreibungen");
+      $this->assertEquals($this->enrolments, 3, "Einschreibungen");
     }
-/*
     public function test_update_student_enrolment()
     {
-      sleep(10);
       global $DB;
       $this->resetAfterTest(false);
       $eventoenrolstate = 20215;
       $eventopersonid =  141703;
       /*Get the user records*/
-/*      $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
-      //var_dump($person);
+      $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
       $user = reset($person);
       /*Get course settings*/
-/*      $course = $DB->get_record('course', array('idnumber'=>'mod.mmpAUKATE1.HS18_BS.001'));
+      $course = $DB->get_record('course', array('idnumber'=>'mod.mmpAUKATE1.HS18_BS.001'));
       $this->get_enroled_user($course->id);
 
       /*Delete a user to re-enrol after*/
-/*      $DB->delete_records('user_enrolments', array('userid'=> current($person)->id));
+      $DB->delete_records('user_enrolments', array('userid'=> current($person)->id));
       $DB->get_record('user_enrolments', array('userid'=> current($person)->id));
-
+      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 2);
       /*Get enrolment instance of course*/
-/*      $instance = $DB->get_record('enrol', array('id' => $this->user_enrolment->id));
-
+      $instance = $DB->get_record('enrol', array('id' => $this->user_enrolment->id));
       /*re-enrol user*/
-      /*$this->locallib->update_student_enrolment_exposed($eventopersonid, $eventoenrolstate, $instance);
-
+      $this->locallib->update_student_enrolment_exposed($eventopersonid, $eventoenrolstate, $instance);
       /*Count users*/
-/*      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 1);
+      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 3);
     }
-/*
     public function test_enrol_teacher()
     {
       global $DB;
       $eventopersonid =  117828;
       $this->resetAfterTest(false);
-
       /*Get the teacher record*/
-/*      $person_teacher = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
-
+      $person_teacher = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
       /*Get the course settings*/
-/*      $course = $DB->get_record('course', array('idnumber'=>'mod.mmpAUKATE1.HS18_BS.001'));
+      $course = $DB->get_record('course', array('idnumber'=>'mod.mmpAUKATE1.HS18_BS.001'));
       $this->get_enroled_user($course->id);
-
+      $user = $DB->get_record('user_enrolments', array('userid'=>current($person_teacher)->id));
       /*Delete the teacher to re-enroll after*/
-/*      $id = $DB->delete_records('user_enrolments', array('userid'=>current($person_teacher)->id));
-      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 33);
-
+      $id = $DB->delete_records('user_enrolments', array('userid'=>current($person_teacher)->id));
+      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 2);
       /**Get the course instance*/
-  /*    $instance = $DB->get_record('enrol', array('id'=>$this->user_enrolment->id));
-
+      $instance = $DB->get_record('enrol', array('id'=>$this->user_enrolment->id));
       /*Re-enroll the teacher*/
-/*      $teacher = $this->locallib->enrol_teacher_exposed($eventopersonid, $instance);
-      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 34);
+      $teacher = $this->locallib->enrol_teacher_exposed($eventopersonid, $instance);
+      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 3);
     }
-
     public function test_set_user_eventoid()
     {
       $this->resetAfterTest(false);
@@ -262,8 +245,6 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
       $this->locallib->set_user_eventoid_exposed($user->id, $eventoid);
       $user_evento = $this->locallib->get_users_by_eventoid_exposed($eventoid, $isstudent=null);
       $this->assertEquals(current($user_evento)->id, $user->id);
-
-
     }
-  */}
+  }
 ?>
