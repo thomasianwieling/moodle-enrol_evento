@@ -111,7 +111,7 @@ class local_evento_evento_service {
         'personeMail' => "peter.mueller@htwchur.ch",
         'personenStatus' => $personenStatus_object
       ];
-/*---HIER BESTEHT EIN PROBLEM------*/
+
       $array_EventoAnlassLeitung_object = (object)
       [
         'anlassLeitungRolle'=> $anlassLeitungRolle_object,

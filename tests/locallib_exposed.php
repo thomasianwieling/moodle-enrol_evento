@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Exposed class for PHPUnit test
+ * Class that exposes methods, i.e. allows to access protected or private mehtods, for unit testing purpose.
+ * localib.php could be find under /evento/locallib.php
  *
  * @package    enrol_evento
  * @copyright  2018 HTW Chur Thomas Wieling

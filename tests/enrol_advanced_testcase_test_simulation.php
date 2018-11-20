@@ -88,18 +88,28 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
      $this->enrolments = $DB->count_records('user_enrolments', array('enrolid'=>$this->user_enrolment->id));
    }
    /*Basic test if plugin is enabled*/
-   public function test_basics()
+   /**
+   * @test
+   */
+   public function basics()
    {
      $this->resetAfterTest(true);
-     $this->assertFalse(enrol_is_enabled('evento'));
+
+//     $this->assertFalse(enrol_is_enabled('evento'));
+
      $this->enable_plugin();
      $plugin = 'evento';
      $evento_plugin = enrol_get_plugin($plugin);
+
      $this->assertEquals( $evento_plugin->get_name(), 'evento');
      $this->assertNotEmpty( $evento_plugin);
    }
+   
    /*get_user() Test for a new user*/
-   public function test_get_user()
+   /**
+   * @test
+   */
+   public function get_user()
    {
      global $DB;
      /*Reset after Test */
@@ -114,15 +124,23 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
      $eventoperson = $this->locallib->get_user_exposed(141703, $isstudent=true, $username=null);
      $eventoperson = $this->locallib->get_user_exposed(143440, $isstudent=true, $username=null);
    }
-   public function test_get_ad_user()
+
+   /**
+   * @test
+   */
+   public function get_ad_user()
    {
      $this->resetAfterTest(false);
      $eventopersonid = 141703;
      $person = $this->locallib->get_ad_user_exposed($eventopersonid, $isstudent=null);
      $this->assertEquals(current($person)->sAMAccountName, 'MaxMuster');
    }
+
    /*Get user by evento id test*/
-   public function test_get_users_by_eventoid()
+   /**
+   * @test
+   */
+   public function get_users_by_eventoid()
    {
      $this->resetAfterTest(false);
      $eventopersonid = 141703;
@@ -130,7 +148,11 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
      $user = reset($person);
      $this->assertEquals($user->email, 'max.muster@stud.htwchur.ch');
    }
-    public function test_get_eventoid_by_userid()
+
+   /**
+   * @test
+   */
+    public function get_eventoid_by_userid()
     {
       $this->resetAfterTest(false);
       $eventopersonid = 141703;
@@ -140,15 +162,23 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
       $personbyid = $this->locallib->get_eventoid_by_userid_exposed($userid);
       $this->assertEquals($eventopersonid, $personbyid);
     }
-    public function test_get_user_by_username()
+
+    /**
+    * @test
+    */
+    public function get_user_by_username()
     {
       $this->resetAfterTest(false);
       $username = "2460181390-1097805571-3701207438-51315@fh-htwchur.ch";
       $person = $this->locallib->get_user_by_username_exposed($username);
       $this->assertEquals($person->username, $username);
     }
+
     /*Kurs einschreibung*/
-    public function test_user_sync()
+    /**
+    * @test
+    */
+    public function user_sync()
     {
       global $DB;
       $this->resetAfterTest(false);
@@ -193,7 +223,11 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
       $this->get_enroled_user($this->course1->id);
       $this->assertEquals($this->enrolments, 3, "Einschreibungen");
     }
-    public function test_update_student_enrolment()
+
+    /**
+    * @test
+    */
+    public function update_student_enrolment()
     {
       global $DB;
       $this->resetAfterTest(false);
@@ -217,7 +251,11 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
       /*Count users*/
       $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 3);
     }
-    public function test_enrol_teacher()
+
+    /**
+    * @test
+    */
+    public function enrol_teacher()
     {
       global $DB;
       $eventopersonid =  117828;
@@ -237,7 +275,11 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
       $teacher = $this->locallib->enrol_teacher_exposed($eventopersonid, $instance);
       $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 3);
     }
-    public function test_set_user_eventoid()
+
+    /**
+    * @test
+    */
+    public function set_user_eventoid()
     {
       $this->resetAfterTest(false);
       $user = $this->getDataGenerator()->create_user();

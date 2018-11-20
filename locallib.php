@@ -20,17 +20,22 @@
  * @copyright  2017 HTW Chur Roger Barras
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/user/selector/lib.php');
 require_once($CFG->dirroot . '/enrol/locallib.php');
+
 /**
  * Name of the user info field for the eventoid
  */
+
 define('ENROL_EVENTO_UIF_EVENTOID', 'eventoid');
+
 /**
  * Class definition for the whole syncronisation process.
  *
  */
+
 class enrol_evento_user_sync{
     // trace reference to null_progress_trace
     protected $trace;
