@@ -58,11 +58,15 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
      $this->cat2 = $this->getDataGenerator()->create_category();
      /*Create Object $locallib*/
      $this->locallib = new enrol_evento_user_sync_exposed();
+     $this->resetAfterTest(false);
    }
    /*Create courses*/
    protected function create_moodle_course()
    {
-     $this->course1 = $this->getDataGenerator()->create_course(array('category'=>$this->cat1->id, 'idnumber' => 'mod.mmpAUKATE1.HS18_BS.001'));
+     $plugin = 'evento';
+     $evento_plugin = enrol_get_plugin($plugin);
+     $course1 = $this->getDataGenerator()->create_course(array('category'=>$this->cat1->id, 'idnumber' => 'mod.mmpAUKATE1.HS18_BS.001'));
+     $instanceid = $evento_plugin->add_default_instance($course1);
    }
    /*Enable plugin method*/
    protected function enable_plugin()
@@ -93,9 +97,8 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
    */
    public function basics()
    {
-     $this->resetAfterTest(true);
 
-//     $this->assertFalse(enrol_is_enabled('evento'));
+     $this->resetAfterTest(true);
 
      $this->enable_plugin();
      $plugin = 'evento';
@@ -104,25 +107,31 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
      $this->assertEquals( $evento_plugin->get_name(), 'evento');
      $this->assertNotEmpty( $evento_plugin);
    }
-   
    /*get_user() Test for a new user*/
    /**
    * @test
    */
    public function get_user()
    {
+     /*set global DB variable*/
      global $DB;
-     /*Reset after Test */
-     $this->resetAfterTest(false);
-     $this->assertFalse(enrol_is_enabled('evento'));
-     $plugin = $this->enable_plugin();
+
      /*Get Plugin name*/
      $evento = new enrol_evento\task\evento_member_sync_task();
      $name = $evento->get_name();
-     $this->assertEquals($name, 'Evento synchronisation');
+
      /*Get new user*/
      $eventoperson = $this->locallib->get_user_exposed(141703, $isstudent=true, $username=null);
      $eventoperson = $this->locallib->get_user_exposed(143440, $isstudent=true, $username=null);
+
+     /*Get Database Records*/
+     $user1 = $DB->get_record('user', array('username'=>'2360181390-1097805571-3701207438-51325@fh-htwchur.ch'));
+     $user2 = $DB->get_record('user', array('username'=>'2460181390-1097805571-3701207438-51315@fh-htwchur.ch'));
+
+     /*^Database Record equals new user*/
+     $this->assertEquals($name, 'Evento synchronisation');
+     $this->assertEquals($user1->email, 'hans.meier@stud.htwchur.ch');
+     $this->assertEquals($user2->email, 'max.muster@stud.htwchur.ch');
    }
 
    /**
@@ -130,9 +139,11 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
    */
    public function get_ad_user()
    {
-     $this->resetAfterTest(false);
+     /*set evento person ID*/
      $eventopersonid = 141703;
+     /*Get ad User*/
      $person = $this->locallib->get_ad_user_exposed($eventopersonid, $isstudent=null);
+     /*Accountname  equals ad username*/
      $this->assertEquals(current($person)->sAMAccountName, 'MaxMuster');
    }
 
@@ -142,10 +153,12 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
    */
    public function get_users_by_eventoid()
    {
-     $this->resetAfterTest(false);
+     /*Set the evento person ID*/
      $eventopersonid = 141703;
+     /*Get the user by evento ID*/
      $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
      $user = reset($person);
+     /*Evento user email equals email adress*/
      $this->assertEquals($user->email, 'max.muster@stud.htwchur.ch');
    }
 
@@ -154,12 +167,15 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
    */
     public function get_eventoid_by_userid()
     {
-      $this->resetAfterTest(false);
+      /*set evento person id*/
       $eventopersonid = 141703;
+      /*Get user by evento person ID for user ID*/
       $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
       $user = reset($person);
       $userid = $user->id;
+      /*get the evento Person ID by user ID*/
       $personbyid = $this->locallib->get_eventoid_by_userid_exposed($userid);
+      /*person by ID equals evento person ID*/
       $this->assertEquals($eventopersonid, $personbyid);
     }
 
@@ -168,9 +184,11 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
     */
     public function get_user_by_username()
     {
-      $this->resetAfterTest(false);
+      /*set username*/
       $username = "2460181390-1097805571-3701207438-51315@fh-htwchur.ch";
+      /*get user by username*/
       $person = $this->locallib->get_user_by_username_exposed($username);
+      /*username from method equals username*/
       $this->assertEquals($person->username, $username);
     }
 
@@ -180,57 +198,36 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
     */
     public function user_sync()
     {
+      /*Set global DB variable*/
       global $DB;
-      $this->resetAfterTest(false);
+      /*create moodle course and enable plugin*/
       $this->create_moodle_course();
       $this->enable_plugin();
       /*create Object trace and enrol*/
       $trace = new null_progress_trace();
       $enrol = new enrol_evento_user_sync;
-      /*Get the evento enrol plugin*/
-      $plugin = 'evento';
-      $evento_plugin = enrol_get_plugin($plugin);
+      /*Get course records and add enrol instances*/
       $courses = $DB->get_recordset_select('course', 'category > 0', null, '', 'id');
       foreach ($courses as $course)
       {
         $instanceid = null;
         $instances = enrol_get_instances($course->id, true);
-        foreach ($instances as $inst)
-        {
-          if ($inst->enrol == $plugin)
-          {
-            $instanceid = (int)$inst->id;
-            break;
-          }
-        }
-        if (empty($instanceid))
-        {
-          $instanceid = $evento_plugin->add_default_instance($course);
-          if (empty($instanceid))
-          {
-            $instanceid = $evento_plugin->add_instance($course);
-          }
-        }
-        if (!empty($instanceid))
-        {
-          // Do additional config of instance if needed.
-          ($instanceid);
-        }
       }
       /*Enrol Users into courses*/
       $enrol->user_sync($trace, $courseid =null);
       /*Get user enrolment record to count enrolments*/
-      $this->get_enroled_user($this->course1->id);
+      $this->get_enroled_user($course->id);
       $this->assertEquals($this->enrolments, 3, "Einschreibungen");
     }
 
+    /*Student enrolment update*/
     /**
     * @test
     */
     public function update_student_enrolment()
     {
       global $DB;
-      $this->resetAfterTest(false);
+
       $eventoenrolstate = 20215;
       $eventopersonid =  141703;
       /*Get the user records*/
@@ -252,6 +249,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
       $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 3);
     }
 
+    /*Teacher enrolment*/
     /**
     * @test
     */
@@ -259,7 +257,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
     {
       global $DB;
       $eventopersonid =  117828;
-      $this->resetAfterTest(false);
+
       /*Get the teacher record*/
       $person_teacher = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
       /*Get the course settings*/
@@ -276,12 +274,13 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
       $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 3);
     }
 
+    /*Set evento id to user*/
     /**
     * @test
     */
     public function set_user_eventoid()
     {
-      $this->resetAfterTest(false);
+
       $user = $this->getDataGenerator()->create_user();
       $eventoid = 12345;
       $this->locallib->set_user_eventoid_exposed($user->id, $eventoid);
