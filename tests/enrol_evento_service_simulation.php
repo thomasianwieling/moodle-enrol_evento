@@ -21,15 +21,11 @@ defined('MOODLE_INTERNAL') || die();
 */
 define('LOCAL_EVENTO_DATETIME_FORMAT', "Y-m-d\TH:i:s.uP");
 
-
-
-
-
 /**
  * Class definition for the evento webservice call
  *
  * @package    local_evento
- * @copyright  2017 HTW Chur Roger Barras
+ * @copyright  2018 HTW Chur Thomas Wieling
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
