@@ -33,7 +33,7 @@ define('LOCAL_EVENTO_DATETIME_FORMAT', "Y-m-d\TH:i:s.uP");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class simulation {
+class evento_service_simulation implements interface_evento_service {
 
   // Plugin configuration.
   private $config;
@@ -125,7 +125,7 @@ class simulation {
         'personeMail' => "peter.mueller@htwchur.ch",
         'personenStatus' => $personenStatus_object
       ];
-/*---HIER BESTEHT EIN PROBLEM------*/
+
       $array_EventoAnlassLeitung_object = (object)
       [
         'anlassLeitungRolle'=> $anlassLeitungRolle_object,

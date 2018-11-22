@@ -22,12 +22,8 @@
  */
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
-require_once($CFG->dirroot . '/enrol/evento/classes/task/evento_member_sync_task.php');
-require_once($CFG->dirroot . '/enrol/evento/tests/local_evento_service_simulation.php');
-//require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
-require_once($CFG->dirroot . '/enrol/evento/locallib.php');
+require_once($CFG->dirroot . '/enrol/evento/interface.php');
 require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
-
 
  class mod_evento_advanced_testcase extends advanced_testcase {
    /** @var stdClass Instance. */
@@ -57,7 +53,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
      $this->cat1 = $this->getDataGenerator()->create_category();
      $this->cat2 = $this->getDataGenerator()->create_category();
      /*Create Object $locallib*/
-     $simulator = new simulation;
+     $simulator = new evento_service_simulation();
      $this->locallib = new enrol_evento_user_sync_exposed($simulator);
      $this->resetAfterTest(false);
    }
