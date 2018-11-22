@@ -15,8 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class that exposes methods, i.e. allows to access protected or private mehtods, for unit testing purpose.
- * localib.php could be find under /evento/locallib.php
+ * Exposed class for PHPUnit test
  *
  * @package    enrol_evento
  * @copyright  2018 HTW Chur Thomas Wieling
@@ -70,7 +69,7 @@ class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
     $this->trace = new null_progress_trace();
     return parent::enrol_teacher($eventopersonid, $instance);
   }
-  public function set_user_eventoid_exposed($userid, $eventoid);
+  public function set_user_eventoid_exposed($userid, $eventoid)
   {
     return parent::set_user_eventoid($userid, $eventoid);
   }

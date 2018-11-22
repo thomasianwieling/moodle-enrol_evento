@@ -57,7 +57,8 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
      $this->cat1 = $this->getDataGenerator()->create_category();
      $this->cat2 = $this->getDataGenerator()->create_category();
      /*Create Object $locallib*/
-     $this->locallib = new enrol_evento_user_sync_exposed();
+     $simulator = new simulation;
+     $this->locallib = new enrol_evento_user_sync_exposed($simulator);
      $this->resetAfterTest(false);
    }
    /*Create courses*/
@@ -205,7 +206,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
       $this->enable_plugin();
       /*create Object trace and enrol*/
       $trace = new null_progress_trace();
-      $enrol = new enrol_evento_user_sync;
+  //    $enrol = new enrol_evento_user_sync;
       /*Get course records and add enrol instances*/
       $courses = $DB->get_recordset_select('course', 'category > 0', null, '', 'id');
       foreach ($courses as $course)
@@ -214,7 +215,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
         $instances = enrol_get_instances($course->id, true);
       }
       /*Enrol Users into courses*/
-      $enrol->user_sync($trace, $courseid =null);
+       $this->locallib->user_sync($trace, $courseid =null);
       /*Get user enrolment record to count enrolments*/
       $this->get_enroled_user($course->id);
       $this->assertEquals($this->enrolments, 3, "Einschreibungen");

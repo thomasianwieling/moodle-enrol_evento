@@ -299,7 +299,8 @@ class enrol_evento_plugin extends enrol_plugin {
 
         require_once("$CFG->dirroot/enrol/evento/locallib.php");
         $syncstart = microtime(true);
-        $usersync = new enrol_evento_user_sync();
+        $evento_service = new local_evento_evento_service();
+        $usersync = new enrol_evento_user_sync($evento_service);
 
         $result = $usersync->user_sync($trace, $courseid);
         $syncend = microtime(true);

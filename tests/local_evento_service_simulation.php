@@ -33,11 +33,10 @@ define('LOCAL_EVENTO_DATETIME_FORMAT', "Y-m-d\TH:i:s.uP");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class local_evento_evento_service {
+class simulation {
 
   // Plugin configuration.
   private $config;
-  private $client;
 
   public function __construct()
   {
@@ -56,8 +55,23 @@ class local_evento_evento_service {
   */
   public function init_call()
   {
+    /*try
+    {
+            $request['theLimitationFilter2']['theMaxResultsValue'] = 10;
+            $result = $this->client->listEventoAnlassTyp($request);
+            return array_key_exists("return", $result) ? true : null;
+        } catch (SoapFault $fault) {
+            debugging("Error, the init webservice call to evento failed: ". $fault->__to);
+            return false;
+        } catch (Exception $ex) {
+            debugging("Error, the init webservice call to evento failed: {$ex->message}");
+            return false;
+        } catch (Throwable $ex) {
+            debugging("Error, the init webservice call to evento failed: {$ex->message}");
+            return false;
+        }*/
         return true;
-  }
+    }
 
     /**
      * Obtains an event by the id-number
@@ -111,7 +125,7 @@ class local_evento_evento_service {
         'personeMail' => "peter.mueller@htwchur.ch",
         'personenStatus' => $personenStatus_object
       ];
-
+/*---HIER BESTEHT EIN PROBLEM------*/
       $array_EventoAnlassLeitung_object = (object)
       [
         'anlassLeitungRolle'=> $anlassLeitungRolle_object,
@@ -181,6 +195,7 @@ class local_evento_evento_service {
      */
     public function get_enrolments_by_eventid($eventid)
     {
+
       if($eventid == 25490)
       {
         $personenAnmeldungStatus_object = (object)
@@ -204,7 +219,29 @@ class local_evento_evento_service {
           'idPerson'=>141703,
           'personenAnmeldungStatus' => $personenAnmeldungStatus_object
         ];
-        return $return_object;
+
+        $personenAnmeldungStatus_object1 = (object)
+        [
+          'aenderung'=> "2008-07-04T10:03:23.000+02:00",
+          'aenderungVon'=> "BI_gzap",
+          'erfassungVon'=> "auto",
+          'idStatus'=>20215,
+          'statusName'=> "aA.Angemeldet"
+        ];
+
+        $return_object1 = (object)
+        [
+          'aenderung'=> "2018-06-05T08:58:20.723+02:00",
+          'aenderungVon'=> "hoferlis",
+          'erfassung'=> "2018-06-05T08:58:20.723+02:00",
+          'erfassungVon'=> "hoferlis",
+          'iDAnmeldung'=>415864,
+          'iDPAStatus'=>20215,
+          'idAnlass'=>25490,
+          'idPerson'=>143440,
+          'personenAnmeldungStatus' => $personenAnmeldungStatus_object1
+        ];
+        return array($return_object, $return_object1);
       }
     }
 
@@ -262,6 +299,30 @@ class local_evento_evento_service {
         ];
         return $returnObject;
       }
+
+      if($personid == 117828)
+      {
+        $personen_anmeldung_object = (object)
+        [
+          "iDAnmeldung"=> 415870,
+          "iDPAStatus"=> 20215,
+          "idAnlass"=> 25490,
+          "idPerson"=> 117828,
+        ];
+
+        $returnObject = (object)
+        [
+          "array_personenanmeldungen"=> array($personen_anmeldung_object),
+          "idPerson"=> 117828,
+          "idPersonStatus"=>30040,
+          "personAktiv"=>true,
+          "personKorrIdPerson"=>117828,
+          "personNachname"=> "Mueller",
+          "personVorname"=> "Peter",
+          "personeMail"=> "peter.mueller@stud.htwchur.ch",
+        ];
+        return $returnObject;
+      }
     }
 
     /**
@@ -286,6 +347,23 @@ class local_evento_evento_service {
           'isStudentAccount' => 1,
           'objectSid' => "S-1-5-21-2460181390-1097805571-3701207438-51315",
           'sAMAccountName' => "MaxMuster"
+        ];
+
+        $person = array($object);
+        return $person;
+      }
+      if($personid == 143440)
+      {
+        $object = (object)
+        [
+          'accountStatusDisabled' => 0,
+          'hasSeveralAccounts' => 0,
+          'idPerson' => 143440,
+          'isEmployeeAccount' => 0,
+          'isLecturerAccount' => 0,
+          'isStudentAccount' => 1,
+          'objectSid' => "S-1-5-21-2460181390-1097805571-3701207438-51315",
+          'sAMAccountName' => "HansMeier"
         ];
 
         $person = array($object);
@@ -321,7 +399,7 @@ class local_evento_evento_service {
         'isEmployeeAccount' => 0,
         'isLecturerAccount' => 0,
         'isStudentAccount' => 1,
-        'objectSid' => "S-1-5-21-2360181390-1097805571-3701207438-51315",
+        'objectSid' => "S-1-5-21-2360181390-1097805571-3701207438-51325",
         'sAMAccountName' => "HansMeier"
       ];
 
@@ -348,8 +426,8 @@ class local_evento_evento_service {
         'isEmployeeAccount' => 0,
         'isLecturerAccount' => 1,
         'isStudentAccount' => 0,
-        'objectSid' => "S-1-5-21-2360181390-1097805571-3701207438-51315",
-        'sAMAccountName' => "HansMeier"
+        'objectSid' => "S-1-5-21-2360181390-1097805571-3701207438-51314",
+        'sAMAccountName' => "PeterMueller"
       ];
       $person = array($object);
 
@@ -364,7 +442,6 @@ class local_evento_evento_service {
      * @return array of stdClass person object "EventoPerson" definied in the wsdl
      */
     public function get_employee_ad_accounts($isactive = null) {
-
 
       //$person = array($object);
 
@@ -401,7 +478,7 @@ class local_evento_evento_service {
      * @return string shibboleth id
      */
     public function sid_to_shibbolethid($sid) {
-        return trim(str_replace($this->config->adsidprefix, "", $sid) . $this->config->adshibbolethsuffix);
+      return trim(str_replace($this->config->adsidprefix, "", $sid) . $this->config->adshibbolethsuffix);
     }
 
     /**
