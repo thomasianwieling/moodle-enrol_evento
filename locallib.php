@@ -60,17 +60,17 @@ class enrol_evento_user_sync{
      * Constructor
      *
      */
-    public function __construct($evento_service = null) {
-        global $DB;
-        $this->config = get_config('enrol_evento');
-        $this->plugin = enrol_get_plugin('evento');
-        $this->eventoservice = $evento_service;
-        // Set up a student and a teacher role for use in some tests.
-        $this->eteacherroleid = $DB->get_field('role', 'id', array('shortname' => 'editingteacher'));
-        $this->studentroleid = $DB->get_field('role', 'id', array('shortname' => 'student'));
-        // Valid Evento enrolmentstate for student enrolment.
-        $this->enrolstateids = explode(",", preg_replace('/\s+/', '', $this->config->evenrolmentstate));
-    }
+     public function __construct($evento_service = null) {
+             global $DB;
+             $this->config = get_config('enrol_evento');
+             $this->plugin = enrol_get_plugin('evento');
+             $this->eventoservice = $evento_service;
+             // Set up a student and a teacher role for use in some tests.
+             $this->eteacherroleid = $DB->get_field('role', 'id', array('shortname' => 'editingteacher'));
+             $this->studentroleid = $DB->get_field('role', 'id', array('shortname' => 'student'));
+             // Valid Evento enrolmentstate for student enrolment.
+             $this->enrolstateids = explode(",", preg_replace('/\s+/', '', $this->config->evenrolmentstate));
+         }
     /**
      * Sync all evento course links.
      *
@@ -85,7 +85,6 @@ class enrol_evento_user_sync{
             $this->trace = $trace;
             if (!enrol_is_enabled('evento')) {
                 $this->trace->output("Evento plugin not enabled");
-
                 $this->trace->finished();
                 return 2;
             }
@@ -95,7 +94,6 @@ class enrol_evento_user_sync{
             if (!$this->eventoservice->init_call()) {
                 // webservice not available
                 $this->trace->output("Evento webservice not available");
-
                 return 2;
             }
             $this->trace->output('Starting evento enrolment synchronisation...');
@@ -104,37 +102,32 @@ class enrol_evento_user_sync{
             $this->timestart = make_timestamp(date('Y', $now), date('m', $now), date('d', $now), 0, 0, 0);
             $this->timeend = 0;
             $instances = array();
-            $params = array('now1' => $now, 'now2' => $now, 'now3' => $now, 'now4' => $now, 'courselevel' => CONTEXT_COURSE,  'enabled' => ENROL_INSTANCE_ENABLED);
+            $params = array('now1' => $now, 'now2' => $now, 'now3' => $now, 'now4' => $now, 'courselevel' => CONTEXT_COURSE, 'enabled' => ENROL_INSTANCE_ENABLED);
             $coursesql = "";
             if (!empty($courseid)) {
                 $coursesql = "AND e.courseid = :courseid";
                 $params['courseid'] = $courseid;
-
             }
-
             // Selects all active enrolments in unfinished courses.
             // No enrolment if course enddate is reached or the course is hidden.
             $sql = "SELECT e.*, c.idnumber, cx.id AS contextid
                     FROM {enrol} e
-                    JOIN {context} cx ON (cx.instanceid = e.courseid AND cx.contextlevel = 50)
+                    JOIN {context} cx ON (cx.instanceid = e.courseid AND cx.contextlevel = :courselevel)
                     JOIN {course} c ON (c.id = e.courseid AND
                                     (((c.enddate = 0 OR (c.enddate > 0 AND c.enddate >= :now1)) AND c.visible = 1)
                                     OR (c.startdate >= :now2)))
                     WHERE e.enrol = 'evento' AND (e.enrolenddate = 0 OR (e.enrolenddate > 0 AND e.enrolenddate >= :now3))
                         AND (e.enrolstartdate = 0 OR (e.enrolstartdate > 0 AND e.enrolstartdate <= :now4))
-                        AND e.status = 0
+                        AND e.status = :enabled
                         $coursesql";
             $rs = $DB->get_recordset_sql($sql, $params);
-
             // Iterate over each evento enrol instance.
             foreach ($rs as $ce) {
-
                 try {
                     if (empty($instances[$ce->id])) {
                         $instances[$ce->id] = $DB->get_record('enrol', array('id' => $ce->id));
                     }
                     $instance = $instances[$ce->id];
-
                     // Get event id and data.
                     if (empty($instance->customtext1)) {
                         $anlassnbr = trim($ce->idnumber);
@@ -152,15 +145,14 @@ class enrol_evento_user_sync{
                     // Array of ids of active enrolled users.
                     $this->entolledusersids = array();
                     $event = $this->eventoservice->get_event_by_number($anlassnbr);
-
                     if (empty($event)) {
                         debugging("No Evento event found for idnumber: {$anlassnbr}", DEBUG_DEVELOPER);
                         continue;
                     }
                     // Get event participants enrolments.
                     $enrolments = $this->eventoservice->get_enrolments_by_eventid($event->idAnlass);
-
                     $enrolments = to_array($enrolments);
+                    // Enrol students.
                     foreach ($enrolments as $ee) {
                         try {
                             $this->update_student_enrolment($ee->idPerson, $ee->iDPAStatus, $instance);
@@ -289,7 +281,6 @@ class enrol_evento_user_sync{
                                         . " {$ce->id}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}");
                 }
             }
-            //sleep(60);
             $rs->close();
             unset($instances);
             $this->trace->output('...user enrolment synchronisation finished.');
@@ -326,9 +317,7 @@ class enrol_evento_user_sync{
             // Enrol.
             // Get or create the moodle user, throws exception on failure.
             $u = $this->get_user($eventopersonid);
-
             $this->plugin->enrol_user($instance, $u->id, $this->studentroleid, $this->timestart, $this->timeend, ENROL_USER_ACTIVE);
-
             $this->entolledusersids[] = $u->id;
             $this->trace->output("enroling user {$u->id} in course {$instance->courseid} as a student", 1);
         }
@@ -361,7 +350,6 @@ class enrol_evento_user_sync{
         if (empty($this->allactiveadaccounts)) {
             $this->allactiveadaccounts = $this->eventoservice->get_all_ad_accounts(true);
         }
-
         // Filter ad-users.
         if (isset($eventopersonid)) {
             // Filter personid.
@@ -398,7 +386,6 @@ class enrol_evento_user_sync{
         global $DB, $CFG;
         // Get the Active Directory User by evento ID.
         $adusers = to_array($this->get_ad_user($eventopersonid, $isstudent));
-
         if (!empty($adusers)) {
             if (count($adusers) == 1) {
                 $aduser = reset($adusers);
@@ -456,8 +443,7 @@ class enrol_evento_user_sync{
             $usernew->id = user_create_user($usernew, false, false);
             $this->set_user_eventoid($usernew->id, $eventopersonid);
             $u = $DB->get_record('user', array('id' => $usernew->id));
-            /*Uncomment for testing*/
-            //debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
+//            debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
             /*uncomment for Testing*/
             $tmp = 'user created with username:';
             fwrite(STDERR, print_r($tmp . print_r($usernew->username,TRUE) , TRUE));
@@ -480,9 +466,7 @@ class enrol_evento_user_sync{
             AND uid.data = :eventoid';
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
-
         return $userlist;
-
     }
     /**
      * Obtains the evento id of a user, if it is set

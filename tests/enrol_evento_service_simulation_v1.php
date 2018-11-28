@@ -112,12 +112,7 @@ class evento_service_simulation implements interface_evento_service {
         "anlassLtgIdPerson"=>117828,
         'anlassLtgPerson' => $anlassLtgPerson_object
       ];
-
-      $anlassStatus_object = (object)
-      [
-      //  'idStatus' => 10230,
-      ];
-
+      
       $anlassKategorie_object = (object)
       [
         'anlassKategorieAktiv' => true,

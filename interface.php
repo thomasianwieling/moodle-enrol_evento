@@ -1,5 +1,6 @@
 <?php
-require_once($CFG->dirroot . '/enrol/evento/tests/enrol_evento_service_simulation.php');
+//require_once($CFG->dirroot . '/enrol/evento/tests/evento_service_generator.php');
+//require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
 interface interface_evento_service
 {
   /**
@@ -21,7 +22,7 @@ interface interface_evento_service
      * @param local_evento_limitationfilter2 $limitationfilter2 filter for response limitation
      * @return stdClass event object "EventoAnlass" definied in the wsdl
      */
-    public function get_events_by_filter(local_evento_eventoanlassfilter $eventoanlassfilter, local_evento_limitationfilter2 $limitationfilter2);
+//    public function get_events_by_filter(local_evento_eventoanlassfilter $eventoanlassfilter, local_evento_limitationfilter2 $limitationfilter2);
 
     /**
      * Obtains the enrolments of an event
@@ -87,7 +88,7 @@ interface interface_evento_service
      * @param string $sid sid of the user from the Active Directory
      * @return string shibboleth id
      */
-    public function sid_to_shibbolethid($sid);
+  //  public function sid_to_shibbolethid($sid);
 
     /**
      * Converts a shibboleth ID to an Active Directory SID
@@ -95,7 +96,7 @@ interface interface_evento_service
      * @param string $sishibbolethid shibbolethid of the user
      * @return string sid from the Active Directory
      */
-    public function shibbolethid_to_sid($shibbolethid);
+  //  public function shibbolethid_to_sid($shibbolethid);
 
     /**
     * Create an array if the value is not already one.

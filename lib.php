@@ -298,6 +298,7 @@ class enrol_evento_plugin extends enrol_plugin {
         global $CFG;
 
         require_once("$CFG->dirroot/enrol/evento/locallib.php");
+        require_once($CFG->dirroot . '/enrol/evento/interface.php');
         $syncstart = microtime(true);
         $evento_service = new local_evento_evento_service();
         $usersync = new enrol_evento_user_sync($evento_service);
