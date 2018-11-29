@@ -59,8 +59,8 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
 
      $builder = new builder;
      /*Create Evento Course*/
-     $evento_anlass = $builder->add_anlass("Audio- & Kameratechnik 1", "2019-02-17T00:00:00.000+01:00", "2018-09-17T00:00:00.000+02:00", null, 117828, "mod.mmpAUKATE1.HS18_BS.001", null, 25490, 1, 60, 10230, 3 );
-     $evento_anlass = $builder->add_anlass("Audio- & Kameratechnik 2", "2019-02-17T00:00:00.000+01:00", "2018-09-17T00:00:00.000+02:00", null, 117828, "mod.mmpAUKATE1.HS18_BS.002", null, 25490, 1, 60, 10230, 3 );
+     $evento_anlass = $builder->add_anlass("Audio- & Kameratechnik 1", "2019-02-17T00:00:00.000+01:00", "2018-09-17T00:00:00.000+02:00", null, 117829, "mod.mmpAUKATE1.HS18_BS.001", null, 25490, 1, 60, 10230, 3 );
+  //   $evento_anlass = $builder->add_anlass("Audio- & Kameratechnik 2", "2019-02-17T00:00:00.000+01:00", "2018-09-17T00:00:00.000+02:00", null, 117828, "mod.mmpAUKATE1.HS18_BS.002", null, 25491, 1, 60, 10230, 3 );
 
      /**/
      $evento_status = $builder->add_evento_status(20215, "aA.Angemeldet", "BI_gzap", "auto", "2008-07-04T10:03:23.000+02:00");
@@ -69,12 +69,18 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
      $evento_person = $builder->add_person("Meier", "Hans", "hans.meier@stud.htwchur.ch",  141703, 30040, true, 141703, $evento_personen_anmeldung);
      $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 141703, 0, 0, 1, "S-1-5-21-2460181390-1097805571-3701207438-51315", "HanMei");
      /*create evento person Max Muster*/
-     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25491, 100001, $evento_status);
-     $evento_person = $builder->add_person("Muster", "Max", "max.muster@stud.htwchur.ch",  100001, 30040, true, 100001, $evento_personen_anmeldung);
-     $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 100001, 0, 0, 1, "S-1-5-21-2460181391-1097805571-3701207438-51315", "MaxMuster");
+     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 117828, $evento_status);
+     $evento_person = $builder->add_person("Muster", "Max", "max.muster@stud.htwchur.ch",  117828, 30040, true, 117828, $evento_personen_anmeldung);
+     $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117828, 0, 0, 1, "S-1-5-21-2460181391-1097805571-3701207438-51315", "MusMax");
+     /*create evento person Peter Mann*/
+     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 117829, $evento_status);
+     $evento_person = $builder->add_person("Mann", "Peter", "peter.mann@stud.htwchur.ch",  117829, 30040, true, 117829, $evento_personen_anmeldung);
+     $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117829, 0, 0, 1, "S-1-5-21-2460181392-1097805571-3701207438-51315", "ManPet");
 
-     $evento_status = $builder->add_evento_status(20214, "aA.Angemeldet", "BI_gzap", "auto", "2008-07-04T10:03:23.000+02:00");
-     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20214, 25491, 141703, $evento_status);
+
+
+     //$evento_status = $builder->add_evento_status(20214, "aA.Angemeldet", "BI_gzap", "auto", "2008-07-04T10:03:23.000+02:00");
+     //$evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20214, 25490, 117828, $evento_status);
 
      $this->simulator =$builder->service;
      $this->locallib = new enrol_evento_user_sync_exposed($this->simulator);
@@ -116,9 +122,13 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
      $anlass = $this->simulator->get_event_by_number("mod.mmpAUKATE1.HS18_BS.002");
      $personen_anmeldung = $this->simulator->get_enrolments_by_eventid(25490);
      //var_dump($personen_anmeldung);
-     $personen_anmeldung = $this->simulator->get_enrolments_by_eventid(25491);
-     //var_dump($personen_anmeldung);
+     $personen_anmeldung = $this->simulator->get_enrolments_by_eventid(25490);
+
+     //var_dump($this->simulator->evento_personen_anmeldungen);
+
      $person = $this->simulator->get_person_by_id(141703);
+     //var_dump($person);
+     $person = $this->simulator->get_person_by_id(117828);
      //var_dump($person);
      $ad_account = $this->simulator->get_ad_accounts_by_evento_personid(141701, null, null);
      //var_dump($ad_account);
@@ -155,7 +165,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
 
      /*Get new user*/
      $eventoperson = $this->locallib->get_user_exposed(141703, $isstudent=true, $username=null);
-     $eventoperson = $this->locallib->get_user_exposed(100001, $isstudent=true, $username=null);
+     $eventoperson = $this->locallib->get_user_exposed(117828, $isstudent=true, $username=null);
 
      /*Get Database Records*/
      $user1 = $DB->get_record('user', array('username'=>'2460181390-1097805571-3701207438-51315@fh-htwchur.ch'));
@@ -187,7 +197,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
    public function get_users_by_eventoid()
    {
      /*Set the evento person ID*/
-     $eventopersonid = 100001;
+     $eventopersonid = 117828;
      /*Get the user by evento ID*/
      $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
      $user = reset($person);
@@ -250,36 +260,36 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
        $this->locallib->user_sync($trace, $courseid =null);
       /*Get user enrolment record to count enrolments*/
       $this->get_enroled_user($course->id);
-      $this->assertEquals($this->enrolments, 1, "Einschreibungen");
+      $this->assertEquals($this->enrolments, 3, "Einschreibungen");
     }
 
     /*Student enrolment update*/
     /**
     * @test
     */
-/*    public function update_student_enrolment()
+    public function update_student_enrolment()
     {
       global $DB;
 
       $eventoenrolstate = 20215;
       $eventopersonid =  141703;
       /*Get the user records*/
-/*      $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
+      $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
       $user = reset($person);
       /*Get course settings*/
-/*      $course = $DB->get_record('course', array('idnumber'=>'mod.mmpAUKATE1.HS18_BS.001'));
+      $course = $DB->get_record('course', array('idnumber'=>'mod.mmpAUKATE1.HS18_BS.001'));
       $this->get_enroled_user($course->id);
 
       /*Delete a user to re-enrol after*/
-/*      $DB->delete_records('user_enrolments', array('userid'=> current($person)->id));
+      $DB->delete_records('user_enrolments', array('userid'=> current($person)->id));
       $DB->get_record('user_enrolments', array('userid'=> current($person)->id));
       $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 2);
       /*Get enrolment instance of course*/
-/*      $instance = $DB->get_record('enrol', array('id' => $this->user_enrolment->id));
+      $instance = $DB->get_record('enrol', array('id' => $this->user_enrolment->id));
       /*re-enrol user*/
-/*      $this->locallib->update_student_enrolment_exposed($eventopersonid, $eventoenrolstate, $instance);
+      $this->locallib->update_student_enrolment_exposed($eventopersonid, $eventoenrolstate, $instance);
       /*Count users*/
-/*      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 3);
+      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 3);
     }
 
     /*Teacher enrolment*/
