@@ -86,7 +86,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
      $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117829, 0, 0, 1, "S-1-5-21-2460181392-1097805571-3701207438-51315", "ManPet");
 
      /*create evento person Peter Mann*/
-     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20216, 25490, 117999, $evento_status);
+     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 117999, $evento_status);
      $evento_person = $builder->add_person("Muster", "Fritz", "peter.mann@stud.htwchur.ch",  117999, 30040, true, 117999, $evento_personen_anmeldung);
      $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117999, 0, 0, 1, "S-1-5-21-2460181393-1097805571-3701207438-51315", "MusFri");
 
@@ -210,7 +210,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
      $eventopersonid = 117828;
      /*Get the user by evento ID*/
      $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
-     $user = reset($person);
+      $user = reset($person);
      /*Evento user email equals email adress*/
      $this->assertEquals($user->email, 'max.muster@stud.htwchur.ch');
    }
@@ -252,12 +252,11 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
     public function user_sync(){
       /*Set global DB variable*/
       global $DB;
-      /*create moodle course and enable plugin*/
-  //    $this->create_moodle_course();
+      /*enable plugin*/
       $this->enable_plugin();
       /*create Object trace and enrol*/
       $trace = new null_progress_trace();
-  //    $enrol = new enrol_evento_user_sync;
+      $enrol = new enrol_evento_user_sync;
       /*Get course records and add enrol instances*/
       $courses = $DB->get_recordset_select('course', 'category > 0', null, '', 'id');
       foreach ($courses as $course)
@@ -269,7 +268,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
        $this->locallib->user_sync($trace, $courseid =null);
       /*Get user enrolment record to count enrolments*/
       $this->get_enroled_user($course->id);
-      $this->assertEquals($this->enrolments, 4, "Einschreibungen");
+      $this->assertEquals(4, $this->enrolments, "Einschreibungen");
     }
 
     /*Student enrolment update*/
@@ -293,7 +292,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
       /*re-enrol user*/
       $student = $this->locallib->update_student_enrolment_exposed($eventopersonid, $eventoenrolstate, $instance);
       /*Count users*/
-      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 4);
+      $this->assertEquals(1, $DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)));
     }
 
     /*Teacher enrolment*/
@@ -312,7 +311,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
       $instance = $DB->get_record('enrol', array('id'=>$this->user_enrolment->id));
       /*Re-enroll the teacher*/
       $teacher = $this->locallib->enrol_teacher_exposed($eventopersonid, $instance);
-      $this->assertEquals($DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)), 1);
+      $this->assertEquals(1, $DB->count_records('user_enrolments', array('enrolid'=> $this->user_enrolment->id)));
     }
 
     /*Set evento id to user*/
