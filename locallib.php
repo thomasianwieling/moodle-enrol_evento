@@ -152,6 +152,7 @@ class enrol_evento_user_sync{
                     // Get event participants enrolments.
                     $enrolments = $this->eventoservice->get_enrolments_by_eventid($event->idAnlass);
                     $enrolments = to_array($enrolments);
+                    //var_dump($enrolments);
                     // Enrol students.
                     foreach ($enrolments as $ee) {
                         try {
