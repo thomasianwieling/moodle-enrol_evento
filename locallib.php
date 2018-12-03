@@ -385,6 +385,7 @@ class enrol_evento_user_sync{
      */
     protected function get_user($eventopersonid, $isstudent=true, $username=null) {
         global $DB, $CFG;
+        $trace = new null_progress_trace();
         // Get the Active Directory User by evento ID.
         $adusers = to_array($this->get_ad_user($eventopersonid, $isstudent));
         if (!empty($adusers)) {
@@ -444,10 +445,7 @@ class enrol_evento_user_sync{
             $usernew->id = user_create_user($usernew, false, false);
             $this->set_user_eventoid($usernew->id, $eventopersonid);
             $u = $DB->get_record('user', array('id' => $usernew->id));
-//            debugging("user created with username: {$usernew->username}", DEBUG_DEVELOPER);
-            /*uncomment for Testing*/
-            $tmp = 'user created with username:';
-            fwrite(STDERR, print_r($tmp . print_r($usernew->username,TRUE) , TRUE));
+            $trace->output("user created with username:  {$usernew->username}");
         }
         return $u;
     }
