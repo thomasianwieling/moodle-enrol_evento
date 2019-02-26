@@ -1,6 +1,6 @@
 <?php
-require_once $CFG->dirroot . '/enrol/evento/tests/evento_service_generator.php';
-require_once $CFG->dirroot . '/enrol/evento/tests/evento_data_generator.php';
+require_once($CFG->dirroot . '/enrol/evento/tests/evento_service_generator.php');
+require_once($CFG->dirroot . '/enrol/evento/tests/evento_data_generator.php');
 class builder
 {
 
