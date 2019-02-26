@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -22,8 +21,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-//  require_once($CFG->dirroot . '/enrol/evento/tests/evento_service_generator.php');
-//  require_once($CFG->dirroot . '/local/evento/classes/evento_service.php');
 interface interface_evento_service
 {
   /**
