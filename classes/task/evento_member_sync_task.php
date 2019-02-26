@@ -32,8 +32,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright 2017 HTW Chur Roger Barras
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class evento_member_sync_task extends \core\task\scheduled_task
-{
+class evento_member_sync_task extends \core\task\scheduled_task{
 
     /**
      * Get a descriptive name for this task (shown to admins).
@@ -49,8 +48,7 @@ class evento_member_sync_task extends \core\task\scheduled_task
      * Do the job.
      * Throw exceptions on errors (the job will be retried).
      */
-    public function execute()
-    {
+    public function execute(){
         global $CFG;
 
         include_once $CFG->dirroot . '/enrol/evento/lib.php';

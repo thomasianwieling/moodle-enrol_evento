@@ -25,8 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 
-function xmldb_enrol_evento_install()
-{
+function xmldb_enrol_evento_install(){
     global $DB, $CFG;
     include_once $CFG->dirroot . '/user/profile/definelib.php';
     include_once $CFG->dirroot . '/enrol/evento/locallib.php';

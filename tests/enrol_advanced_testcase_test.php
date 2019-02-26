@@ -22,90 +22,66 @@
  */
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
-require_once $CFG->dirroot . '/enrol/evento/interface.php';
-require_once $CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php';
-require_once $CFG->dirroot . '/enrol/evento/tests/builder.php';
+require_once($CFG->dirroot . '/enrol/evento/interface.php');
+require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
+require_once()$CFG->dirroot . '/enrol/evento/tests/builder.php');
 
 class mod_evento_advanced_testcase extends advanced_testcase
 {
     /**
-     * 
-     *
-     * @var stdClass Instance. 
+     * @var stdClass Instance.
      */
     private $instance;
     /**
-     * 
-     *
-     * @var stdClass Student. 
+     * @var stdClass Student.
      */
     private $student;
     /**
-     * 
-     *
-     * @var stdClass First course. 
+     * @var stdClass First course.
      */
     private $course1;
     /**
-     * 
-     *
-     * @var stdClass Second course. 
+     * @var stdClass Second course.
      */
     private $course2;
     /**
-     * 
-     *
-     * @var stdClass Second course. 
+     * @var stdClass Second course.
      */
     private $cat1;
     /**
-     * 
-     *
-     * @var stdClass Second course. 
+     * @var stdClass Second course.
      */
     private $cat2;
     /**
-     * 
-     *
-     * @var stdClass Plugin. 
+     * @var stdClass Plugin.
      */
     private $plugin;
     /**
-     * 
-     *
-     * @var stdClass Plugin. 
+     * @var stdClass Plugin.
      */
     private $locallib;
     /**
-     * 
-     *
-     * @var stdClass Plugin. 
+     * @var stdClass Plugin.
      */
     private $user_enrolment;
     /**
-     * 
-     *
-     * @var stdClass Plugin. 
+     * @var stdClass Plugin.
      */
     private $enrolments;
     /**
-     * 
-     *
-     * @var stdClass Plugin. 
+     * @var stdClass Plugin.
      */
     private $simulator;
 
     /*Create courses*/
-    protected function create_moodle_course()
-    {
+    protected function create_moodle_course(){
         $plugin = 'evento';
         $evento_plugin = enrol_get_plugin($plugin);
         $course1 = $this->getDataGenerator()->create_course(array('category'=>$this->cat1->id, 'idnumber' => 'mod.mmpAUKATE1.HS18_BS.001'));
         $instanceid = $evento_plugin->add_default_instance($course1);
     }
 
-    protected function setUp()
-    {
+    protected function setUp(){
         /*Create Moodle categories*/
         $this->cat1 = $this->getDataGenerator()->create_category();
         $this->cat2 = $this->getDataGenerator()->create_category();
@@ -150,24 +126,21 @@ class mod_evento_advanced_testcase extends advanced_testcase
     }
 
     /*Enable plugin method*/
-    protected function enable_plugin()
-    {
+    protected function enable_plugin(){
         $enabled = enrol_get_plugins(true);
         $enabled['evento'] = true;
         $enabled = array_keys($enabled);
         set_config('enrol_plugins_enabled', implode(',', $enabled));
     }
     /*disable plugin method*/
-    protected function disable_plugin()
-    {
+    protected function disable_plugin(){
         $enabled = enrol_get_plugins(true);
         unset($enabled['evento']);
         $enabled = array_keys($enabled);
         set_config('enrol_plugins_enabled', implode(',', $enabled));
     }
     /*get enroled user from course*/
-    protected function get_enroled_user($id)
-    {
+    protected function get_enroled_user($id){
         global $DB;
         $this->user_enrolment = $DB->get_record('enrol', array('courseid'=>$id, 'enrol'=>'evento'), '*', MUST_EXIST);
         $this->enrolments = $DB->count_records('user_enrolments', array('enrolid'=>$this->user_enrolment->id));
@@ -178,8 +151,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function basic()
-    {
+    public function basic(){
         $anlass = $this->simulator->get_event_by_number("mod.mmpAUKATE1.HS18_BS.002");
         $personen_anmeldung = $this->simulator->get_enrolments_by_eventid(25490);
         //var_dump($personen_anmeldung);
@@ -201,8 +173,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function basics()
-    {
+    public function basics(){
 
         $this->resetAfterTest(true);
 
@@ -217,8 +188,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function get_user()
-    {
+    public function get_user(){
         /*set global DB variable*/
         global $DB;
 
@@ -243,8 +213,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function get_ad_user()
-    {
+    public function get_ad_user(){
         /*set evento person ID*/
         $eventopersonid = 141703;
         /*Get ad User*/
@@ -257,8 +226,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function get_users_by_eventoid()
-    {
+    public function get_users_by_eventoid(){
         /*Set the evento person ID*/
         $this->get_user();
 
@@ -273,8 +241,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function get_eventoid_by_userid()
-    {
+    public function get_eventoid_by_userid(){
         $this->get_user();
         /*set evento person id*/
         $eventopersonid = 141703;
@@ -291,8 +258,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function get_user_by_username()
-    {
+    public function get_user_by_username(){
         $this->get_user();
         /*set username*/
         $username = "2460181390-1097805571-3701207438-51315@fh-htwchur.ch";
@@ -306,8 +272,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function user_sync()
-    {
+    public function user_sync(){
         /*Set global DB variable*/
         global $DB;
         /*enable plugin*/
@@ -333,8 +298,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function update_student_enrolment()
-    {
+    public function update_student_enrolment(){
         global $DB;
 
         $eventoenrolstate = 20215;
@@ -358,8 +322,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function enrol_teacher()
-    {
+    public function enrol_teacher(){
         global $DB;
         $eventopersonid =  118000;
 
@@ -368,7 +331,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
         $this->get_enroled_user($course->id);
 
         /**
-* 
+*
 * Get the course instance
 */
         $instance = $DB->get_record('enrol', array('id'=>$this->user_enrolment->id));
@@ -381,8 +344,7 @@ class mod_evento_advanced_testcase extends advanced_testcase
     /**
      * @test
      */
-    public function set_user_eventoid()
-    {
+    public function set_user_eventoid(){
 
         $user = $this->getDataGenerator()->create_user();
         $eventoid = 12345;
