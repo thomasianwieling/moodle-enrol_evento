@@ -23,10 +23,10 @@
 
 interface interface_evento_service
 {
-   /**
-   * Doing a simple init Webservice call to open the connection
-   * @return boolean true if the request was successfully
-   */
+    /**
+    * Doing a simple init Webservice call to open the connection
+    * @return boolean true if the request was successfully
+    */
     public function init_call();
 
     /**
@@ -120,7 +120,7 @@ interface interface_evento_service
 
     /**
      * Create an array if the value is not already one.
-     *0
+     * 0
      * @param var $value0
      * @return array of the $value
      */

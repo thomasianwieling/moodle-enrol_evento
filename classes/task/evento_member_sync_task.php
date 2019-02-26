@@ -40,7 +40,7 @@ class evento_member_sync_task extends \core\task\scheduled_task {
      * @return string
      */
     public function get_name() {
-      return get_string('eventosync', 'enrol_evento');
+        return get_string('eventosync', 'enrol_evento');
     }
 
     /**
