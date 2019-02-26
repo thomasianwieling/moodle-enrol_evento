@@ -208,31 +208,3 @@ class evento_anlass{
     $this->idAnlassTyp = $idAnlassTyp;
   }
 }
-
-
-
-/*
-class anlass_ltg_person{
-  public $array_personenanmeldungen;
-  public $idPerson;
-  public $idPersonStatus;
-  public $personAktiv;
-  public $personKorrIdPerson;
-  public $personNachname;
-  public $personRechIdPerson;
-  public $personVorname;
-  public $personeMail;
-  public $personenStatus;
-  public function __construct(array $array_personenanmeldungen, int $idPerson, int $idPersonStatus, boolean $personAktiv, int $personKorrIdPerson, string $personNachname, int $personRechIdPerson, string $personVorname, string $personeMail, personen_status $personenStatus){
-  $this->array_personenanmeldungen = $array_personenanmeldungen;
-  $this->idPerson = $idPerson;
-  $this->idPersonStatus = $idPersonStatus;
-  $this->personAkti = $personAktiv;
-  $this->personKorrIdPerson = $personKorrIdPerson;
-  $this->personNachname = $personNachname;
-  $this->personRechIdPerson = $personRechIdPerson;
-  $this->personVorname = $personVorname;
-  $this->personeMail = $personeMail;
-  $this->personenStatus = $personenStatus;
-  }
-}*/
