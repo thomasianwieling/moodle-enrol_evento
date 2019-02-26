@@ -23,11 +23,11 @@
 
 interface interface_evento_service
 {
-  /**
+   /**
    * Doing a simple init Webservice call to open the connection
    * @return boolean true if the request was successfully
-  */
-  public function init_call();
+   */
+    public function init_call();
 
     /**
      * Obtains an event by the id-number
@@ -42,7 +42,7 @@ interface interface_evento_service
      * @param local_evento_limitationfilter2 $limitationfilter2 filter for response limitation
      * @return stdClass event object "EventoAnlass" definied in the wsdl
      */
-//    public function get_events_by_filter(local_evento_eventoanlassfilter $eventoanlassfilter, local_evento_limitationfilter2 $limitationfilter2);
+    // public function get_events_by_filter(local_evento_eventoanlassfilter $eventoanlassfilter, local_evento_limitationfilter2 $limitationfilter2);
 
     /**
      * Obtains the enrolments of an event
@@ -108,7 +108,7 @@ interface interface_evento_service
      * @param string $sid sid of the user from the Active Directory
      * @return string shibboleth id
      */
-  //  public function sid_to_shibbolethid($sid);
+    // public function sid_to_shibbolethid($sid);
 
     /**
      * Converts a shibboleth ID to an Active Directory SID
@@ -116,13 +116,13 @@ interface interface_evento_service
      * @param string $sishibbolethid shibbolethid of the user
      * @return string sid from the Active Directory
      */
-  //  public function shibbolethid_to_sid($shibbolethid);
+    // public function shibbolethid_to_sid($shibbolethid);
 
     /**
-    * Create an array if the value is not already one.
-    *
-    * @param var $value
-    * @return array of the $value
-    */
+     * Create an array if the value is not already one.
+     *0
+     * @param var $value0
+     * @return array of the $value
+     */
     public static function to_array($value);
-  }
+}
