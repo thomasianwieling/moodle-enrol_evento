@@ -17,9 +17,9 @@
 /**
  * Scheduled task for processing Evento enrolments.
  *
- * @package    enrol_evento
- * @copyright  2017 HTW Chur Roger Barras
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_evento
+ * @copyright 2017 HTW Chur Roger Barras
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace enrol_evento\task;
@@ -29,28 +29,31 @@ defined('MOODLE_INTERNAL') || die;
 /**
  * Simple task to run sync enrolments.
  *
- * @copyright  2017 HTW Chur Roger Barras
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2017 HTW Chur Roger Barras
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class evento_member_sync_task extends \core\task\scheduled_task {
+class evento_member_sync_task extends \core\task\scheduled_task
+{
 
     /**
      * Get a descriptive name for this task (shown to admins).
      *
      * @return string
      */
-    public function get_name() {
-       return get_string('eventosync', 'enrol_evento');
+    public function get_name()
+    {
+        return get_string('eventosync', 'enrol_evento');
     }
 
     /**
      * Do the job.
      * Throw exceptions on errors (the job will be retried).
      */
-    public function execute() {
+    public function execute()
+    {
         global $CFG;
 
-        require_once($CFG->dirroot . '/enrol/evento/lib.php');
+        include_once $CFG->dirroot . '/enrol/evento/lib.php';
 
         if (!enrol_is_enabled('evento')) {
             return;

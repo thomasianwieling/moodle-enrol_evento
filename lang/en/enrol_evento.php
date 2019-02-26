@@ -17,9 +17,9 @@
 /**
  * Strings for component 'local_coursecopy', language 'en'
  *
- * @package    enrol_evento
- * @copyright  2017, HTW Chur {@link http://www.htwchur.ch}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_evento
+ * @copyright 2017, HTW Chur {@link http://www.htwchur.ch}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 $string['accounttype'] = 'Accounttype';
 $string['accounttype_desc'] = 'Type of the account to create new users';

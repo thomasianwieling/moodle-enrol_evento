@@ -37,16 +37,16 @@
  * $ sudo -u www-data /usr/bin/php admin/tool/task/cli/schedule_task.php /
  * --execute=\\enrol_evento\\task\\evento_sync_task
  *
- * @package    enrol_evento
- * @copyright  2017 HTW Chur Roger Barras
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_evento
+ * @copyright 2017 HTW Chur Roger Barras
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 
 define('CLI_SCRIPT', true);
 
-require(__DIR__.'/../../../config.php');
-require_once("$CFG->libdir/clilib.php");
+require __DIR__.'/../../../config.php';
+require_once "$CFG->libdir/clilib.php";
 
 // Now get cli options.
 list($options, $unrecognized) = cli_get_params(array('verbose' => false, 'help' => false, 'courseid' => false), array('v' => 'verbose', 'h' => 'help'));
