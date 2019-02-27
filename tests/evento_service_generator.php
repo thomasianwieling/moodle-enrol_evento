@@ -2,7 +2,7 @@
 
 class service implements interface_evento_service
 {
-    private $config;
+    public $config;
     public $evento_anlass;
     public $evento_personen_anmeldungen;
     public $evento_personen;
