@@ -50,7 +50,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     /** @var stdClass Plugin. */
     private $simulator;
 
-   /*Create courses*/
+    /*Create courses*/
     protected function create_moodle_course(){
     $plugin = 'evento';
     $evento_plugin = enrol_get_plugin($plugin);
@@ -58,62 +58,61 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     $instanceid = $evento_plugin->add_default_instance($course1);
     }
 
-   protected function setUp(){
-       global $DB;
-     /*Create Moodle categories*/
-     $this->cat1 = $this->getDataGenerator()->create_category();
-     $this->cat2 = $this->getDataGenerator()->create_category();
-     /*Create Object $locallib*/
+    protected function setUp(){
+    global $DB;
+    /*Create Moodle categories*/
+    $this->cat1 = $this->getDataGenerator()->create_category();
+    $this->cat2 = $this->getDataGenerator()->create_category();
+    /*Create Object $locallib*/
+
+    $builder = new builder;
+    /*Create Evento Course*/
+    $evento_anlass = $builder->add_anlass("Audio- & Kameratechnik 1", "2019-02-17T00:00:00.000+01:00", "2018-09-17T00:00:00.000+02:00", null, 117829, "mod.mmpAUKATE1.HS18_BS.001", null, 25490, 1, 60, 10230, 3 );
+    $evento_anlass = $builder->add_anlass("Audio- & Kameratechnik 2", "2019-02-17T00:00:00.000+01:00", "2018-09-17T00:00:00.000+02:00", null, 117828, "mod.mmpAUKATE1.HS18_BS.002", null, 25491, 1, 60, 10230, 3 );
+
+    /**/
+    $evento_status = $builder->add_evento_status(20215, "aA.Angemeldet", "BI_gzap", "auto", "2008-07-04T10:03:23.000+02:00");
+    /*Create evento person Hans Meier*/
+    $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 141703, $evento_status);
+    $evento_person = $builder->add_person("Meier", "Hans", "hans.meier@stud.htwchur.ch",  141703, 30040, true, 141703, $evento_personen_anmeldung);
+    $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 141703, 0, 0, 1, "S-1-5-21-2460181390-1097805571-3701207438-51315", "HanMei");
+
+    /*create evento person Max Muster*/
+    $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 117828, $evento_status);
+    $evento_person = $builder->add_person("Muster", "Max", "max.muster@stud.htwchur.ch",  117828, 30040, true, 117828, $evento_personen_anmeldung);
+    $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117828, 0, 0, 1, "S-1-5-21-2460181391-1097805571-3701207438-51315", "MusMax");
+
+    /*create evento person Peter Mann*/
+    $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 117829, $evento_status);
+    $evento_person = $builder->add_person("Mann", "Peter", "peter.mann@stud.htwchur.ch",  117829, 30040, true, 117829, $evento_personen_anmeldung);
+    $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117829, 0, 0, 1, "S-1-5-21-2460181392-1097805571-3701207438-51315", "ManPet");
+
+    /*create evento person Peter Mann*/
+    $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 117999, $evento_status);
+    $evento_person = $builder->add_person("Muster", "Fritz", "peter.mann@stud.htwchur.ch",  117999, 30040, true, 117999, $evento_personen_anmeldung);
+    $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117999, 0, 0, 1, "S-1-5-21-2460181393-1097805571-3701207438-51315", "MusFri");
+
+    /*create teacher person*/
+    $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20216, 25491, 118000, $evento_status);
+    $evento_person = $builder->add_person("Teacher", "Mister", "mister.teacher@stud.htwchur.ch",  118000, 30040, true, 118000, $evento_personen_anmeldung);
+    $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118000, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51315", "MisTe");
 
 
-     $builder = new builder;
-     /*Create Evento Course*/
-     $evento_anlass = $builder->add_anlass("Audio- & Kameratechnik 1", "2019-02-17T00:00:00.000+01:00", "2018-09-17T00:00:00.000+02:00", null, 117829, "mod.mmpAUKATE1.HS18_BS.001", null, 25490, 1, 60, 10230, 3 );
-     $evento_anlass = $builder->add_anlass("Audio- & Kameratechnik 2", "2019-02-17T00:00:00.000+01:00", "2018-09-17T00:00:00.000+02:00", null, 117828, "mod.mmpAUKATE1.HS18_BS.002", null, 25491, 1, 60, 10230, 3 );
+    $this->simulator =$builder->service;
+    $this->locallib = new enrol_evento_user_sync_exposed($this->simulator);
+    $this->resetAfterTest(true);
+    $this->create_moodle_course();
 
-     /**/
-     $evento_status = $builder->add_evento_status(20215, "aA.Angemeldet", "BI_gzap", "auto", "2008-07-04T10:03:23.000+02:00");
-     /*Create evento person Hans Meier*/
-     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 141703, $evento_status);
-     $evento_person = $builder->add_person("Meier", "Hans", "hans.meier@stud.htwchur.ch",  141703, 30040, true, 141703, $evento_personen_anmeldung);
-     $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 141703, 0, 0, 1, "S-1-5-21-2460181390-1097805571-3701207438-51315", "HanMei");
+    $user1 = $this->getDataGenerator()->create_user(array('email'=>'max.fritz@htwchur.ch', 'username'=>'2460181394-1097805571-3701207438-51316@htwchur.ch', 'firstname'=>'Max', 'lastname'=>'Fritz', 'timecreated'=>1548078299, 'timemodified'=>1548078299));
+    $result = $DB->get_records('user',array('lastname'=>'Fritz'));
 
-     /*create evento person Max Muster*/
-     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 117828, $evento_status);
-     $evento_person = $builder->add_person("Muster", "Max", "max.muster@stud.htwchur.ch",  117828, 30040, true, 117828, $evento_personen_anmeldung);
-     $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117828, 0, 0, 1, "S-1-5-21-2460181391-1097805571-3701207438-51315", "MusMax");
-
-     /*create evento person Peter Mann*/
-     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 117829, $evento_status);
-     $evento_person = $builder->add_person("Mann", "Peter", "peter.mann@stud.htwchur.ch",  117829, 30040, true, 117829, $evento_personen_anmeldung);
-     $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117829, 0, 0, 1, "S-1-5-21-2460181392-1097805571-3701207438-51315", "ManPet");
-
-     /*create evento person Peter Mann*/
-     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20215, 25490, 117999, $evento_status);
-     $evento_person = $builder->add_person("Muster", "Fritz", "peter.mann@stud.htwchur.ch",  117999, 30040, true, 117999, $evento_personen_anmeldung);
-     $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117999, 0, 0, 1, "S-1-5-21-2460181393-1097805571-3701207438-51315", "MusFri");
-
-     /*create teacher person*/
-     $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto" ,415864, 20216, 25491, 118000, $evento_status);
-     $evento_person = $builder->add_person("Teacher", "Mister", "mister.teacher@stud.htwchur.ch",  118000, 30040, true, 118000, $evento_personen_anmeldung);
-     $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118000, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51315", "MisTe");
-
-
-     $this->simulator =$builder->service;
-     $this->locallib = new enrol_evento_user_sync_exposed($this->simulator);
-     $this->resetAfterTest(true);
-     $this->create_moodle_course();
-
-     $user1 = $this->getDataGenerator()->create_user(array('email'=>'max.fritz@htwchur.ch', 'username'=>'2460181394-1097805571-3701207438-51316@htwchur.ch', 'firstname'=>'Max', 'lastname'=>'Fritz', 'timecreated'=>1548078299, 'timemodified'=>1548078299));
-     $result = $DB->get_records('user',array('lastname'=>'Fritz'));
-
-     $item = new \stdClass();
-     $item->userid = reset($result)->id;
-     $item->data = (string)117820;
-     $item->dataformat = 0;
-     $uiditem = $DB->insert_record('user_info_data', $item);
-     $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117820, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51316", "MaFri");
-   }
+    $item = new \stdClass();
+    $item->userid = reset($result)->id;
+    $item->data = (string)117820;
+    $item->dataformat = 0;
+    $uiditem = $DB->insert_record('user_info_data', $item);
+    $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117820, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51316", "MaFri");
+    }
 
    /*Enable plugin method*/
    protected function enable_plugin(){
