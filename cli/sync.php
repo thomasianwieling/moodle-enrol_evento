@@ -45,8 +45,8 @@
 
 define('CLI_SCRIPT', true);
 
-require __DIR__.'/../../../config.php';
-require_once "$CFG->libdir/clilib.php";
+require(__DIR__.'/../../../config.php');
+require_once("$CFG->libdir/clilib.php");
 
 // Now get cli options.
 list($options, $unrecognized) = cli_get_params(array('verbose' => false, 'help' => false, 'courseid' => false), array('v' => 'verbose', 'h' => 'help'));
