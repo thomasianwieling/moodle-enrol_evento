@@ -26,39 +26,40 @@ require_once($CFG->dirroot . '/enrol/evento/interface.php');
 require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
 require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
 
- class mod_evento_advanced_testcase extends advanced_testcase {
-   /** @var stdClass Instance. */
-   private $instance;
-   /** @var stdClass Student. */
-   private $student;
-   /** @var stdClass First course. */
-   private $course1;
-   /** @var stdClass Second course. */
-   private $course2;
-   /** @var stdClass Second course. */
-   private $cat1;
-   /** @var stdClass Second course. */
-   private $cat2;
-   /** @var stdClass Plugin. */
-   private $plugin;
-   /** @var stdClass Plugin. */
-   private $locallib;
-   /** @var stdClass Plugin. */
-   private $user_enrolment;
-   /** @var stdClass Plugin. */
-   private $enrolments;
-   /** @var stdClass Plugin. */
-   private $simulator;
+class mod_evento_advanced_testcase extends advanced_testcase {
+    /** @var stdClass Instance. */
+    private $instance;
+    /** @var stdClass Student. */
+    private $student;
+    /** @var stdClass First course. */
+    private $course1;
+    /** @var stdClass Second course. */
+    private $course2;
+    /** @var stdClass Second course. */
+    private $cat1;
+    /** @var stdClass Second course. */
+    private $cat2;
+    /** @var stdClass Plugin. */
+    private $plugin;
+    /** @var stdClass Plugin. */
+    private $locallib;
+    /** @var stdClass Plugin. */
+    private $user_enrolment;
+    /** @var stdClass Plugin. */
+    private $enrolments;
+    /** @var stdClass Plugin. */
+    private $simulator;
 
    /*Create courses*/
-   protected function create_moodle_course(){
-     $plugin = 'evento';
-     $evento_plugin = enrol_get_plugin($plugin);
-     $course1 = $this->getDataGenerator()->create_course(array('category'=>$this->cat1->id, 'idnumber' => 'mod.mmpAUKATE1.HS18_BS.001'));
-     $instanceid = $evento_plugin->add_default_instance($course1);
-   }
+    protected function create_moodle_course(){
+    $plugin = 'evento';
+    $evento_plugin = enrol_get_plugin($plugin);
+    $course1 = $this->getDataGenerator()->create_course(array('category'=>$this->cat1->id, 'idnumber' => 'mod.mmpAUKATE1.HS18_BS.001'));
+    $instanceid = $evento_plugin->add_default_instance($course1);
+    }
 
    protected function setUp(){
+       global $DB;
      /*Create Moodle categories*/
      $this->cat1 = $this->getDataGenerator()->create_category();
      $this->cat2 = $this->getDataGenerator()->create_category();
@@ -102,6 +103,16 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
      $this->locallib = new enrol_evento_user_sync_exposed($this->simulator);
      $this->resetAfterTest(true);
      $this->create_moodle_course();
+
+     $user1 = $this->getDataGenerator()->create_user(array('email'=>'max.fritz@htwchur.ch', 'username'=>'2460181394-1097805571-3701207438-51316@htwchur.ch', 'firstname'=>'Max', 'lastname'=>'Fritz', 'timecreated'=>1548078299, 'timemodified'=>1548078299));
+     $result = $DB->get_records('user',array('lastname'=>'Fritz'));
+
+     $item = new \stdClass();
+     $item->userid = reset($result)->id;
+     $item->data = (string)117820;
+     $item->dataformat = 0;
+     $uiditem = $DB->insert_record('user_info_data', $item);
+     $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117820, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51316", "MaFri");
    }
 
    /*Enable plugin method*/
@@ -111,20 +122,21 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
      $enabled = array_keys($enabled);
      set_config('enrol_plugins_enabled', implode(',', $enabled));
    }
-   /*disable plugin method*/
+   /*Disable plugin method*/
    protected function disable_plugin(){
      $enabled = enrol_get_plugins(true);
      unset($enabled['evento']);
      $enabled = array_keys($enabled);
      set_config('enrol_plugins_enabled', implode(',', $enabled));
    }
-   /*get enroled user from course*/
+   /*Get enroled user from course*/
    protected function get_enroled_user($id){
      global $DB;
      $this->user_enrolment = $DB->get_record('enrol', array('courseid'=>$id, 'enrol'=>'evento'), '*', MUST_EXIST);
      $this->enrolments = $DB->count_records('user_enrolments', array('enrolid'=>$this->user_enrolment->id));
    }
 
+   /*Get mail from person with person id*/
    protected function get_mail_from_person_id($personid){
      $evento_personen = $this->simulator->evento_personen;
 
@@ -135,6 +147,7 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
      }
    }
 
+   /*Get username from person with personid*/
    protected function get_username_from_person_id($personid){
      $ad_accounts = $this->simulator->ad_accounts;
 
@@ -176,6 +189,37 @@ require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
      $this->assertEquals( $evento_plugin->get_name(), 'evento');
      $this->assertNotEmpty( $evento_plugin);
    }
+
+   /* Test that get_user returns an **existing** user with given evento */
+/**
+* @test
+*/
+ public function get_user_existing_user() {
+     $this->resetAfterTest(true);
+   global $DB;
+  $result = $DB->get_records('user_info_data',array('data'=>'117820'));
+  var_dump($result);
+  //var_dump($this->item);
+      $eventopersonid = 117820;
+      /*Get user by evento person ID for user ID*/
+      $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
+      //var_dump($person);
+ }
+
+ /* Test that get_user returns an **existing** user with given evento */
+/**
+* @test
+*/
+public function get_user_no_ad_user() {
+   //$this->resetAfterTest(true);
+ //global $DB;
+// $result = $DB->get_records('user',array('lastname'=>'Fritz'));
+    $eventopersonid = 99999;
+    /*Get user by evento person ID for user ID*/
+    $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent=null);
+    //var_dump($person);
+}
+
    /*get_user() Test for a new user*/
    /**
    * @test
