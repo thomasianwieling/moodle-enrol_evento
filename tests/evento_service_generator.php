@@ -27,7 +27,7 @@ class service implements interface_evento_service
         $evento_anlass = $this->evento_anlass;
 
         foreach ($evento_anlass as $anlass){
-            if ($number == $anlass->anlassNummer) {
+            if ($number == $anlass->anlassnummer) {
                 return $anlass;
             }
         }
@@ -41,7 +41,7 @@ class service implements interface_evento_service
         $personenanmeldungen_array = null;
 
         foreach ($personenanmeldungen as $personenanmeldung){
-            if ($eventid == $personenanmeldung->idAnlass) {
+            if ($eventid == $personenanmeldung->idanlass) {
                 $personenanmeldungen_array[] = $personenanmeldung;
             }
         }
@@ -54,7 +54,7 @@ class service implements interface_evento_service
         $evento_personen = $this->evento_personen;
 
         foreach ($evento_personen as $evento_person){
-            if ($personid == $evento_person->idPerson) {
+            if ($personid == $evento_person->idperson) {
                 return $evento_person;
             }
         }
@@ -66,7 +66,7 @@ class service implements interface_evento_service
     {
         $ad_accounts = $this->ad_accounts;
         foreach ($ad_accounts as $ad_account){
-            if ($personid == $ad_account->idPerson) {
+            if ($personid == $ad_account->idperson) {
                 return $ad_account;
             }
         }
@@ -79,7 +79,7 @@ class service implements interface_evento_service
         $ad_accounts = $this->ad_accounts;
         $student_ad_account = null;
         foreach ($ad_accounts as $ad_account){
-            if (1 == $ad_account->isStudentAccount) {
+            if (1 == $ad_account->isstudentaccount) {
                 $student_ad_account[] = $ad_account;
             }
         }
@@ -92,7 +92,7 @@ class service implements interface_evento_service
         $ad_accounts = $this->ad_accounts;
         $lecturer_ad_account = null;
         foreach ($ad_accounts as $ad_account){
-            if (1 == $ad_account->isLecturerAccount) {
+            if (1 == $ad_account->islectureraccount) {
                 $lecturer_ad_account[] = $ad_account;
             }
         }
@@ -105,7 +105,7 @@ class service implements interface_evento_service
         $ad_accounts = $this->ad_accounts;
         $employee_ad_account = null;
         foreach ($ad_accounts as $ad_account){
-            if (1 == $ad_account->isEmployeeAccount) {
+            if (1 == $ad_account->isemployeeaccount) {
                 $employee_ad_account[] = $ad_account;
             }
         }
