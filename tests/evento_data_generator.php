@@ -1,7 +1,6 @@
 <?php
 
-class ad_account
-{
+class ad_account{
     public $accountstatusdisabled;
     public $changed;
     public $created;
@@ -13,8 +12,8 @@ class ad_account
     public $objectsid;
     public $sAMAccountName;
 
-    public function __construct(int $accountstatusdisabled, string $changed, string $created, int $hasseveralaccounts, int $idPerson, int $isemployeeaccount, int $islectureraccount, int $isstudentaccount, string $objectsid, string $sAMAccountName)
-    {
+    public function __construct(int $accountstatusdisabled, string $changed, string $created, int $hasseveralaccounts, int $idperson, int $isemployeeaccount, int $islectureraccount, int $isstudentaccount, string $objectsid, string $sAMAccountName) {
+
         $this->accountstatusdisabled = $accountstatusdisabled;
         $this->changed = $changed;
         $this->created = $created;
@@ -28,201 +27,200 @@ class ad_account
     }
 }
 
-class evento_status
-{
-    public $idStatus;
-    public $statusName;
-    public $aenderung;
-    public $aenderungVon;
-    public $erfassungVon;
+class evento_status{
 
-    public function __construct( int $idStatus, string $statusName, string $aenderungVon, string $erfassungVon, string $aenderung)
-    {
-        $this->idStatus = $idStatus;
-        $this->statusName = $statusName;
-        $this->aenderungVon = $aenderungVon;
-        $this->erfassungVon = $erfassungVon;
+    public $idstatus;
+    public $statusname;
+    public $aenderung;
+    public $aenderungvon;
+    public $erfassungvon;
+
+    public function __construct( int $idstatus, string $statusname, string $aenderungvon, string $erfassungvon, string $aenderung) {
+        $this->idstatus = $idstatus;
+        $this->statusName = $statusname;
+        $this->aenderungvon = $aenderungvon;
+        $this->erfassungvon = $erfassungvon;
         $this->aenderung = $aenderung;
     }
 }
 
-class evento_anlass_typ
-{
+class evento_anlass_typ{
+
     public $aenderung;
-    public $aenderungVon;
-    public $anlassTypAktiv;
-    public $anlassTypBez;
+    public $aenderungvon;
+    public $anlasstypaktiv;
+    public $anlasstypbez;
     public $erfassung;
-    public $erfassungVon;
-    public $idAnlassTyp;
+    public $erfassungvon;
+    public $idanlasstyp;
 
-    public function __construct(string $aenderung, string $aenderungVon, boolean $anlassTypAktiv, string $anlassTypBez, string $erfassung, string $erfassungVon, int $idAnlassTyp)
-    {
+    public function __construct(string $aenderung, string $aenderungvon, boolean $anlasstypaktiv, string $anlasstypbez, string $erfassung, string $erfassungvon, int $idanlasstyp) {
+
         $this->aenderung = $aenderung;
-        $this->aenderungVon = $aenderungVon;
-        $this->anlassTypAktiv = $anlassTypAktiv;
-        $this->anlassTypBez = $anlassTypBez;
+        $this->aenderungVon = $aenderungvon;
+        $this->anlasstypaktiv = $anlasstypaktiv;
+        $this->anlasstypbez = $anlasstypbez;
         $this->erfassung = $erfassung;
-        $this->erfassungVon = $erfassungVon;
-        $this->idAnlassTyp = $idAnlassTyp;
+        $this->erfassungvon = $erfassungvon;
+        $this->idanlasstyp = $idanlasstyp;
     }
 }
 
-class evento_personen_anmeldung
-{
-    public $idAnmeldung;
+class evento_personen_anmeldung{
+
+    public $idanmeldung;
     public $iDPAStatus;
-    public $idAnlass;
-    public $idPerson;
-    public $personenAnmeldungStatus;
+    public $idanlass;
+    public $idperson;
+    public $personenanmeldungstatus;
     public $aenderung;
-    public $aenderungVon;
+    public $aenderungvon;
     public $erfassung;
-    public $erfassungVon;
+    public $erfassungvon;
 
-    public function __construct(string $aenderung, string $aenderungVon, string $erfassung, string $erfassungVon, int $idAnmeldung, int $iDPAStatus, int $idAnlass, int $idPerson, object $personenAnmeldungStatus)
-    {
+    public function __construct(string $aenderung, string $aenderungvon, string $erfassung, string $erfassungvon, int $idanmeldung, int $iDPAStatus, int $idanlass, int $idperson, object $personenanmeldungstatus) {
+
         $this->aenderung = $aenderung;
-        $this->aenderungVon = $aenderungVon;
+        $this->aenderungvon = $aenderungvon;
         $this->erfassung = $erfassung;
-        $this->erfassungVon = $erfassungVon;
-        $this->idAnmeldung = $idAnmeldung;
+        $this->erfassungvon = $erfassungvon;
+        $this->idanmeldung = $idanmeldung;
         $this->iDPAStatus = $iDPAStatus;
-        $this->idAnlass = $idAnlass;
-        $this->idPerson = $idPerson;
-        $this->personenAnmeldungStatus = $personenAnmeldungStatus;
+        $this->idanlass = $idanlass;
+        $this->idperson = $idperson;
+        $this->personenanmeldungstatus = $personenanmeldungstatus;
     }
 }
 
-class evento_person
-{
-    public $personNachname;
-    public $personVorname;
-    public $personeMail;
-    public $idPerson;
-    public $idPersonStatus;
-    public $personAktiv;
-    public $personKorrIdPerson;
-    public $personen_anmeldung;
+class evento_person{
 
-    public function __construct(string $personNachname, string $personVorname, string $personeMail, int $idPerson, int $idPersonStatus,  $personAktiv, int $personKorrIdPerson, object $personen_anmeldung)
+    public $personnachname;
+    public $personvorname;
+    public $personemail;
+    public $idperson;
+    public $idpersonstatus;
+    public $personaktiv;
+    public $personkorridperson;
+    public $personenanmeldung;
+
+    public function __construct(string $personnachname, string $personvorname, string $personemail, int $idperson, int $idpersonstatus,  $personaktiv, int $personkorridperson, object $personenanmeldung)
     {
-        $this->personNachname = $personNachname;
-        $this->personVorname = $personVorname;
-        $this->personeMail = $personeMail;
-        $this->idPerson = $idPerson;
-        $this->idPersonStatus = $idPersonStatus;
-        $this->personAktiv = $personAktiv;
-        $this->personKorrIdPerson = $personKorrIdPerson;
-        $this->personen_anmeldung = $personen_anmeldung;
+        $this->personnachname = $personnachname;
+        $this->personvorname = $personvorname;
+        $this->personemail = $personemail;
+        $this->idperson = $idperson;
+        $this->idpersonstatus = $idpersonstatus;
+        $this->personaktiv = $personaktiv;
+        $this->personkorridperson = $personkorridperson;
+        $this->personenanmeldung = $personenanmeldung;
     }
 }
 
 class anlass_leitung_rolle
 {
-    public $anlassLtgRolleAktiv;
-    public $anlassLtgRolleBezeichnung;
-    public $anlassLtgRolleBezeichnungKrz;
-    public $anlassLtgRolleBezeichnungSort;
-    public $idAnlassLtgRolle;
+    public $anlassltgrolleaktiv;
+    public $anlassltgrollebezeichnung;
+    public $anlassltgrollebezeichnungkrz;
+    public $anlassltgrollebezeichnungsort;
+    public $idanlassltgrolle;
     public $aenderung;
-    public $aenderungVon;
+    public $aenderungvon;
     public $erfassung;
-    public $erfassungVon;
+    public $erfassungvon;
 
-    public function __construct( boolean $anlassLtgRolleAktiv, string $anlassLtgRolleBezeichnung,  string $anlassLtgRolleBezeichnungKrz, string $anlassLtgRolleBezeichnungSort, int $idAnlassLtgRolle, string $aenderung, string $aenderungVon, string $erfassung, string $erfassungVon)
-    {
-        $this->anlassLtgRolleAktiv = $anlassLtgRolleAktiv;
-        $this->anlassLtgRolleBezeichnung = $anlassLtgRolleBezeichnung;
-        $this->anlassLtgRolleBezeichnungKrz = $anlassLtgRolleBezeichnungKrz;
-        $this->anlassLtgRolleBezeichnungSort = $anlassLtgRolleBezeichnungSort;
-        $this->idAnlassLtgRolle = $idAnlassLtgRolle;
+    public function __construct( boolean $anlassltgrolleaktiv, string $anlassltgrollebezeichnung,  string $anlassltgrollebezeichnungkrz, string $anlassltgrollebezeichnungsort, int $idanlassltgrolle, string $aenderung, string $aenderungvon, string $erfassung, string $erfassungvon) {
+
+        $this->anlassLtgrolleaktiv = $anlassltgrolleaktiv;
+        $this->anlassltgrollebezeichnung = $anlassltgrollebezeichnung;
+        $this->anlassltgrollebezeichnungkrz = $anlassltgrollebezeichnungkrz;
+        $this->anlassltgrollebezeichnungsort = $anlassltgrollebezeichnungsort;
+        $this->idanlassltgrolle = $idanlassltgrolle;
         $this->aenderung = $aenderung;
-        $this->aenderungVon = $aenderungVon;
+        $this->aenderungvon = $aenderungvon;
         $this->erfassung = $erfassung;
-        $this->erfassungVon = $erfassungVon;
+        $this->erfassungvon = $erfassungvon;
     }
 }
 
-class evento_anlass_leitung
-{
-    public $anlassLeitungRolle;
-    public $anlassLtgIdAnlass;
-    public $anlassLtgIdAnlassLtgRolle;
-    public $anlassLtgIdPerson;
-    public $anlassLtgPerson;
+class evento_anlass_leitung{
+
+    public $anlassleitungrolle;
+    public $anlassltgidanlass;
+    public $anlassltgidanlassltgrolle;
+    public $anlassltgidperson;
+    public $anlassltgperson;
     public $aenderung;
-    public $aenderungVon;
+    public $aenderungvon;
     public $erfassung;
-    public $erfassungVon;
-    public $idAnlassLtg;
+    public $erfassungvon;
+    public $idanlassltg;
 
-    public function __construct(anlass_ltg_person $anlassLeitungRolle, int $anlassLtgIdAnlass, int $anlassLtgIdAnlassLtgRolle, int $anlassLtgIdPerson, anlass_ltg_person $anlassLtgPerson, string $aenderung, string $aenderungVon, string $erfassung, string $erfassungVon, int $idAnlassLtg)
-    {
-        $this->anlassLeitungRolle = $anlassLeitungRolle;
-        $this->anlassLtgIdAnlass = $anlassLtgIdAnlass;
-        $this->anlassLtgIdAnlassLtgRolle = $anlassLtgIdAnlassLtgRolle;
-        $this->anlassLtgIdPerson = $anlassLtgIdPerson;
-        $this->anlassLtgPerson = $anlassLtgPerson;
+    public function __construct(anlass_ltg_person $anlassleitungrolle, int $anlassltgidanlass, int $anlassltgidanlassltgrolle, int $anlassltgidperson, anlass_ltg_person $anlassltgperson, string $aenderung, string $aenderungvon, string $erfassung, string $erfassungvon, int $idanlassltg) {
+
+        $this->anlassleitungrolle = $anlassleitungrolle;
+        $this->anlassltgidanlass = $anlassltgidanlass;
+        $this->anlassltgidanlassltgrolle = $anlassltgidanlassltgrolle;
+        $this->anlassltgidperson = $anlassltgidperson;
+        $this->anlassltgperson = $anlassltgperson;
         $this->aenderung = $aenderung;
-        $this->aenderungVon = $aenderungVon;
+        $this->aenderungvon = $aenderungvon;
         $this->erfassung = $erfassung;
-        $this->erfassungVon = $erfassungVon;
-        $this->idAnlassLtg = $idAnlassLtg;
-    }
-}
-
-
-
-class evento_anlass_kategorie
-{
-    public $anlassKategorieAktiv;
-    public $idAnlassKategorie;
-    public $aenderung;
-    public $aenderungVon;
-    public $erfassung;
-    public $erfassungVon;
-
-    public function __construct(boolean $anlassKategorieAktiv, int $idAnlassKategorie, string $aenderung, string $aenderungVon, string $erfassung, string $erfassungVon)
-    {
-        $this->anlassKategorieAktiv = $anlassKategorieAktiv;
-        $this->idAnlassKategorie = $idAnlassKategorie;
-        $this->aenderung = $aenderung;
-        $this->aenderungVon = $aenderungVon;
-        $this->erfassung = $erfassung;
-        $this->erfassungVon = $erfassungVon;
+        $this->erfassungvon = $erfassungvon;
+        $this->idanlassltg = $idanlassltg;
     }
 }
 
 
-class evento_anlass
-{
-    public $anlassBezeichnung;
-    public $anlassDatumBis;
-    public $anlassDatumVon;
-    public $anlassKategorie;
-    public $anlassLeitungIdPerson;
-    public $anlassNummer;
-    public $array_EventoAnlassLeitung;
-    public $idAnlass;
-    public $idAnlassKategorie;
-    public $idAnlassNiveau;
-    public $idAnlassStatus;
-    public $idAnlassTyp;
 
-    public function __construct($anlassBezeichnung, $anlassDatumBis, $anlassDatumVon, $anlassKategorie, $anlassLeitungIdPerson, $anlassNummer, $array_EventoAnlassLeitung, $idAnlass, $idAnlassKategorie, $idAnlassNiveau, $idAnlassStatus, $idAnlassTyp)
-    {
-        $this->anlassBezeichnung = $anlassBezeichnung;
-        $this->anlassDatumBis = $anlassDatumBis;
-        $this->anlassDatumVon = $anlassDatumVon;
-        $this->anlassKategorie = $anlassKategorie;
-        $this->anlassLeitungIdPerson = $anlassLeitungIdPerson;
-        $this->anlassNummer = $anlassNummer;
-        $this->array_EventoAnlassLeitung = $array_EventoAnlassLeitung;
-        $this->idAnlass = $idAnlass;
-        $this->idAnlassKategorie = $idAnlassKategorie;
-        $this->idAnlassNiveau = $idAnlassNiveau;
-        $this->idAnlassStatus = $idAnlassStatus;
-        $this->idAnlassTyp = $idAnlassTyp;
+class evento_anlass_kategorie{
+
+    public $anlasskategorieaktiv;
+    public $idanlasskategorie;
+    public $aenderung;
+    public $aenderungvon;
+    public $erfassung;
+    public $erfassungvon;
+
+    public function __construct(boolean $anlasskategorieaktiv, int $idanlasskategorie, string $aenderung, string $aenderungvon, string $erfassung, string $erfassungvon) {
+
+        $this->anlasskategorieaktiv = $anlasskategorieaktiv;
+        $this->idanlasskategorie = $idanlasskategorie;
+        $this->aenderung = $aenderung;
+        $this->aenderungvon = $aenderungvon;
+        $this->erfassung = $erfassung;
+        $this->erfassungvon = $erfassungvon;
+    }
+}
+
+
+class evento_anlass{
+
+    public $anlassbezeichnung;
+    public $anlassdatumbis;
+    public $anlassdatumvon;
+    public $anlasskategorie;
+    public $anlassleitungidperson;
+    public $anlassnummer;
+    public $arrayeventoanlassleitung;
+    public $idanlass;
+    public $idanlasskategorie;
+    public $idanlassniveau;
+    public $idanlassstatus;
+    public $idanlasstyp;
+
+    public function __construct($anlassbezeichnung, $anlassdatumbis, $anlassdatumvon, $anlasskategorie, $anlassleitungidperson, $anlassnummer, $arrayeventoanlassleitung, $idanlass, $idanlasskategorie, $idanlassniveau, $idanlassstatus, $idanlasstyp) {
+
+        $this->anlassbezeichnung = $anlassbezeichnung;
+        $this->anlassdatumbis = $anlassdatumbis;
+        $this->anlassdatumvon = $anlassdatumvon;
+        $this->anlasskategorie = $anlasskategorie;
+        $this->anlassleitungidperson = $anlassleitungidperson;
+        $this->anlassnummer = $anlassnummer;
+        $this->arrayeventoanlassleitung = $arrayeventoanlassleitung;
+        $this->idanlass = $idanlass;
+        $this->idanlasskategorie = $idanlasskategorie;
+        $this->idanlassniveau = $idanlassniveau;
+        $this->idanlassstatus = $idanlassstatus;
+        $this->idanlasstyp = $idanlasstyp;
     }
 }

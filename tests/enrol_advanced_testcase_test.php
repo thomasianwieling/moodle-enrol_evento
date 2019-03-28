@@ -163,8 +163,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
      */
     public function basic() {
         $anlass = $this->simulator->get_event_by_number("mod.mmpAUKATE1.HS18_BS.002");
-        $personen_anmeldung = $this->simulator->get_enrolments_by_eventid(25490);
-        $personen_anmeldung = $this->simulator->get_enrolments_by_eventid(25490);
+        $personenanmeldung = $this->simulator->get_enrolments_by_eventid(25490);
+        $personenanmeldung = $this->simulator->get_enrolments_by_eventid(25490);
 
         $person = $this->simulator->get_person_by_id(141703);
         $person = $this->simulator->get_person_by_id(117828);
@@ -343,7 +343,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         global $DB;
 
         $eventoenrolstate = 20215;
-        $eventopersonid =  117999;
+        $eventopersonid = 117999;
         /*Get the user records*/
         $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent = null);
         $user = reset($person);
@@ -372,7 +372,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $this->get_enroled_user($course->id);
 
         /**Get the course instance*/
-        $instance = $DB->get_record('enrol', array('id'=> $this->user_enrolment->id));
+        $instance = $DB->get_record('enrol', array('id' => $this->user_enrolment->id));
         /*Re-enroll the teacher*/
         $teacher = $this->locallib->enrol_teacher_exposed($eventopersonid, $instance);
         $this->assertEquals(1, $DB->count_records('user_enrolments', array('enrolid' => $this->user_enrolment->id)));

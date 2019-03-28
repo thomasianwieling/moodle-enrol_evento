@@ -37,16 +37,16 @@ class service implements interface_evento_service
 
     public function get_enrolments_by_eventid($eventid)
     {
-        $personen_anmeldungen = $this->evento_personen_anmeldungen;
-        $personen_anmeldungen_array = null;
+        $personenanmeldungen = $this->evento_personen_anmeldungen;
+        $personenanmeldungen_array = null;
 
-        foreach ($personen_anmeldungen as $personen_anmeldung){
-            if ($eventid == $personen_anmeldung->idAnlass) {
-                $personen_anmeldungen_array[] = $personen_anmeldung;
+        foreach ($personenanmeldungen as $personenanmeldung){
+            if ($eventid == $personenanmeldung->idAnlass) {
+                $personenanmeldungen_array[] = $personenanmeldung;
             }
         }
 
-        return $personen_anmeldungen_array;
+        return $personenanmeldungen_array;
     }
 
     public function get_person_by_id($personid)
