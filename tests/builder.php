@@ -40,9 +40,9 @@ class builder
         return $evento_person;
     }
 
-    public function add_ad_account($accountStatusDisabled, $changed, $created, $hasSeveralAccounts, $idPerson, $isEmployeeAccount, $isLecturerAccount, $isStudentAccount, $objectSid, $sAMAccountName)
+    public function add_ad_account($accountstatusdisabled, $changed, $created, $hasseveralaccounts, $idPerson, $isemployeeaccount, $islectureraccount, $isstudentaccount, $objectsid, $sAMAccountName)
     {
-        $ad_account = new ad_account($accountStatusDisabled, $changed, $created, $hasSeveralAccounts, $idPerson, $isEmployeeAccount, $isLecturerAccount, $isStudentAccount, $objectSid, $sAMAccountName);
+        $ad_account = new ad_account($accountstatusdisabled, $changed, $created, $hasseveralaccounts, $idPerson, $isemployeeaccount, $islectureraccount, $isstudentaccount, $objectsid, $sAMAccountName);
         $this->service->ad_accounts[] = $ad_account;
         return $ad_account;
     }

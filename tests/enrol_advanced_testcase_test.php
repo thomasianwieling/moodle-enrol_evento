@@ -73,7 +73,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         /**/
         $evento_status = $builder->add_evento_status(20215, "aA.Angemeldet", "BI_gzap", "auto", "2008-07-04T10:03:23.000+02:00");
         /*Create evento person Hans Meier*/
-        $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00","auto", 415864, 20215, 25490, 141703, $evento_status);
+        $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto", 415864, 20215, 25490, 141703, $evento_status);
         $evento_person = $builder->add_person("Meier", "Hans", "hans.meier@stud.htwchur.ch",  141703, 30040, true, 141703, $evento_personen_anmeldung);
         $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 141703, 0, 0, 1, "S-1-5-21-2460181390-1097805571-3701207438-51315", "HanMei");
 
@@ -159,8 +159,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
     /*Simuation test if plugin is enabled*/
     /**
-    * @test
-    */
+     * @test
+     */
     public function basic() {
         $anlass = $this->simulator->get_event_by_number("mod.mmpAUKATE1.HS18_BS.002");
         $personen_anmeldung = $this->simulator->get_enrolments_by_eventid(25490);
@@ -174,8 +174,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
     /*Basic test if plugin is enabled*/
     /**
-    * @test
-    */
+     * @test
+     */
     public function basics() {
 
         $this->resetAfterTest(true);
@@ -190,14 +190,14 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
     /* Test that get_user returns an **existing** user with given evento */
     /**
-    * @test
-    */
+     * @test
+     */
     public function get_user_existing_user() {
         $this->resetAfterTest(true);
         global $DB;
-        $result = $DB->get_records('user_info_data',array('data' => '117820'));
+        $result = $DB->get_records('user_info_data', array('data' => '117820'));
         var_dump($result);
-        //var_dump($this->item);
+        // var_dump($this->item);
         $eventopersonid = 117820;
 
         /*Get user by evento person ID for user ID*/
@@ -207,11 +207,11 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
     /* Test that get_user returns an **existing** user with given evento */
     /**
-    * @test
-    */
+     * @test
+     */
     public function get_user_no_ad_user() {
-        //$this->resetAfterTest(true);
-        //global $DB;
+        // $this->resetAfterTest(true);
+        // global $DB;
         // $result = $DB->get_records('user',array('lastname'=>'Fritz'));
         $eventopersonid = 99999;
         /*Get user by evento person ID for user ID*/
@@ -221,8 +221,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
     /*get_user() Test for a new user*/
     /**
-    * @test
-    */
+     * @test
+     */
     public function get_user() {
         /*set global DB variable*/
         global $DB;
@@ -253,8 +253,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function get_ad_user() {
         /*set evento person ID*/
         $eventopersonid = 141703;
@@ -266,11 +266,11 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
     /*Get user by evento id test*/
     /**
-    * @test
-    */
+     * @test
+     */
     public function get_users_by_eventoid() {
         /*Set the evento person ID*/
-        $this->get_user(); //Braucht es diese Methode, ja!
+        $this->get_user();
 
         $eventopersonid = 117828;
         /*Get the user by evento ID*/
@@ -281,8 +281,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function get_eventoid_by_userid() {
         $this->get_user();
         /*set evento person id*/
@@ -298,8 +298,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function get_user_by_username() {
         $this->get_user();
         /*set username*/
@@ -312,8 +312,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
     /*Kurs einschreibung*/
     /**
-    * @test
-    */
+     * @test
+     */
     public function user_sync() {
         /*Set global DB variable*/
         global $DB;
@@ -324,7 +324,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $enrol = new enrol_evento_user_sync;
         /*Get course records and add enrol instances*/
         $courses = $DB->get_recordset_select('course', 'category > 0', null, '', 'id');
-        foreach ($courses as $course){
+        foreach ($courses as $course) {
             $instanceid = null;
             $instances = enrol_get_instances($course->id, true);
         }
@@ -337,8 +337,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
     /*Student enrolment update*/
     /**
-    * @test
-    */
+     * @test
+     */
     public function update_student_enrolment() {
         global $DB;
 
@@ -361,8 +361,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
     /*Teacher enrolment*/
     /**
-    * @test
-    */
+     * @test
+     */
     public function enrol_teacher() {
         global $DB;
         $eventopersonid = 118000;
@@ -380,15 +380,14 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
     /*Set evento id to user*/
     /**
-    * @test
-    */
+     * @test
+     */
     public function set_user_eventoid() {
 
         $user = $this->getDataGenerator()->create_user();
         $eventoid = 12345;
         $this->locallib->set_user_eventoid_exposed($user->id, $eventoid);
-        $user_evento = $this->locallib->get_users_by_eventoid_exposed($eventoid, $isstudent=null);
+        $user_evento = $this->locallib->get_users_by_eventoid_exposed($eventoid, $isstudent = null);
         $this->assertEquals(current($user_evento)->id, $user->id);
     }
 }
-?>

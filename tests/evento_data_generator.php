@@ -2,28 +2,28 @@
 
 class ad_account
 {
-    public $accountStatusDisabled;
+    public $accountstatusdisabled;
     public $changed;
     public $created;
-    public $hasSeveralAccounts;
+    public $hasseveralaccounts;
     public $idPerson;
-    public $isEmployeeAccount;
-    public $isLecturerAccount;
-    public $isStudentAccount;
-    public $objectSid;
+    public $isemployeeaccount;
+    public $islectureraccount;
+    public $isstudentaccount;
+    public $objectsid;
     public $sAMAccountName;
 
-    public function __construct(int $accountStatusDisabled, string $changed, string $created, int $hasSeveralAccounts, int $idPerson, int $isEmployeeAccount, int $isLecturerAccount, int $isStudentAccount, string $objectSid, string $sAMAccountName)
+    public function __construct(int $accountstatusdisabled, string $changed, string $created, int $hasseveralaccounts, int $idPerson, int $isemployeeaccount, int $islectureraccount, int $isstudentaccount, string $objectsid, string $sAMAccountName)
     {
-        $this->accountStatusDisabled = $accountStatusDisabled;
+        $this->accountstatusdisabled = $accountstatusdisabled;
         $this->changed = $changed;
         $this->created = $created;
-        $this->hasSeveralAccounts = $hasSeveralAccounts;
-        $this->idPerson = $idPerson;
-        $this->isEmployeeAccount = $isEmployeeAccount;
-        $this->isLecturerAccount = $isLecturerAccount;
-        $this->isStudentAccount = $isStudentAccount;
-        $this->objectSid = $objectSid;
+        $this->hasseveralaccounts = $hasseveralaccounts;
+        $this->idperson = $idperson;
+        $this->isemployeeaccount = $isemployeeaccount;
+        $this->islectureraccount = $islectureraccount;
+        $this->isstudentaccount = $isstudentaccount;
+        $this->objectsid = $objectsid;
         $this->sAMAccountName = $sAMAccountName;
     }
 }
