@@ -6,7 +6,7 @@ class ad_account
     public $changed;
     public $created;
     public $hasseveralaccounts;
-    public $idPerson;
+    public $idperson;
     public $isemployeeaccount;
     public $islectureraccount;
     public $isstudentaccount;
