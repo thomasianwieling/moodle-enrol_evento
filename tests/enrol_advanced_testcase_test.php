@@ -140,7 +140,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $evento_personen = $this->simulator->evento_personen;
 
         foreach ($evento_personen as $evento_person) {
-            if ($personid == $evento_person->idPerson) {
+            if ($personid == $evento_person->idperson) {
                 return $evento_person->personeMail;
             }
         }
@@ -151,7 +151,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $ad_accounts = $this->simulator->ad_accounts;
 
         foreach ($ad_accounts as $ad_account) {
-            if ($personid == $ad_account->idPerson) {
+            if ($personid == $ad_account->idperson) {
                 return $ad_account->objectSid;
             }
         }
