@@ -197,12 +197,11 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         global $DB;
         $result = $DB->get_records('user_info_data', array('data' => '117820'));
         var_dump($result);
-        // var_dump($this->item);
         $eventopersonid = 117820;
 
         /*Get user by evento person ID for user ID*/
         $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent = null);
-        //var_dump($person);
+        var_dump($person);
     }
 
     /* Test that get_user returns an **existing** user with given evento */
@@ -216,7 +215,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $eventopersonid = 99999;
         /*Get user by evento person ID for user ID*/
         $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent = null);
-        //var_dump($person);
+        var_dump($person);
     }
 
     /*get_user() Test for a new user*/
