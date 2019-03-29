@@ -59,8 +59,7 @@ class enrol_evento_user_sync
     /**
      * Constructor
      */
-    public function __construct($evento_service = null)
-    {
+    public function __construct($evento_service = null) {
             global $DB;
             $this->config = get_config('enrol_evento');
             $this->plugin = enrol_get_plugin('evento');
@@ -78,8 +77,7 @@ class enrol_evento_user_sync
      * @param  int            $courseid one course, empty means all
      * @return int 0 means ok, 1 means error, 2 means plugin disabled
      */
-    public function user_sync(progress_trace $trace, $courseid = null)
-    {
+    public function user_sync(progress_trace $trace, $courseid = null) {
         global $CFG, $DB, $USER;
         try {
             // Init.
@@ -351,8 +349,7 @@ class enrol_evento_user_sync
      * @param int $eventoenrolstate evento state of the enrolment (iDPAStatus)
      * @param obj $instance         evento enrolment dataset
      */
-    protected function update_student_enrolment($eventopersonid, $eventoenrolstate, $instance)
-    {
+    protected function update_student_enrolment($eventopersonid, $eventoenrolstate, $instance) {
         // Check enrolment state to enrol or suspend.
         if (in_array($eventoenrolstate, $this->enrolstateids)) {
             // Enrol.
@@ -369,8 +366,7 @@ class enrol_evento_user_sync
      * @param string $eventopersonid evento idperson
      * @param obj    $instance       evento enrolment dataset
      */
-    protected function enrol_teacher($eventopersonid, $instance)
-    {
+    protected function enrol_teacher($eventopersonid, $instance) {
         // Get or create the moodle user, throws exception on failure.
         $u = $this->get_user($eventopersonid, false);
         // Enrol.
@@ -388,8 +384,7 @@ class enrol_evento_user_sync
 
      * @param array of ad users
      */
-    protected function get_ad_user($eventopersonid, $isstudent=null)
-    {
+    protected function get_ad_user($eventopersonid, $isstudent=null) {
         $result = null;
         if (empty($this->allactiveadaccounts)) {
             $this->allactiveadaccounts = $this->eventoservice->get_all_ad_accounts(true);
@@ -428,8 +423,7 @@ class enrol_evento_user_sync
      * @param  int  $username
      * @return a fieldset object for the user
      */
-    protected function get_user($eventopersonid, $isstudent=true, $username=null)
-    {
+    protected function get_user($eventopersonid, $isstudent=true, $username=null) {
         global $DB, $CFG;
         $trace = new null_progress_trace();
         // Get the Active Directory User by evento ID.
@@ -505,8 +499,7 @@ class enrol_evento_user_sync
      * @param  string $eventoid
      * @return an array of fieldset objects for the user
      */
-    protected function get_users_by_eventoid($eventoid)
-    {
+    protected function get_users_by_eventoid($eventoid) {
         global $DB;
         $sql = 'SELECT u.*
             FROM {user} u
@@ -524,8 +517,7 @@ class enrol_evento_user_sync
      * @param  int $userid
      * @return string eventoid of the user (person)
      */
-    protected function get_eventoid_by_userid($userid)
-    {
+    protected function get_eventoid_by_userid($userid) {
         global $DB;
         $result = null;
         $sql = 'SELECT u.id, uid.data
@@ -547,8 +539,7 @@ class enrol_evento_user_sync
      * @param  string $username
      * @return a fieldset object for the user
      */
-    protected function get_user_by_username($username)
-    {
+    protected function get_user_by_username($username) {
         global $DB;
         $user = $DB->get_record('user', array('username' => $username));
         return ($user == false) ? null : $user;
@@ -560,8 +551,7 @@ class enrol_evento_user_sync
      * @param  int $eventoid
      * @return bool true if set successfully
      */
-    protected function set_user_eventoid($userid, $eventoid)
-    {
+    protected function set_user_eventoid($userid, $eventoid) {
         global $DB;
         $returnvalue = false;
         // Gets an existing user info data eventoid.
@@ -605,8 +595,7 @@ class enrol_evento_user_sync
  * @param  var $value
  * @return array of the $value
  */
-function to_array($value)
-{
+function to_array($value) {
     $returnarray = array();
     if (is_array($value)) {
         $returnarray = $value;
@@ -621,8 +610,7 @@ function to_array($value)
  * @param int    $courseid
  * @param string $newgroupname
  */
-function enrol_evento_create_new_group($courseid, $newgroupname)
-{
+function enrol_evento_create_new_group($courseid, $newgroupname) {
     global $DB, $CFG;
     include_once $CFG->dirroot.'/group/lib.php';
     $a = new stdClass();
@@ -648,8 +636,7 @@ function enrol_evento_create_new_group($courseid, $newgroupname)
  * @param int    $courseid
  * @param string $newgroupingname
  */
-function enrol_evento_create_new_grouping($courseid, $newgroupingname)
-{
+function enrol_evento_create_new_grouping($courseid, $newgroupingname) {
     global $DB, $CFG;
     include_once $CFG->dirroot.'/group/lib.php';
     $a = new stdClass();

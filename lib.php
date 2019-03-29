@@ -72,8 +72,8 @@ class enrol_evento_plugin extends enrol_plugin
     public function add_instance($course, array $fields = null) {
         global $CFG;
 
-        include_once "$CFG->dirroot/enrol/evento/locallib.php";
-        include_once $CFG->dirroot.'/group/lib.php';
+        include_once("$CFG->dirroot/enrol/evento/locallib.php");
+        include_once($CFG->dirroot.'/group/lib.php');
         $groupingid = null;
         $groupid = null;
 
@@ -241,8 +241,8 @@ class enrol_evento_plugin extends enrol_plugin
     public function update_instance($instance, $data) {
         global $CFG;
 
-        include_once "$CFG->dirroot/enrol/evento/locallib.php";
-        include_once $CFG->dirroot.'/group/lib.php';
+        include_once("$CFG->dirroot/enrol/evento/locallib.php");
+        include_once($CFG->dirroot.'/group/lib.php');
         $groupingid = null;
         $groupid = null;
 
@@ -306,8 +306,8 @@ class enrol_evento_plugin extends enrol_plugin
     public function sync(progress_trace $trace, $courseid = null) {
         global $CFG;
 
-        include_once "$CFG->dirroot/enrol/evento/locallib.php";
-        include_once $CFG->dirroot . '/enrol/evento/interface.php';
+        include_once("$CFG->dirroot/enrol/evento/locallib.php");
+        include_once($CFG->dirroot . '/enrol/evento/interface.php');
         $syncstart = microtime(true);
         $evento_service = new local_evento_evento_service();
         $usersync = new enrol_evento_user_sync($evento_service);
@@ -345,8 +345,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param stdClass                          $course
      * @param int                               $oldid
      */
-    public function restore_instance(restore_enrolments_structure_step $step, stdClass $data, $course, $oldid)
-    {
+    public function restore_instance(restore_enrolments_structure_step $step, stdClass $data, $course, $oldid) {
         $instanceid = $this->add_instance($course, (array)$data);
         $step->set_mapping('enrol', $oldid, $instanceid);
     }
