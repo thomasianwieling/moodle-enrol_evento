@@ -141,7 +141,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
         foreach ($evento_personen as $evento_person) {
             if ($personid == $evento_person->idperson) {
-                return $evento_person->personeMail;
+                return $evento_person->personemail;
             }
         }
     }
