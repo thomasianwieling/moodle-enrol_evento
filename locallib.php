@@ -456,7 +456,7 @@ class enrol_evento_user_sync
                 // Only one user, so take this.
                 $u = reset($ul);
                 // check if the user matches with the aduser
-                $shibbolethid = $this->eventoservice->sid_to_shibbolethid($aduser->objectSid);
+                $shibbolethid = $this->eventoservice->sid_to_shibbolethid($aduser->objectsid);
                 if ($u->username != $shibbolethid) {
                     $u = null; // not the same useraccount
                 }
@@ -464,7 +464,7 @@ class enrol_evento_user_sync
         }
         // Get the moodle user by the username.
         if (!isset($u)) {
-            $shibbolethid = $this->eventoservice->sid_to_shibbolethid($aduser->objectSid);
+            $shibbolethid = $this->eventoservice->sid_to_shibbolethid($aduser->objectsid);
             $u = $this->get_user_by_username($shibbolethid);
             if (isset($u)) {
                 $this->set_user_eventoid($u->id, $eventopersonid);
@@ -476,9 +476,9 @@ class enrol_evento_user_sync
             // Get person details from evento.
             $person = $this->eventoservice->get_person_by_id($eventopersonid);
             $username = $shibbolethid;
-            $email = $person->personeMail;
-            $firstname = $person->personVorname;
-            $lastname = $person->personNachname;
+            $email = $person->personemail;
+            $firstname = $person->personvorname;
+            $lastname = $person->personnachname;
             $usernew = new stdClass();
             $usernew->auth = $this->config->accounttype;
             $usernew->username = $username;
