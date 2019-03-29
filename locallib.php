@@ -413,7 +413,7 @@ class enrol_evento_user_sync
                         } else {
                             $isstudentaccount = '0';
                         }
-                                        return (($var->isStudentAccount == $isstudentaccount));
+                                        return (($var->isstudentaccount == $isstudentaccount));
                     }
                 );
             }
