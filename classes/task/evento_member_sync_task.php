@@ -39,8 +39,7 @@ class evento_member_sync_task extends \core\task\scheduled_task{
      *
      * @return string
      */
-    public function get_name()
-    {
+    public function get_name() {
         return get_string('eventosync', 'enrol_evento');
     }
 
@@ -51,7 +50,7 @@ class evento_member_sync_task extends \core\task\scheduled_task{
     public function execute(){
         global $CFG;
 
-        include_once $CFG->dirroot . '/enrol/evento/lib.php';
+        include_once($CFG->dirroot . '/enrol/evento/lib.php');
 
         if (!enrol_is_enabled('evento')) {
             return;

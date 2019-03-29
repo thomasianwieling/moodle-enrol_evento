@@ -21,8 +21,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-interface interface_evento_service
-{
+interface interface_evento_service{
     /**
      * Doing a simple init Webservice call to open the connection
      *
@@ -45,7 +44,6 @@ interface interface_evento_service
      * @param  local_evento_limitationfilter2 $limitationfilter2 filter for response limitation
      * @return stdClass event object "EventoAnlass" definied in the wsdl
      */
-    // public function get_events_by_filter(local_evento_eventoanlassfilter $eventoanlassfilter, local_evento_limitationfilter2 $limitationfilter2);
 
     /**
      * Obtains the enrolments of an event
@@ -114,14 +112,6 @@ interface interface_evento_service
      * @return string shibboleth id
      */
     // public function sid_to_shibbolethid($sid);
-
-    /**
-     * Converts a shibboleth ID to an Active Directory SID
-     *
-     * @param  string $sishibbolethid shibbolethid of the user
-     * @return string sid from the Active Directory
-     */
-    // public function shibbolethid_to_sid($shibbolethid);
 
     /**
      * Create an array if the value is not already one.

@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-function xmldb_enrol_evento_upgrade($oldversion){
+function xmldb_enrol_evento_upgrade($oldversion) {
     global $DB;
 
     /*
