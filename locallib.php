@@ -157,12 +157,12 @@ class enrol_evento_user_sync
                     // Enrol students.
                     foreach ($enrolments as $ee) {
                         try {
-                            $this->update_student_enrolment($ee->idPerson, $ee->iDPAStatus, $instance);
+                            $this->update_student_enrolment($ee->idperson, $ee->iDPAStatus, $instance);
                         } catch (SoapFault $fault) {
                             debugging("Soapfault : ". $fault->__toString());
                             $this->trace->output(
                                 "...user enrolment synchronisation aborted unexpected with a soapfault"
-                                . " during sync of the enrolment with evento personid: {$ee->idPerson} ; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
+                                . " during sync of the enrolment with evento personid: {$ee->idperson} ; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
                             );
                             if (in_array($fault->faultcode, $this->stopsoapfaultcodes)) {
                                 // Stop execution.
@@ -171,21 +171,21 @@ class enrol_evento_user_sync
                             }
                         } catch (Exception $ex) {
                             debugging(
-                                "Enrolment sync of user evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
+                                "Enrolment sync of user evento personid: {$ee->idperson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
                                 . " aborted with error: ". $ex->getMessage()
                             );
                             $this->trace->output(
                                 "...user enrolment synchronisation aborted unexpected during sync of enrolment"
-                                . " with evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
+                                . " with evento personid: {$ee->idperson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
                             );
                         } catch (Throwable $ex) {
                             debugging(
-                                "Enrolment sync of user evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
+                                "Enrolment sync of user evento personid: {$ee->idperson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
                                 . " aborted with error: ". $ex->getMessage()
                             );
                             $this->trace->output(
                                 "...user enrolment synchronisation aborted unexpected during sync of enrolment"
-                                . " with evento personid: {$ee->idPerson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
+                                . " with evento personid: {$ee->idperson}; eventnr.:{$anlassnbr}; courseid: {$ce->courseid}"
                             );
                         }
                     }
@@ -347,7 +347,7 @@ class enrol_evento_user_sync
      * Checks and enrols a student by an evento enrolment dataset
      * thorws Exceptions on failure
      *
-     * @param int $eventopersonid   evento person id (idPerson)
+     * @param int $eventopersonid   evento person id (idperson)
      * @param int $eventoenrolstate evento state of the enrolment (iDPAStatus)
      * @param obj $instance         evento enrolment dataset
      */
@@ -366,7 +366,7 @@ class enrol_evento_user_sync
     /**
      * Enrol a teacher, thorws Exceptions on failure
      *
-     * @param string $eventopersonid evento idPerson
+     * @param string $eventopersonid evento idperson
      * @param obj    $instance       evento enrolment dataset
      */
     protected function enrol_teacher($eventopersonid, $instance)
@@ -382,7 +382,7 @@ class enrol_evento_user_sync
      * Get an aduser by evento personid
      * default is the student account
      *
-     * @param string            $eventopersonid evento idPerson
+     * @param string            $eventopersonid evento idperson
      * @param bool              $isstudent      optional; get the student account (default), otherwise you will get lecturer or employee accounts
      *                                          ; set null if you like to get all accounts
 
@@ -400,7 +400,7 @@ class enrol_evento_user_sync
             $result = array_filter(
                 $this->allactiveadaccounts,
                 function ($var) use ($eventopersonid) {
-                                    return (($var->idPerson == $eventopersonid));
+                                    return (($var->idperson == $eventopersonid));
                 }
             );
             // Filter student, lecturer or employee.
