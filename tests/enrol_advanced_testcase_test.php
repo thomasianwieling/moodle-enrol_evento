@@ -152,7 +152,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
         foreach ($ad_accounts as $ad_account) {
             if ($personid == $ad_account->idperson) {
-                return $ad_account->objectSid;
+                return $ad_account->objectsid;
             }
         }
     }
