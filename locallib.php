@@ -151,7 +151,7 @@ class enrol_evento_user_sync
                         continue;
                     }
                     // Get event participants enrolments.
-                    $enrolments = $this->eventoservice->get_enrolments_by_eventid($event->idAnlass);
+                    $enrolments = $this->eventoservice->get_enrolments_by_eventid($event->idanlass);
                     $enrolments = to_array($enrolments);
                     //var_dump($enrolments);
                     // Enrol students.
@@ -278,10 +278,10 @@ class enrol_evento_user_sync
                                 }
                             }
                         } else {
-                            debugging("not processing suspending, because no evento enrolments gotten for evento.idAnlass: {$event->idAnlass}; courseid: {$ce->courseid}");
+                            debugging("not processing suspending, because no evento enrolments gotten for evento.idAnlass: {$event->idanlass}; courseid: {$ce->courseid}");
                             $this->trace->output(
                                 "...not processing suspending, because no evento enrollments gotten for"
-                                . " evento.idAnlass: {$event->idAnlass}; courseid: {$ce->courseid}"
+                                . " evento.idAnlass: {$event->idanlass}; courseid: {$ce->courseid}"
                             );
                         }
                     }
