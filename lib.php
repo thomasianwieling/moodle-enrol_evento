@@ -42,26 +42,22 @@ class enrol_evento_plugin extends enrol_plugin
     protected $lasternollerinstanceid = 0;
 
 
-    public function roles_protected()
-    {
+    public function roles_protected() {
         // Users may tweak the roles later.
         return false;
     }
 
-    public function allow_enrol(stdClass $instance)
-    {
+    public function allow_enrol(stdClass $instance) {
         // Users with enrol cap may unenrol other users manually manually.
         return false;
     }
 
-    public function allow_unenrol(stdClass $instance)
-    {
+    public function allow_unenrol(stdClass $instance) {
         // Users with unenrol cap may unenrol other users manually manually.
         return false;
     }
 
-    public function allow_manage(stdClass $instance)
-    {
+    public function allow_manage(stdClass $instance) {
         // Users with manage cap may tweak period and status.
         return false;
     }
@@ -73,8 +69,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  array  $fields instance fields
      * @return int id of last instance, null if can not be created
      */
-    public function add_instance($course, array $fields = null)
-    {
+    public function add_instance($course, array $fields = null) {
         global $CFG;
 
         include_once "$CFG->dirroot/enrol/evento/locallib.php";
@@ -127,8 +122,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  int $courseid
      * @return boolean
      */
-    public function can_add_instance($courseid)
-    {
+    public function can_add_instance($courseid) {
         global $DB;
 
         return true;
@@ -140,8 +134,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  stdClass $course
      * @return int id of new instance, null if can not be created
      */
-    public function add_default_instance($course)
-    {
+    public function add_default_instance($course) {
         $fields = $this->get_instance_defaults();
 
         return $this->add_instance($course, $fields);
@@ -154,8 +147,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  string evento event number "anlassnummer"
      * @return boolean
      */
-    public function instance_exists_by_eventnumber($course, $idnumber)
-    {
+    public function instance_exists_by_eventnumber($course, $idnumber) {
         global $DB;
 
         $result = false;
@@ -179,8 +171,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  stdClass $data instance fields
      * @return string
      */
-    private function get_default_groupname($data)
-    {
+    private function get_default_groupname($data) {
         // Is the new group name empty set to the name or to the alternative evento number
         // or to the plugin name
         if (!empty($data->name)) {
@@ -202,8 +193,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  stdClass $data instance fields
      * @return string
      */
-    private function get_default_groupingname($data)
-    {
+    private function get_default_groupingname($data) {
         // At the moment the same like the default groupname.
         return $this->get_default_groupname($data);
     }
@@ -213,8 +203,7 @@ class enrol_evento_plugin extends enrol_plugin
      *
      * @return array
      */
-    public function get_instance_defaults()
-    {
+    public function get_instance_defaults() {
         $fields = array();
         $fields['name']            = get_string('pluginname', 'enrol_evento');
         $fields['status']          = ENROL_INSTANCE_ENABLED;
@@ -237,8 +226,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  string custom evento event number
      * @return array
      */
-    public function set_custom_coursenumber($fields, $customcoursenumber)
-    {
+    public function set_custom_coursenumber($fields, $customcoursenumber) {
         $fields['customtext1']     = $customcoursenumber;
         return $fields;
     }
@@ -250,8 +238,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  stdClass $data     modified instance fields
      * @return boolean
      */
-    public function update_instance($instance, $data)
-    {
+    public function update_instance($instance, $data) {
         global $CFG;
 
         include_once "$CFG->dirroot/enrol/evento/locallib.php";
@@ -302,8 +289,7 @@ class enrol_evento_plugin extends enrol_plugin
      *
      * @return void
      */
-    public function cron()
-    {
+    public function cron() {
 
         $trace = new null_progress_trace();
         $this->sync($trace, null);
@@ -317,8 +303,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  int            $courseid one course, empty mean all
      * @return int 0 means ok, 1 means error, 2 means plugin disabled
      */
-    public function sync(progress_trace $trace, $courseid = null)
-    {
+    public function sync(progress_trace $trace, $courseid = null) {
         global $CFG;
 
         include_once "$CFG->dirroot/enrol/evento/locallib.php";
@@ -348,8 +333,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  object $user user record
      * @return void
      */
-    public function sync_user_enrolments($user)
-    {
+    public function sync_user_enrolments($user) {
         // Probably better no sync durring login.
     }
 
@@ -376,8 +360,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param int                               $oldinstancestatus
      * @param int                               $userid
      */
-    public function restore_user_enrolment(restore_enrolments_structure_step $step, $data, $instance, $userid, $oldinstancestatus)
-    {
+    public function restore_user_enrolment(restore_enrolments_structure_step $step, $data, $instance, $userid, $oldinstancestatus) {
         global $DB;
 
         $ue = $DB->get_record('user_enrolments', array('enrolid' => $instance->id, 'userid' => $userid));
@@ -424,8 +407,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param int      $userid
      * @param int      $contextid
      */
-    public function restore_role_assignment($instance, $roleid, $userid, $contextid)
-    {
+    public function restore_role_assignment($instance, $roleid, $userid, $contextid) {
         // This is necessary only because we may migrate other types to this instance,
         // we do not use component in manual or self enrol.
         role_assign($roleid, $userid, $contextid, '', 0);
@@ -437,8 +419,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  object $instance
      * @return bool
      */
-    public function can_delete_instance($instance)
-    {
+    public function can_delete_instance($instance) {
         $context = context_course::instance($instance->courseid);
         return has_capability('enrol/evento:config', $context);
     }
@@ -449,8 +430,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  stdClass $instance
      * @return bool
      */
-    public function can_hide_show_instance($instance)
-    {
+    public function can_hide_show_instance($instance) {
         $context = context_course::instance($instance->courseid);
         return has_capability('enrol/evento:config', $context);
     }
@@ -460,8 +440,7 @@ class enrol_evento_plugin extends enrol_plugin
      *
      * @return boolean
      */
-    public function use_standard_editing_ui()
-    {
+    public function use_standard_editing_ui() {
         return true;
     }
 
@@ -471,8 +450,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  context $coursecontext
      * @return array
      */
-    protected function get_group_options($coursecontext)
-    {
+    protected function get_group_options($coursecontext) {
         $groups = array(0 => get_string('none'));
         $courseid = $coursecontext->instanceid;
         if (has_capability('moodle/course:managegroups', $coursecontext)) {
@@ -490,8 +468,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  context $coursecontext
      * @return array
      */
-    protected function get_groupings_options($coursecontext)
-    {
+    protected function get_groupings_options($coursecontext) {
         $groupings = array(0 => get_string('none'));
         $courseid = $coursecontext->instanceid;
         if (has_capability('moodle/course:managegroups', $coursecontext)) {
@@ -511,8 +488,7 @@ class enrol_evento_plugin extends enrol_plugin
      * @param  context         $context
      * @return bool
      */
-    public function edit_instance_form($instance, MoodleQuickForm $mform, $context)
-    {
+    public function edit_instance_form($instance, MoodleQuickForm $mform, $context) {
         global $CFG;
 
         $config = get_config('enrol_evento');
@@ -609,8 +585,7 @@ class enrol_evento_plugin extends enrol_plugin
      *         or an empty array if everything is OK.
      * @return void
      */
-    public function edit_instance_validation($data, $files, $instance, $context)
-    {
+    public function edit_instance_validation($data, $files, $instance, $context) {
         $errors = array();
 
         // Todo settings validation.

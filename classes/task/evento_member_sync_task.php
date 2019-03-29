@@ -47,7 +47,7 @@ class evento_member_sync_task extends \core\task\scheduled_task{
      * Do the job.
      * Throw exceptions on errors (the job will be retried).
      */
-    public function execute(){
+    public function execute() {
         global $CFG;
 
         include_once($CFG->dirroot . '/enrol/evento/lib.php');

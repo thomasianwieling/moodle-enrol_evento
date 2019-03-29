@@ -76,7 +76,7 @@ if (!enrol_is_enabled('evento')) {
     cli_error('enrol_evento plugin is disabled, synchronisation stopped', 2);
 }
 
-//...@var $plugin enrol_evento_plugin.
+// ...@var $plugin enrol_evento_plugin.
 $plugin = enrol_get_plugin('evento');
 
 if (empty($options['verbose'])) {

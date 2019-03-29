@@ -1,5 +1,4 @@
 <?php
-
 class ad_account{
     public $accountstatusdisabled;
     public $changed;
