@@ -202,9 +202,9 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     public function get_user_existing_user() {
         $this->resetAfterTest(true);
         global $DB;
-        $result = $DB->get_records('user_info_data', array('data' => '117820'));
-        var_dump($result);
-        $eventopersonid = 117820;
+
+        $result = $DB->get_records('user_info_data', array('data' => '118200'));
+        $eventopersonid = 118200;
 
         /*Get user by evento person ID for user ID*/
         $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent = null);
