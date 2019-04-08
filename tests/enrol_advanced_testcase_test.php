@@ -203,7 +203,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
         global $DB;
 
-        $result = $DB->get_records('user_info_data', array('data' => '118200'));
+        $result = $DB->get_records("user_info_data", array("data" => "118200"));
         $eventopersonid = 118200;
 
         /*Get user by evento person ID for user ID*/
