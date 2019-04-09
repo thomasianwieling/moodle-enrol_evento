@@ -453,6 +453,7 @@ class enrol_evento_user_sync
                 $shibbolethid = $this->eventoservice->sid_to_shibbolethid($aduser->objectsid);
                 if ($u->username != $shibbolethid) {
                     $u = null; // not the same useraccount
+                    var_dump("nooo");
                 }
             }
         }
