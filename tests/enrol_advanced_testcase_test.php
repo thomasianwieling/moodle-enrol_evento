@@ -209,7 +209,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 //        $person = $this->locallib->get_user_exposed($eventopersonid, $isstudent = true);
 $result = $DB->get_records('user', array('lastname' => 'Fritz'));
     //    $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent = null);
-        var_dump($person);
+        var_dump($result);
     }
 
 }
