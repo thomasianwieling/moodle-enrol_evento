@@ -431,6 +431,7 @@ class enrol_evento_user_sync
         if (!empty($adusers)) {
             if (count($adusers) == 1) {
                 $aduser = reset($adusers);
+                var_dump($aduser);
             } else if (count($adusers) > 1) {
                 throw new moodle_exception(
                     'toomanyadusersfound', 'local_evento', '',
@@ -453,7 +454,6 @@ class enrol_evento_user_sync
                 $shibbolethid = $this->eventoservice->sid_to_shibbolethid($aduser->objectsid);
                 if ($u->username != $shibbolethid) {
                     $u = null; // not the same useraccount
-                    var_dump("nooo");
                 }
             }
         }
