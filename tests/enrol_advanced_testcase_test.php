@@ -100,7 +100,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         /*create existing moodle user*/
         $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20216, 25491, 118200, $evento_status);
         $evento_person = $builder->add_person("Max", "Fritz", "max.fritz@htwchur.ch",  118200, 30040, true, 118200, $evento_personen_anmeldung);
-//        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118200, 0, 0, 1, "S-1-5-21-2460181394-1097805571-3701207438-51000", "MaFri");
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118200, 0, 0, 1, "S-1-5-21-2460181394-1097805571-3701207438-51000", "MaFri");
 
         $this->simulator = $builder->service;
         $this->locallib = new enrol_evento_user_sync_exposed($this->simulator);
@@ -117,8 +117,6 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $item->data = (string)118200;
         $item->dataformat = 0;
         $uiditem = $DB->insert_record('user_info_data', $item);
-        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118200, 0, 0, 1, "S-1-5-21-2460181394-1097805571-3701207438-51000", "MaFri");
-
     }
 
     /*Enable plugin method*/
@@ -207,7 +205,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $eventopersonid = 118200;
 
         /*Get user by evento person ID for user ID*/
-       $person = $this->locallib->get_user_exposed($eventopersonid, $isstudent = null);
+       $person = $this->locallib->get_user_exposed($eventopersonid, $isstudent = true);
         var_dump($person);
     }
 
