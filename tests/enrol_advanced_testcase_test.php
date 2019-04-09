@@ -114,10 +114,10 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
         $item = new \stdClass();
         $item->userid = reset($result)->id;
-        $item->data = (string)117820;
+        $item->data = (string)118200;
         $item->dataformat = 0;
         $uiditem = $DB->insert_record('user_info_data', $item);
-        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117820, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51316", "MaFri");
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118200, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51316", "MaFri");
     }
 
     /*Enable plugin method*/
