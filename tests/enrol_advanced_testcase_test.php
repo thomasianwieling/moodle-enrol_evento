@@ -207,6 +207,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         /*Get user by evento person ID for user ID*/
        $person = $this->locallib->get_user_exposed($eventopersonid, $isstudent = true, $username = null);
         var_dump($person);
+        $ad_account_student = $this->simulator->get_all_ad_accounts(null);
+        var_dump($ad_account_student);
     }
 
 }
