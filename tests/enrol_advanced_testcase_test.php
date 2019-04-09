@@ -117,7 +117,6 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $item->data = (string)118200;
         $item->dataformat = 0;
         $uiditem = $DB->insert_record('user_info_data', $item);
-        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118200, 0, 0, 1, "S-1-5-21-2460181394-1097805571-3701207438-51000", "MaFri");
     }
 
     /*Enable plugin method*/
@@ -206,10 +205,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $eventopersonid = 118200;
 
         /*Get user by evento person ID for user ID*/
-//        $person = $this->locallib->get_user_exposed($eventopersonid, $isstudent = true);
-$result = $DB->get_records('user', array('lastname' => 'Fritz'));
-$ad_account_student = $this->simulator->get_all_ad_accounts(null);
-    //    $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent = null);
+       $person = $this->locallib->get_user_exposed($eventopersonid, $isstudent = true);
         var_dump($ad_account_student);
     }
 
