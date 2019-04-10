@@ -504,6 +504,8 @@ class enrol_evento_user_sync
      * @return an array of fieldset objects for the user
      */
     protected function get_users_by_eventoid($eventoid) {
+        echo "get_users_by_eventoid";
+
         global $DB;
         $sql = 'SELECT u.*
             FROM {user} u
@@ -514,7 +516,6 @@ class enrol_evento_user_sync
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
         return $userlist;
-        echo "get_users_by_eventoid";
         var_dump($userlist);
     }
     /**
