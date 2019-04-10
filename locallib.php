@@ -514,6 +514,8 @@ class enrol_evento_user_sync
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
         return $userlist;
+        echo "get_users_by_eventoid";
+        var_dump($userlist);
     }
     /**
      * Obtains the evento id of a user, if it is set
