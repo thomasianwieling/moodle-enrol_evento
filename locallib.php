@@ -446,7 +446,6 @@ class enrol_evento_user_sync
         }
         // Get moodle users by the user eventoid field.
         $ul = $this->get_users_by_eventoid($eventopersonid);
-        var_dump($eventopersonid);
         if (!empty($ul)) {
             if (count($ul) == 1) {
                 // Only one user, so take this.
@@ -502,7 +501,6 @@ class enrol_evento_user_sync
      * @return an array of fieldset objects for the user
      */
     protected function get_users_by_eventoid($eventoid) {
-        echo "get_users_by_eventoid";
 
         global $DB;
         $sql = 'SELECT u.*
