@@ -151,7 +151,6 @@ class enrol_evento_user_sync
                     // Get event participants enrolments.
                     $enrolments = $this->eventoservice->get_enrolments_by_eventid($event->idanlass);
                     $enrolments = to_array($enrolments);
-                    //var_dump($enrolments);
                     // Enrol students.
                     foreach ($enrolments as $ee) {
                         try {
@@ -431,7 +430,6 @@ class enrol_evento_user_sync
         if (!empty($adusers)) {
             if (count($adusers) == 1) {
                 $aduser = reset($adusers);
-                var_dump($aduser);
             } else if (count($adusers) > 1) {
                 throw new moodle_exception(
                     'toomanyadusersfound', 'local_evento', '',
@@ -512,7 +510,6 @@ class enrol_evento_user_sync
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
         return $userlist;
-        var_dump($userlist);
     }
     /**
      * Obtains the evento id of a user, if it is set
