@@ -203,7 +203,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
          global $DB;
 
          $eventopersonid = 118200;
-
+var_dump("getuserexistinguser");
          /*Get user by evento person ID for user ID*/
         $person = $this->locallib->get_user_exposed($eventopersonid, $isstudent = true, $username = null);
         var_dump($person);
