@@ -430,7 +430,6 @@ class enrol_evento_user_sync
         if (!empty($adusers)) {
             if (count($adusers) == 1) {
                 $aduser = reset($adusers);
-                var_dump($aduser);
             } else if (count($adusers) > 1) {
                 throw new moodle_exception(
                     'toomanyadusersfound', 'local_evento', '',
@@ -445,6 +444,7 @@ class enrol_evento_user_sync
         }
         // Get moodle users by the user eventoid field.
         $ul = $this->get_users_by_eventoid($eventopersonid);
+        var_dump($ul);
         if (!empty($ul)) {
             if (count($ul) == 1) {
                 // Only one user, so take this.
