@@ -444,7 +444,6 @@ class enrol_evento_user_sync
         }
         // Get moodle users by the user eventoid field.
         $ul = $this->get_users_by_eventoid($eventopersonid);
-        var_dump($ul);
         if (!empty($ul)) {
             if (count($ul) == 1) {
                 // Only one user, so take this.
@@ -510,6 +509,7 @@ class enrol_evento_user_sync
             AND uid.data = :eventoid';
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
+        var_dump($userlist);
         return $userlist;
     }
     /**
