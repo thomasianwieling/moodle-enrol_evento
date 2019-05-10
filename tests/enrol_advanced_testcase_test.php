@@ -210,6 +210,7 @@ $table = 'user_info_data';
         $person = $this->locallib->get_user_exposed($eventopersonid, $isstudent = true, $username = null);
         //$result = $DB->get_record('user_info_data', array('data' => '118200'));
         $result = $DB->get_records('user', array('lastname' => 'Fritz'));
+        $result = $DB->get_records('user_info_data', array('data' => '118200'));
         var_dump($result);
         //$this->assertEquals($user->email, $this->get_mail_from_person_id($eventopersonid));
 
