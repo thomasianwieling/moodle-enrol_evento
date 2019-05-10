@@ -209,7 +209,7 @@ $table = 'user_info_data';
          /*Get user by evento person ID for user ID*/
         $person = $this->locallib->get_user_exposed($eventopersonid, $isstudent = true, $username = null);
         //$result = $DB->get_record('user_info_data', array('data' => '118200'));
-        $result = $DB->get_records($table, array $conditions=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0)
+        $result = $DB->get_records($table, array $conditions=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0);
         var_dump($record);
         //$this->assertEquals($user->email, $this->get_mail_from_person_id($eventopersonid));
 
