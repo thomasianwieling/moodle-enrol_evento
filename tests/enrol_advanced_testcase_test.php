@@ -209,11 +209,7 @@ var_dump("getuserexistinguser");
 $table = 'user_info_data';
          /*Get user by evento person ID for user ID*/
         $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent = true);
-        //$result = $DB->get_record('user_info_data', array('data' => '118200'));
-        //$result = $DB->get_records('user', array('lastname' => 'Fritz'));
-        //$result1 = $DB->get_records('user_info_data', array('data' => '118200'));
-        //var_dump($this->$result);
-        var_dump($person);
+
         //$this->assertEquals($user->email, $this->get_mail_from_person_id($eventopersonid));
 
     }
