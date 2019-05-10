@@ -117,7 +117,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $item->data = (string)118200;
         $item->dataformat = 0;
         $uiditem = $DB->insert_record('user_info_data', $item);
-        $result = $DB->get_records('user_info_data', array('data' => '118200'));
+        $result = $DB->get_records('user_info_data', array('userid' => reset($result)->id));
         var_dump($result);
     }
 
