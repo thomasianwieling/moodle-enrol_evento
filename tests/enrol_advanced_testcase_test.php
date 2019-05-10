@@ -118,7 +118,6 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $item->dataformat = 0;
         $uiditem = $DB->insert_record('user_info_data', $item);
         $result = $DB->get_records('user_info_data', array('userid' => reset($result)->id));
-        var_dump($result);
     }
 
     /*Enable plugin method*/
@@ -213,8 +212,8 @@ $table = 'user_info_data';
         //$result = $DB->get_record('user_info_data', array('data' => '118200'));
         $result = $DB->get_records('user', array('lastname' => 'Fritz'));
         $result1 = $DB->get_records('user_info_data', array('data' => '118200'));
-        var_dump($result);
-        var_dump($result1);
+        //var_dump($this->$result);
+        var_dump($person);
         //$this->assertEquals($user->email, $this->get_mail_from_person_id($eventopersonid));
 
     }
