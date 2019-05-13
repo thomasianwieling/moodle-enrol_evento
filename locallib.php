@@ -508,11 +508,12 @@ class enrol_evento_user_sync
             WHERE uif.shortname = :eventoidshortname
             AND uid.data = :eventoid';
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
-        //$userlist = $DB->get_records_sql($sql, $sqlparams);
+        $userlist = $DB->get_records_sql($sql, $sqlparams);
         //$result = $DB->get_records('user', array('lastname' => 'Fritz'));
         //$result = $DB->get_records('user_info_data', array('userid' => reset($result)->id));
-        var_dump($sqlparams);
+
         return $userlist;
+        var_dump($userlist);
     }
     /**
      * Obtains the evento id of a user, if it is set
