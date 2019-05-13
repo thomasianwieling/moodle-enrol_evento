@@ -511,9 +511,10 @@ class enrol_evento_user_sync
         $userlist = $DB->get_records_sql($sql, $sqlparams);
         //$result = $DB->get_records('user', array('lastname' => 'Fritz'));
         //$result = $DB->get_records('user_info_data', array('userid' => reset($result)->id));
-
-        return $userlist;
+        var_dump("Userlist");
         var_dump($userlist);
+        return $userlist;
+
     }
     /**
      * Obtains the evento id of a user, if it is set
