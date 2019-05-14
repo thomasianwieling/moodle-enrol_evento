@@ -509,7 +509,8 @@ class enrol_evento_user_sync
             AND uid.data = :eventoid';
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
-        $user = $DB->get_record_sql('SELECT u.* FROM {user_info_data} u INNER JOIN {user_info_data} uid ON uid.userid = u.id INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id WHERE uif.shortname = "eventoid" AND uid.data = "118200";');
+//        $user = $DB->get_record_sql('SELECT u.* FROM {user_info_data} u INNER JOIN {user_info_data} uid ON uid.userid = u.id INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id WHERE uif.shortname = "eventoid" AND uid.data = "118200";');
+        $user = $DB->get_record_sql('SELECT * FROM {user_info_data} WHERE data = "118200";');
         //$result = $DB->get_records('user', array('lastname' => 'Fritz'));
         //$result = $DB->get_records('user_info_data', array('userid' => reset($result)->id));
         var_dump("Userlist");
