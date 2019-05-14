@@ -514,7 +514,7 @@ class enrol_evento_user_sync
         //$result = $DB->get_records('user', array('lastname' => 'Fritz'));
         //$result = $DB->get_records('user_info_data', array('userid' => reset($result)->id));
         var_dump("Userlist");
-        var_dump($user);
+        var_dump($userlist);
         return $userlist;
 
     }
