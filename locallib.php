@@ -509,7 +509,7 @@ class enrol_evento_user_sync
             AND uid.data = :eventoid';
         $sqlparams = array('eventoidshortname' => 'eventoid', 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
-        printf($userlist)
+        var_dump($userlist);
         return $userlist;
 
     }
