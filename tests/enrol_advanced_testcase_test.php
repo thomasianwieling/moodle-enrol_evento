@@ -203,12 +203,12 @@ class mod_evento_advanced_testcase extends advanced_testcase {
          $this->resetAfterTest(true);
          global $DB;
 
-         $eventopersonid = 118200;
+         $eventoid = 118200;
 var_dump("getuserexistinguser");
 
 $table = 'user_info_data';
          /*Get user by evento person ID for user ID*/
-        $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent = true);
+        $person = $this->locallib->get_users_by_eventoid_exposed($eventoid);
 
         //$this->assertEquals($user->email, $this->get_mail_from_person_id($eventopersonid));
 
