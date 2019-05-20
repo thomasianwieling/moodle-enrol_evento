@@ -501,18 +501,18 @@ class enrol_evento_user_sync
     protected function get_users_by_eventoid($eventoid) {
 
         global $DB;
-        $sql = 'SELECT * FROM `phpu_user_info_field`';
+        $DB->set_debug(true);
 
-
-/*        'SELECT u.*
-            FROM {user} u
-            INNER JOIN {user_info_data} uid ON uid.userid = u.id
-            INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id
-            WHERE uif.shortname = "eventoid"
-            AND uid.data = "118200"';*/
+        $sql = 'SELECT u.*
+                FROM {user} u
+                INNER JOIN {user_info_data} uid ON uid.userid = u.id
+                INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id
+                WHERE uif.shortname = "eventoid"
+                AND uid.data = "118200"';
+                
         $sqlparams = array('eventoidshortname' => 'eventoid', 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
-        var_dump($userlist);
+        var_dump($sqlparams);
         return $userlist;
 
     }
