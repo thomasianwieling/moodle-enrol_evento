@@ -501,8 +501,6 @@ class enrol_evento_user_sync
     protected function get_users_by_eventoid($eventoid) {
 
         global $DB;
-        $DB->set_debug(true);
-
         $sql = 'SELECT * FROM `phpu_user_info_field`';
 
 
