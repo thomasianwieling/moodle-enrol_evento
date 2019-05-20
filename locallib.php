@@ -501,6 +501,7 @@ class enrol_evento_user_sync
     protected function get_users_by_eventoid($eventoid) {
 
         global $DB;
+        $DB->set_debug(true)
         $sql = 'SELECT u.*
             FROM {user} u
             INNER JOIN {user_info_data} uid ON uid.userid = u.id
