@@ -505,7 +505,7 @@ class enrol_evento_user_sync
 
         $sql = 'SELECT *
                 FROM  {user_info_data}
-                WHERE uid.data = :eventoid';
+                WHERE uid.data = "eventoid"';
 
         $sqlparams = array('eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
