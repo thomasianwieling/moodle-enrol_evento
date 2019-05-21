@@ -207,13 +207,15 @@ class mod_evento_advanced_testcase extends advanced_testcase {
                  FROM {user} u
                  INNER JOIN {user_info_data} uid ON uid.userid = u.id
                  INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id
-                 WHERE uif.shortname = "eventoid"
-                 AND uid.data = "118200"';
-                 
+                 WHERE uif.shortname = :eventoidshortname
+            AND uid.data = :eventoid';
+
 $eventoid = 118200;
          $sqlparams = array('eventoidshortname' => "eventoid", 'eventoid' => (string)$eventoid);
          $userlist = $DB->get_records_sql($sql, $sqlparams);
          var_dump($sqlparams);
+
+         $DB->get_records($table, array $conditions=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0)
 
 
          var_dump("getuserexistinguser");
