@@ -209,12 +209,13 @@ class mod_evento_advanced_testcase extends advanced_testcase {
                  INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id
                  WHERE uif.shortname = "eventoid"
                  AND uid.data = "118200"';
-
+                 
+$eventoid = 118200;
          $sqlparams = array('eventoidshortname' => "eventoid", 'eventoid' => (string)$eventoid);
          $userlist = $DB->get_records_sql($sql, $sqlparams);
          var_dump($sqlparams);
 
-         $eventoid = 118200;
+
          var_dump("getuserexistinguser");
          /*Get user by evento person ID for user ID*/
         $person = $this->locallib->get_users_by_eventoid_exposed($eventoid);
