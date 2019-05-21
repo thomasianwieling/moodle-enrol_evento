@@ -210,13 +210,10 @@ class mod_evento_advanced_testcase extends advanced_testcase {
                  WHERE uif.shortname = :eventoidshortname
             AND uid.data = :eventoid';
 
-$eventoid = 118200;
+        $eventoid = 118200;
          $sqlparams = array('eventoidshortname' => "eventoid", 'eventoid' => (string)$eventoid);
          $userlist = $DB->get_records_sql($sql, $sqlparams);
          var_dump($sqlparams);
-
-         $DB->get_records($table, array $conditions=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0)
-
 
          var_dump("getuserexistinguser");
          /*Get user by evento person ID for user ID*/
