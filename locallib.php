@@ -503,14 +503,15 @@ class enrol_evento_user_sync
         global $DB;
         //$DB->set_debug(true);
 
-        $sql = 'SELECT u.*
-            FROM {user} u
-            INNER JOIN {user_info_data} uid ON uid.userid = u.id
-            INNER JOIN {user_info_field} uif ON uid.fieldid = uif.id
-            WHERE uif.shortname = "eventoid"
-            AND uid.data = :eventoid';
+        $sql = 'SELECT *
+            FROM {user_info_field}
+            WHERE uif.shortname = "eventoid"';
 
-        $sqlparams = array('eventoid' => (string)$eventoid);
+
+//            $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
+//$userlist = $DB->get_records_sql($sql, $sqlparams);
+//return $userlist;
+
         $userlist = $DB->get_records_sql($sql, $sqlparams);
         var_dump($sqlparams);
         return $userlist;
