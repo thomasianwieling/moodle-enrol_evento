@@ -503,7 +503,7 @@ class enrol_evento_user_sync
         global $DB;
         //$DB->set_debug(true);
 
-        $sql = 'SELECT * FROM {user_info_data} WHERE data = "118200"';
+        $sql = 'SELECT * FROM {user_info_field}';
 
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
