@@ -504,7 +504,7 @@ class enrol_evento_user_sync
         //$DB->set_debug(true);
 
         $sql = 'SELECT *
-            FROM {user_info_field}';
+            FROM {user}';
 
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
