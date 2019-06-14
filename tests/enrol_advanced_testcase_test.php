@@ -207,29 +207,12 @@ class mod_evento_advanced_testcase extends advanced_testcase {
          $eventoid = 118200;
         // var_dump("getuserexistinguser");
          /*Get user by evento person ID for user ID*/
-        $person = $this->locallib->get_users_by_eventoid_exposed($eventoid);
-        //var_dump(reset($person));
+        $person = $this->locallib->get_users_exposed($eventoid);
+        /var_dump(reset($person));
 
         $this->assertEquals(reset($person)->email, $this->get_mail_from_person_id($eventoid));
 
     }
 
-    /* Test that get_user returns an **existing** user with given evento */
-    /**
-     * @test
-     */
-     public function get_user_new_user() {
-         $this->resetAfterTest(true);
-         global $DB;
-
-         $eventoid = 118201;
-        // var_dump("getuserexistinguser");
-         /*Get user by evento person ID for user ID*/
-        $person = $this->locallib->get_users_by_eventoid_exposed($eventoid);
-        //var_dump(reset($person));
-
-        $this->assertEquals(reset($person)->email, $this->get_mail_from_person_id($eventoid));
-
-    }
-
+    
 }
