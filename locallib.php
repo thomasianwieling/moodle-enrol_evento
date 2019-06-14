@@ -501,7 +501,7 @@ class enrol_evento_user_sync
     protected function get_users_by_eventoid($eventoid) {
 
         global $DB;
-        
+
         $sql = 'SELECT u.*
             FROM {user} u
             INNER JOIN {user_info_data} uid ON uid.userid = u.id
@@ -509,7 +509,7 @@ class enrol_evento_user_sync
 
         $sqlparams = array('eventoidshortname' => ENROL_EVENTO_UIF_EVENTOID, 'eventoid' => (string)$eventoid);
         $userlist = $DB->get_records_sql($sql, $sqlparams);
-        var_dump($userlist);
+        //var_dump($userlist);
         return $userlist;
 
 
