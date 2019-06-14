@@ -40,7 +40,7 @@ class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
     }
     public function get_users_by_eventoid_exposed($eventopersonid, $isstudent=null) {
         parent::get_users_by_eventoid($eventopersonid, $isstudent = null);
-        var_dump("hallo");
+        var_dump(parent::get_users_by_eventoid($eventopersonid, $isstudent = null));
     }
     public function get_eventoid_by_userid_exposed($userid) {
         return parent::get_eventoid_by_userid($userid);
