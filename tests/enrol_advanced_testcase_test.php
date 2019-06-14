@@ -210,7 +210,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $person = $this->locallib->get_users_by_eventoid_exposed($eventoid);
         //var_dump(reset($person));
 
-        $this->assertEquals(reset($person)->email, $this->get_mail_from_person_id($eventopersonid));
+        $this->assertEquals(reset($person)->email, $this->get_mail_from_person_id($eventoid));
 
     }
 
