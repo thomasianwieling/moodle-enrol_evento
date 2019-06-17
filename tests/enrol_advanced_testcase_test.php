@@ -107,8 +107,6 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
         $this->create_moodle_course();
 
-
-
         $user1 = $this->getDataGenerator()->create_user(array('email' => 'max.fritz@htwchur.ch', 'username' => '2460181394-1097805571-3701207438-51000@htwchur.ch', 'firstname' => 'Max', 'lastname' => 'Fritz', 'timecreated' => 1548078299, 'timemodified' => 1548078299));
         $result = $DB->get_records('user', array('lastname' => 'Fritz'));
 
@@ -118,7 +116,15 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $item->dataformat = 0;
         $item->fieldid = 1;
         $uiditem = $DB->insert_record('user_info_data', $item);
-        $result = $DB->get_records('user_info_data', array('userid' => reset($result)->id));
+        //$result = $DB->get_records('user_info_data', array('userid' => reset($result)->id));
+
+        /*create new moodle user*/
+        $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20216, 25491, 118201, $evento_status);
+        $evento_person = $builder->add_person("Hanspeter", "Mueller", "hanspeter.mueller@htwchur.ch",  118201, 30040, true, 118201, $evento_personen_anmeldung);
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118201, 0, 0, 1, "S-1-5-21-2460181395-1097805571-3701207438-51000", "MaFri");
+
+
+
     }
 
     /*Enable plugin method*/
@@ -165,7 +171,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         }
     }
 
-    protected function get_samaccountname($personid){
+    protected function get_s_am_accountname($personid){
         $ad_accounts = $this->simulator->ad_accounts;
 
         foreach ($ad_accounts as $ad_account) {
@@ -240,7 +246,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
         global $DB;
 
-        $eventoid = 118200;
+        $eventoid = 118201;
        // var_dump("getuserexistinguser");
         /*Get user by evento person ID for user ID*/
        $person = $this->locallib->get_user_exposed($eventoid);
