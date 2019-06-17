@@ -165,6 +165,16 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         }
     }
 
+    protected function get_samaccountname($personid){
+        $ad_accounts = $this->simulator->ad_accounts;
+
+        foreach ($ad_accounts as $ad_account) {
+            if ($personid == $ad_account->idperson) {
+                return $ad_account->sAMAccountName;
+            }
+        }
+    }
+
     /*Simuation test if plugin is enabled*/
     /**
      * @test
@@ -196,6 +206,18 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $this->assertNotEmpty( $evento_plugin);
     }
 
+    /**
+    * @test
+    */
+   public function get_ad_user() {
+       /*set evento person ID*/
+       $eventopersonid = 141703;
+       /*Get ad User*/
+       $person = $this->locallib->get_ad_user_exposed($eventopersonid, $isstudent = null);
+       /*Accountname  equals ad username*/
+       $this->assertEquals(current($person)->sAMAccountName, $this->get_s_am_accountname($personid));
+   }
+
     /* Test that get_user returns an **existing** user with given evento */
     /**
      * @test
@@ -213,6 +235,20 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $this->assertEquals(reset($person)->email, $this->get_mail_from_person_id($eventoid));
 
     }
+
+    public function get_user_new_user() {
+        $this->resetAfterTest(true);
+        global $DB;
+
+        $eventoid = 118200;
+       // var_dump("getuserexistinguser");
+        /*Get user by evento person ID for user ID*/
+       $person = $this->locallib->get_user_exposed($eventoid);
+       var_dump(reset($person));
+
+       $this->assertEquals(reset($person)->email, $this->get_mail_from_person_id($eventoid));
+
+   }
 
 
 }
