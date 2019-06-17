@@ -217,7 +217,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     */
    public function get_ad_user() {
        /*set evento person ID*/
-       $eventopersonid = 141703;
+       $eventoid = 141703;
        /*Get ad User*/
        $person = $this->locallib->get_ad_user_exposed($eventopersonid, $isstudent = null);
        /*Accountname  equals ad username*/
