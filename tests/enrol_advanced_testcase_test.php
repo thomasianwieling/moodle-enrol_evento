@@ -236,7 +236,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         // var_dump("getuserexistinguser");
          /*Get user by evento person ID for user ID*/
         $person = $this->locallib->get_user_exposed($eventoid);
-        var_dump($person);
+        var_dump(reset($person));
 
     //    $this->assertEquals(reset($person)->email, $this->get_mail_from_person_id($eventoid));
 
