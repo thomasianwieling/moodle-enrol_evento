@@ -33,7 +33,7 @@ require_once $CFG->dirroot . '/enrol/evento/locallib.php';
 class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
 {
     public function get_user_exposed($eventopersonid, $isstudent=true, $username=null) {
-        parent::get_user($eventopersonid, $isstudent = true, $username = null);
+        return parent::get_user($eventopersonid, $isstudent = true, $username = null);
     }
     public function get_ad_user_exposed($eventopersonid, $isstudent=null) {
         return parent::get_ad_user($eventopersonid, $isstudent = null);
