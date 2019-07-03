@@ -240,7 +240,10 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $this->assertEquals($person->email, $this->get_mail_from_person_id($eventoid));
 
     }
-
+    /* Test that get_user returns an **new** user with given evento */
+    /**
+     * @test
+     */
     public function get_user_new_user() {
         $this->resetAfterTest(true);
         global $DB;
@@ -253,12 +256,15 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
        $this->assertEquals($person->email, $this->get_mail_from_person_id($eventoid));
    }
-
+   /* Test that get_user returns an **no AD account** user with given evento */
+   /**
+    * @test
+    */
    public function get_user_no_ad() {
        $this->resetAfterTest(true);
        global $DB;
 
-       $eventoid = 118202;
+       $eventoid = 999999;
       // var_dump("getuserexistinguser");
        /*Get user by evento person ID for user ID*/
       $person = $this->locallib->get_user_exposed($eventoid);
