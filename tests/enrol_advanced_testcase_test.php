@@ -264,13 +264,14 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 
 
        $eventoid = 999999;
+       $exception_class = new moodle_exception;
        /*Get user by evento person ID for user ID*/
 //      $person = $this->locallib->get_user_exposed($eventoid);
 
       try {
    $this->locallib->get_user_exposed($eventoid);
 } catch (\Throwable $exception) {
-   $this->assertInstanceOf(moodle_exception, $exception, 'An invalid exception was thrown');
+   $this->assertInstanceOf($exception_class, $exception, 'An invalid exception was thrown');
    return;
 }
 
