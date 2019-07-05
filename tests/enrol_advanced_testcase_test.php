@@ -261,23 +261,11 @@ class mod_evento_advanced_testcase extends advanced_testcase {
        $this->resetAfterTest(true);
        global $DB;
 
-
-
        $eventoid = 999999;
-       $exception_class = new moodle_exception('');
        /*Get user by evento person ID for user ID*/
-//      $person = $this->locallib->get_user_exposed($eventoid);
-
-      try {
-   $this->locallib->get_user_exposed($eventoid);
-} catch (\Throwable $exception) {
-   $this->assertInstanceOf($exception_class, $exception, 'An invalid exception was thrown');
-   return;
-}
-
-$this->fail('No exception was thrown');
-
-    //   $this->assertException( $person, 'InvalidArgumentException', 100, 'expected message' );
+      $person = $this->locallib->get_user_exposed($eventoid);
+    $this->expectException('moodle_exception');
+       $this->expectExceptionMessage(get_string('ratepermissiondenied', 'rating'));
       //var_dump($person);
       //$this->expectException(Error::class);
   }
