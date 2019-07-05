@@ -262,7 +262,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
        $eventoid = 999999;
        /*Get user by evento person ID for user ID*/
       $person = $this->locallib->get_user_exposed($eventoid);
-      $this->expectException(class:moodle_exception);
+      $this->expectException(moodle_exception::class);
   }
 
 
