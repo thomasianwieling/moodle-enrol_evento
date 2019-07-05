@@ -265,7 +265,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
        /*Get user by evento person ID for user ID*/
       $person = $this->locallib->get_user_exposed($eventoid);
 
-       $this->expectExceptionMessage("","");
+       $this->expectExceptionMessage("hallo",$person);
       //var_dump($person);
       //$this->expectException(Error::class);
   }
