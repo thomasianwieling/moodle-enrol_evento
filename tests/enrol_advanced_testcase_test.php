@@ -260,12 +260,12 @@ class mod_evento_advanced_testcase extends advanced_testcase {
    public function get_user_no_ad() {
        $this->resetAfterTest(true);
        global $DB;
-
+    $this->expectException('moodle_exception');
        $eventoid = 999999;
        /*Get user by evento person ID for user ID*/
       $person = $this->locallib->get_user_exposed($eventoid);
-    $this->expectException('moodle_exception');
-       $this->expectExceptionMessage(get_string('ratepermissiondenied', 'rating'));
+
+       $this->expectExceptionMessage("","");
       //var_dump($person);
       //$this->expectException(Error::class);
   }
