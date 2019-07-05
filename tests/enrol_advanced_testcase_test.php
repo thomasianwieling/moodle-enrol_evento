@@ -275,7 +275,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
 }
 
 $this->fail('No exception was thrown');
-}
+
     //   $this->assertException( $person, 'InvalidArgumentException', 100, 'expected message' );
       //var_dump($person);
       //$this->expectException(Error::class);
