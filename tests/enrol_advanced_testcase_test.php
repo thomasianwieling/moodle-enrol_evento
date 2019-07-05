@@ -266,7 +266,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
       var_dump($person);
       $this->expectException('moodle_exception');
 
-       $this->expectExceptionMessage("hallo",$person);
+       $this->expectExceptionMessage('cannotfindaduser', 'local_evento', '', $eventopersonid,
+       "No Active Directory account for".$eventoid, $person);
       //var_dump($person);
       //$this->expectException(Error::class);
   }
