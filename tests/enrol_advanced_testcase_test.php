@@ -260,12 +260,11 @@ class mod_evento_advanced_testcase extends advanced_testcase {
    public function get_user_no_ad() {
        $this->resetAfterTest(true);
        global $DB;
-       $this->setExpectedException('moodle_exception');
-       $this->fail('Exception expected if not having capability to enrol');
 
        $eventoid = 999999;
        /*Get user by evento person ID for user ID*/
       $person = $this->locallib->get_user_exposed($eventoid);
+       $this->assertException( $person, 'InvalidArgumentException', 100, 'expected message' );
       //var_dump($person);
       //$this->expectException(Error::class);
   }
