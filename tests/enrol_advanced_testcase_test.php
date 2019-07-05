@@ -22,8 +22,7 @@
  */
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
-require_once($CFG->dirroot . '/user/selector/lib.php');
-require_once($CFG->dirroot . '/enrol/locallib.php');
+use PHPUnit\Framework\Error\Error;
 
 require_once($CFG->dirroot . '/enrol/evento/interface.php');
 require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
@@ -265,7 +264,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
        $eventoid = 999999;
        /*Get user by evento person ID for user ID*/
       $person = $this->locallib->get_user_exposed($eventoid);
-      $this->expectException(moodle_exception::class);
+      $this->expectException(Error::class);
   }
 
 
