@@ -82,22 +82,22 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         /*create evento person Max Muster*/
         $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto", 415864, 20215, 25490, 117828, $evento_status);
         $evento_person = $builder->add_person("Muster", "Max", "max.muster@stud.htwchur.ch",  117828, 30040, true, 117828, $evento_personen_anmeldung);
-        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117828, 0, 0, 1, "S-1-5-21-2460181391-1097805571-3701207438-51315", "MusMax");
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117828, 0, 0, 1, "S-1-5-21-2460181391-1097805571-3701207438-51316", "MusMax");
 
         /*create evento person Peter Mann*/
         $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20215, 25490, 117829, $evento_status);
         $evento_person = $builder->add_person("Mann", "Peter", "peter.mann@stud.htwchur.ch",  117829, 30040, true, 117829, $evento_personen_anmeldung);
-        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117829, 0, 0, 1, "S-1-5-21-2460181392-1097805571-3701207438-51315", "ManPet");
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117829, 0, 0, 1, "S-1-5-21-2460181392-1097805571-3701207438-51317", "ManPet");
 
         /*create evento person Peter Mann*/
         $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20215, 25490, 117999, $evento_status);
         $evento_person = $builder->add_person("Muster", "Fritz", "peter.mann@stud.htwchur.ch",  117999, 30040, true, 117999, $evento_personen_anmeldung);
-        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117999, 0, 0, 1, "S-1-5-21-2460181393-1097805571-3701207438-51315", "MusFri");
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 117999, 0, 0, 1, "S-1-5-21-2460181393-1097805571-3701207438-51318", "MusFri");
 
         /*create teacher person*/
         $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20216, 25491, 118000, $evento_status);
         $evento_person = $builder->add_person("Teacher", "Mister", "mister.teacher@stud.htwchur.ch",  118000, 30040, true, 118000, $evento_personen_anmeldung);
-        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118000, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51315", "MisTe");
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118000, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51319", "MisTe");
 
         /*create existing moodle user*/
         $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20216, 25491, 118200, $evento_status);
@@ -277,7 +277,6 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     * @test
     */
    public function get_eventoid_by_userid() {
-      // $this->get_user();
        /*set evento person id*/
        $eventopersonid = 118200;
        /*Get user by evento person ID for user ID*/
@@ -288,6 +287,18 @@ class mod_evento_advanced_testcase extends advanced_testcase {
        $personbyid = $this->locallib->get_eventoid_by_userid_exposed($userid);
        /*person by ID equals evento person ID*/
        $this->assertEquals($eventopersonid, $personbyid);
+   }
+
+   /**
+   * @test
+   */
+   public function get_user_by_username() {
+       /*set username*/
+       $username = "2460181390-1097805571-3701207438-51000@fh-htwchur.ch";
+       /*get user by username*/
+       $person = $this->locallib->get_user_by_username_exposed($username);
+       /*username from method equals username*/
+       $this->assertEquals($person->username, $username);
    }
 
 
