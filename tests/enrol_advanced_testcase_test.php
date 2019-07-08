@@ -272,7 +272,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
       //$this->expectException(Error::class);
 
       try {
-          $test->get_user_exposed($eventoid);
+          $this->locallib->get_user_exposed($eventoid);
           $this->fial("hallo Moodle");
 
       } catch (moodle_exception $e) {
