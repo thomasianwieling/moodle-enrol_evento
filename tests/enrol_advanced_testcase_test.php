@@ -309,24 +309,48 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     */
    public function user_sync() {
        /*Set global DB variable*/
-           global $DB;
-           /*enable plugin*/
-           $this->enable_plugin();
-           /*create Object trace and enrol*/
-           $trace = new null_progress_trace();
-           $enrol = new enrol_evento_user_sync;
-           /*Get course records and add enrol instances*/
-           $courses = $DB->get_recordset_select('course', 'category > 0', null, '', 'id');
-           foreach ($courses as $course) {
-               $instanceid = null;
-               $instances = enrol_get_instances($course->id, true);
-           }
-           /*Enrol Users into courses*/
-           $this->locallib->user_sync($trace, $courseid = null);
-           /*Get user enrolment record to count enrolments*/
-           $this->get_enroled_user($course->id);
-           $this->assertEquals(4, $this->enrolments, "Einschreibungen");
+       global $DB;
+       /*enable plugin*/
+       $this->enable_plugin();
+       /*create Object trace and enrol*/
+       $trace = new null_progress_trace();
+       $enrol = new enrol_evento_user_sync;
+       /*Get course records and add enrol instances*/
+       $courses = $DB->get_recordset_select('course', 'category > 0', null, '', 'id');
+       foreach ($courses as $course) {
+           $instanceid = null;
+           $instances = enrol_get_instances($course->id, true);
        }
+       /*Enrol Users into courses*/
+       $this->locallib->user_sync($trace, $courseid = null);
+       /*Get user enrolment record to count enrolments*/
+       $this->get_enroled_user($course->id);
+       $this->assertEquals(4, $this->enrolments, "Einschreibungen");
+   }
 
+   /*Student enrolment update*/
+   /**
+   * @test
+   */
+   public function update_student_enrolment() {
+       global $DB;
+
+       $eventoenrolstate = 20215;
+       $eventopersonid = 117999;
+
+       /*Get the user records*/
+       $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent = null);
+       $user = reset($person);
+       /*Get course settings*/
+       $course = $DB->get_record('course', array('idnumber' => 'mod.mmpAUKATE1.HS18_BS.001'));
+       $this->get_enroled_user($course->id);
+
+       /*Get enrolment instance of course*/
+       $instance = $DB->get_record('enrol', array('id' => $this->user_enrolment->id));
+       /*re-enrol user*/
+       $student = $this->locallib->update_student_enrolment_exposed($eventopersonid, $eventoenrolstate, $instance);
+       /*Count users*/
+       $this->assertEquals(1, $DB->count_records('user_enrolments', array('enrolid' => $this->user_enrolment->id)));
+   }
 
 }
