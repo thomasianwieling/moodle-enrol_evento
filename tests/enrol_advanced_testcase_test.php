@@ -258,18 +258,30 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     * @test
     */
    public function get_user_no_ad() {
-       $this->resetAfterTest(true);
-       global $DB;
+//       $this->resetAfterTest(true);
+//       global $DB;
        $eventoid = 999999;
        /*Get user by evento person ID for user ID*/
-      $person = $this->locallib->get_user_exposed($eventoid);
-      var_dump($person);
-      $this->expectException('moodle_exception');
+//      $person = $this->locallib->get_user_exposed($eventoid);
+//      var_dump($person);
+//      $this->expectException('moodle_exception');
 
-       $this->expectExceptionMessage('cannotfindaduser', 'local_evento', '', $eventopersonid,
-       "No Active Directory account for".$eventoid, $person);
+//       $this->expectExceptionMessage('cannotfindaduser', 'local_evento', '', $eventopersonid,
+//        "No Active Directory account for".$eventoid, $person);
       //var_dump($person);
       //$this->expectException(Error::class);
+
+      try {
+          $test->get_user_exposed($eventoid);
+          $this->fial("hallo Moodle");
+
+      } catch (moodle_exception $e) {
+          $this->assertEquals("blabla", $e->getMessage());
+
+      }
+
+
+
   }
 
 
