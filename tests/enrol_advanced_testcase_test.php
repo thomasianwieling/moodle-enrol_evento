@@ -303,5 +303,30 @@ class mod_evento_advanced_testcase extends advanced_testcase {
        $this->assertEquals($person->username, $username);
    }
 
+   /*Kurs einschreibung*/
+   /**
+    * @test
+    */
+   public function user_sync() {
+       /*Set global DB variable*/
+           global $DB;
+           /*enable plugin*/
+           $this->enable_plugin();
+           /*create Object trace and enrol*/
+           $trace = new null_progress_trace();
+           $enrol = new enrol_evento_user_sync;
+           /*Get course records and add enrol instances*/
+           $courses = $DB->get_recordset_select('course', 'category > 0', null, '', 'id');
+           foreach ($courses as $course) {
+               $instanceid = null;
+               $instances = enrol_get_instances($course->id, true);
+           }
+           /*Enrol Users into courses*/
+           $this->locallib->user_sync($trace, $courseid = null);
+           /*Get user enrolment record to count enrolments*/
+           $this->get_enroled_user($course->id);
+           $this->assertEquals(4, $this->enrolments, "Einschreibungen");
+       }
+
 
 }
