@@ -258,31 +258,37 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     * @test
     */
    public function get_user_no_ad() {
-//       $this->resetAfterTest(true);
-//       global $DB;
+
+       //Evento ID from User with no AD
        $eventoid = 999999;
+
+       //Test thrown exception
+       try {
+           //If no exception is thrown test have to fail
+           $this->locallib->get_user_exposed($eventoid);
+           $this->fail("Test failed");
+       } catch (moodle_exception $e) {
+           //test thrown exception
+           $this->assertEquals("local_evento/cannotfindaduser (No Active Directory account for 999999)\n\$a contents: ".$eventoid, $e->getMessage());
+       }
+   }
+
+   /**
+    * @test
+    */
+   public function get_eventoid_by_userid() {
+      // $this->get_user();
+       /*set evento person id*/
+       $eventopersonid = 118200;
        /*Get user by evento person ID for user ID*/
-//      $person = $this->locallib->get_user_exposed($eventoid);
-//      var_dump($person);
-//      $this->expectException('moodle_exception');
-
-//       $this->expectExceptionMessage('cannotfindaduser', 'local_evento', '', $eventopersonid,
-//        "No Active Directory account for".$eventoid, $person);
-      //var_dump($person);
-      //$this->expectException(Error::class);
-
-      try {
-          $this->locallib->get_user_exposed($eventoid);
-          $this->fail("Test failed");
-
-      } catch (moodle_exception $e) {
-          $this->assertEquals("local_evento/cannotfindaduser (No Active Directory account for 999999)\n\$a contents: ".$eventoid, $e->getMessage());
-
-      }
-
-
-
-  }
+       $person = $this->locallib->get_users_by_eventoid_exposed($eventopersonid, $isstudent = null);
+       $user = reset($person);
+       $userid = $user->id;
+       /*get the evento Person ID by user ID*/
+       $personbyid = $this->locallib->get_eventoid_by_userid_exposed($userid);
+       /*person by ID equals evento person ID*/
+       $this->assertEquals($eventopersonid, $personbyid);
+   }
 
 
 }
