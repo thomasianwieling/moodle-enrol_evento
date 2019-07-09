@@ -226,39 +226,37 @@ class mod_evento_advanced_testcase extends advanced_testcase {
        $this->assertEquals(current($person)->sAMAccountName, $this->get_s_am_accountname($eventoid));
    }
 
-    /* Test that get_user returns an **existing** user with given evento */
-    /**
-     * @test
-     */
-     public function get_user_existing_user() {
-         $this->resetAfterTest(true);
-         global $DB;
-
-         $eventoid = 118200;
-         /*Get user by evento person ID for user ID*/
-        $person = $this->locallib->get_user_exposed($eventoid);
-        $this->assertEquals($person->email, $this->get_mail_from_person_id($eventoid));
-
-    }
-    /* Test that get_user returns an **new** user with given evento */
-    /**
-     * @test
-     */
-    public function get_user_new_user() {
-        $this->resetAfterTest(true);
-        global $DB;
-
-        $eventoid = 118201;
-        /*Get user by evento person ID for user ID*/
+   /* Test that get_user returns an **existing** user with given evento */
+   /**
+    * @test
+    */
+   public function get_user_existing_user() {
+       $this->resetAfterTest(true);
+       global $DB;
+       $eventoid = 118200;
+       /*Get user by evento person ID for user ID*/
        $person = $this->locallib->get_user_exposed($eventoid);
        $this->assertEquals($person->email, $this->get_mail_from_person_id($eventoid));
    }
+
+   /* Test that get_user returns an **new** user with given evento */
+   /**
+    * @test
+    */
+   public function get_user_new_user() {
+       $this->resetAfterTest(true);
+       global $DB;
+       $eventoid = 118201;
+       /*Get user by evento person ID for user ID*/
+       $person = $this->locallib->get_user_exposed($eventoid);
+       $this->assertEquals($person->email, $this->get_mail_from_person_id($eventoid));
+   }
+
    /* Test that get_user returns an **no AD account** user with given evento */
    /**
     * @test
     */
    public function get_user_no_ad() {
-
        //Evento ID from User with no AD
        $eventoid = 999999;
 
@@ -293,9 +291,12 @@ class mod_evento_advanced_testcase extends advanced_testcase {
    * @test
    */
    public function get_user_by_username() {
-       $this->get_user();
+    //   $this->get_user();
        /*set username*/
-       $username = "2460181390-1097805571-3701207438-51315@fh-htwchur.ch";
+       $eventoid = 118200;
+        $person = $this->locallib->get_user_exposed($eventoid);
+       var_dump($person);
+       $username = "2460181394-1097805571-3701207438-51000@fh-htwchur.ch";
        /*get user by username*/
        $person = $this->locallib->get_user_by_username_exposed($username);
        var_dump($person);
