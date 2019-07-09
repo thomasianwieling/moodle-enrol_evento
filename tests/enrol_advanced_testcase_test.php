@@ -118,7 +118,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $item->dataformat = 0;
         $item->fieldid = 1;
         $uiditem = $DB->insert_record('user_info_data', $item);
-        $result = $DB->get_records('user_info_data', array('userid' => reset($result)->id));
+        $result = $DB->get_records('user', array('username' => '2460181394-1097805571-3701207438-51000@htwchur.ch'));
         var_dump($result);
         /*create new moodle user*/
         $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20216, 25491, 118201, $evento_status);
