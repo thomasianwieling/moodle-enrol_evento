@@ -544,6 +544,8 @@ class enrol_evento_user_sync
     protected function get_user_by_username($username) {
         global $DB;
         $user = $DB->get_record('user', array('username' => $username));
+        var_dump($username);
+        var_dump($user);
         return ($user == false) ? null : $user;
     }
     /**
