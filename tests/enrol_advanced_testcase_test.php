@@ -300,7 +300,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
        /*get user by username*/
 
        $user = $DB->get_record('user', array('username' => $username));
-       var_dump(($user == false) ? null : $user);
+       var_dump($user);
+       ($user == false) ? null : $user;
        //$person = $this->locallib->get_user_by_username_exposed($username);
        /*username from method equals username*/
      //  $this->assertEquals($person->username, $username);
