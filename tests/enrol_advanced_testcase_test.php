@@ -296,6 +296,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
        /*get user by username*/
        $person = $this->locallib->get_user_by_username_exposed($username);
        var_dump("User by username");
+       
        var_dump($person);
 
        /*username from method equals username*/
