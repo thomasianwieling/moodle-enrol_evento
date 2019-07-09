@@ -298,8 +298,9 @@ global $DB;
        $username = "2460181394-1097805571-3701207438-51000@fh-htwchur.ch";
        /*get user by username*/
        $person = $this->locallib->get_user_by_username_exposed($username);
-       $user = $DB->get_record('user', array('username' => '2460181394-1097805571-3701207438-51000@htwchur.ch')); 
+       $user = $DB->get_record('user', array('username' => '2460181394-1097805571-3701207438-51000@htwchur.ch'));
        var_dump($user);
+       //var_dump($person);
        /*username from method equals username*/
      //  $this->assertEquals($person->username, $username);
    }

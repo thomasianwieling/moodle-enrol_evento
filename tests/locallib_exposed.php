@@ -45,7 +45,7 @@ class enrol_evento_user_sync_exposed extends enrol_evento_user_sync
         return parent::get_eventoid_by_userid($userid);
     }
     public function get_user_by_username_exposed($username) {
-        return parent::get_user_by_username($username);
+        var_dump(parent::get_user_by_username($username));
     }
     public function update_student_enrolment_exposed($eventopersonid, $eventoenrolstate, $instance) {
 
