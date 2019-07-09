@@ -119,7 +119,6 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $item->fieldid = 1;
         $uiditem = $DB->insert_record('user_info_data', $item);
         //$result = $DB->get_records('user', array('username' => '2460181394-1097805571-3701207438-51000@htwchur.ch'));
-        //var_dump($result);
         /*create new moodle user*/
         $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20216, 25491, 118201, $evento_status);
         $evento_person = $builder->add_person("Hanspeter", "Mueller", "hanspeter.mueller@htwchur.ch",  118201, 30040, true, 118201, $evento_personen_anmeldung);
@@ -299,7 +298,7 @@ global $DB;
        $username = "2460181394-1097805571-3701207438-51000@fh-htwchur.ch";
        /*get user by username*/
        $person = $this->locallib->get_user_by_username_exposed($username);
-       $user = $DB->get_records('user', array('username' => '2460181394-1097805571-3701207438-51000@htwchur.ch'));
+       $user = $DB->get_record('user', array('username' => '2460181394-1097805571-3701207438-51000@htwchur.ch')); 
        var_dump($user);
        /*username from method equals username*/
      //  $this->assertEquals($person->username, $username);
