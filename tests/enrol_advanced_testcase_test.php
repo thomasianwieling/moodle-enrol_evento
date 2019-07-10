@@ -282,6 +282,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
    public function get_user_too_many_ad() {
        //Evento ID from User with no AD
        $eventoid = 888888;
+       $person=$this->locallib->get_user_exposed($eventoid);
+       var_dump($person);
 
        //Test thrown exception
        try {
