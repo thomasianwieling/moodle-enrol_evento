@@ -292,9 +292,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
    public function get_user_by_username() {
        /*set username*/
        global $DB;
-       $this->get_user_existing_user();
        $username = "2460181394-1097805571-3701207438-51000@fh-htwchur.ch";
-       $user = $DB->get_record('user', array('username' => $username));
+      $user = $DB->get_records('user', array('lastname' => 'Fritz'));
        /*get user by username*/
 //       $person = $this->locallib->get_user_by_username_exposed($username);
        var_dump($user);
