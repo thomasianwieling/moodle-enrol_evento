@@ -430,7 +430,6 @@ class enrol_evento_user_sync
         if (!empty($adusers)) {
             if (count($adusers) == 1) {
                 $aduser = reset($adusers);
-                var_dump($user);
             } else if (count($adusers) > 1) {
                 throw new moodle_exception(
                     'toomanyadusersfound', 'local_evento', '',
