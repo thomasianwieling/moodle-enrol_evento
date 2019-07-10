@@ -277,6 +277,8 @@ class mod_evento_advanced_testcase extends advanced_testcase {
     */
    public function get_user_too_many_ad() {
        var_dump("too many users");
+       $ad_account = $this->simulator->get_ad_accounts_by_evento_personid(888888, null, null);
+       var_dump($ad_account)
        //Evento ID from User with no AD
        $eventoid = 888888;
        //Test thrown exception
