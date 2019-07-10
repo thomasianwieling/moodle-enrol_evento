@@ -118,13 +118,17 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $item->dataformat = 0;
         $item->fieldid = 1;
         $uiditem = $DB->insert_record('user_info_data', $item);
-        //$result = $DB->get_records('user', array('username' => '2460181394-1097805571-3701207438-51000@htwchur.ch'));
+
         /*create new moodle user*/
         $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20216, 25491, 118201, $evento_status);
         $evento_person = $builder->add_person("Hanspeter", "Mueller", "hanspeter.mueller@htwchur.ch",  118201, 30040, true, 118201, $evento_personen_anmeldung);
         $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118201, 0, 0, 1, "S-1-5-21-2460181395-1097805571-3701207438-51000", "MaFri");
 
-
+        /*create user with to many ad accounts*/
+        $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20216, 25491, 118000, $evento_status);
+        $evento_person = $builder->add_person("Teacher", "Mister", "mister.teacher@stud.htwchur.ch",  888888, 30040, true, 888888, $evento_personen_anmeldung);
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 888888, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51319", "MisTe");
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 888888, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51319", "MisTe");
 
     }
 
@@ -258,6 +262,26 @@ class mod_evento_advanced_testcase extends advanced_testcase {
    public function get_user_no_ad() {
        //Evento ID from User with no AD
        $eventoid = 999999;
+
+       //Test thrown exception
+       try {
+           //If no exception is thrown test have to fail
+           $this->locallib->get_user_exposed($eventoid);
+           $this->fail("Test failed");
+       } catch (moodle_exception $e) {
+           //test thrown exception
+           $this->assertEquals("local_evento/cannotfindaduser (No Active Directory account for 999999)\n\$a contents: ".$eventoid, $e->getMessage());
+       }
+   }
+
+
+   /* Test that get_user returns an **no AD account** user with given evento */
+   /**
+    * @test
+    */
+   public function get_user_too_many_ad() {
+       //Evento ID from User with no AD
+       $eventoid = 888888;
 
        //Test thrown exception
        try {
