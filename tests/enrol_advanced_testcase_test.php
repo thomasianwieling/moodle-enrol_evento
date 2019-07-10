@@ -125,11 +125,25 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 118201, 0, 0, 1, "S-1-5-21-2460181395-1097805571-3701207438-51000", "MaFri");
 
         /*create user with to many ad accounts*/
-        $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20216, 25491, 118000, $evento_status);
-        $evento_person = $builder->add_person("Teacher", "Mister", "mister.teacher@stud.htwchur.ch",  888888, 30040, true, 888888, $evento_personen_anmeldung);
-        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 888888, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51319", "MisTe");
-        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 888888, 0, 1, 0, "S-1-5-21-2460181394-1097805571-3701207438-51319", "MisTe");
+        $evento_personen_anmeldung = $builder->add_personen_anmeldung("2019-02-17T00:00:00.000+01:00", "hoferlis", "2018-06-05T08:58:20.723+02:00", "auto" , 415864, 20216, 25491, 118200, $evento_status);
+        $evento_person = $builder->add_person("Peter", "Fritz", "peter.fritz@htwchur.ch",  888888, 30040, true, 888888, $evento_personen_anmeldung);
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 888888, 0, 0, 1, "S-1-5-21-2460181394-1097805571-3701207438-51030", "PeFri");
+        $ad_account = $builder->add_ad_account(0, "2019-02-17T00:00:00.000+01:00", "2019-02-17T00:00:00.000+01:00", 0, 888888, 0, 0, 1, "S-1-5-21-2460181394-1097805571-3701207438-51030", "PeFri");
 
+        $this->simulator = $builder->service;
+        $this->locallib = new enrol_evento_user_sync_exposed($this->simulator);
+        $this->resetAfterTest(true);
+        $this->create_moodle_course();
+
+        $user1 = $this->getDataGenerator()->create_user(array('email' => 'Peter.fritz@htwchur.ch', 'username' => '2460181394-1097805571-3701207438-51030@fh-htwchur.ch', 'firstname' => 'Peter', 'lastname' => 'Fritz', 'timecreated' => 1548078299, 'timemodified' => 1548078299));
+        $result = $DB->get_records('user', array('lastname' => 'Fritz'));
+
+        $item = new \stdClass();
+        $item->userid = reset($result)->id;
+        $item->data = (string)888888;
+        $item->dataformat = 0;
+        $item->fieldid = 1;
+        $uiditem = $DB->insert_record('user_info_data', $item);
     }
 
     /*Enable plugin method*/
@@ -282,8 +296,6 @@ class mod_evento_advanced_testcase extends advanced_testcase {
    public function get_user_too_many_ad() {
        //Evento ID from User with no AD
        $eventoid = 888888;
-       $person=$this->locallib->get_user_exposed($eventoid);
-       var_dump($person);
 
        //Test thrown exception
        try {
