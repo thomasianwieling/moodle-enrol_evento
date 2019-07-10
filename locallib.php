@@ -427,6 +427,7 @@ class enrol_evento_user_sync
         $trace = new null_progress_trace();
         // Get the Active Directory User by evento ID.
         $adusers = to_array($this->get_ad_user($eventopersonid, $isstudent));
+        var_dump($adusers);
         if (!empty($adusers)) {
             if (count($adusers) == 1) {
                 $aduser = reset($adusers);
