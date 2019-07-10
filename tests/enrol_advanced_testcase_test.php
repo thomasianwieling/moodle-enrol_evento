@@ -109,7 +109,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
         $this->create_moodle_course();
 
-        $user1 = $this->getDataGenerator()->create_user(array('email' => 'max.fritz@htwchur.ch', 'username' => '2460181394-1097805571-3701207438-51000@htwchur.ch', 'firstname' => 'Max', 'lastname' => 'Fritz', 'timecreated' => 1548078299, 'timemodified' => 1548078299));
+        $user1 = $this->getDataGenerator()->create_user(array('email' => 'max.fritz@htwchur.ch', 'username' => '2460181394-1097805571-3701207438-51000@fh-htwchur.ch', 'firstname' => 'Max', 'lastname' => 'Fritz', 'timecreated' => 1548078299, 'timemodified' => 1548078299));
         $result = $DB->get_records('user', array('lastname' => 'Fritz'));
 
         $item = new \stdClass();
