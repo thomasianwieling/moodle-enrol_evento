@@ -545,7 +545,7 @@ class enrol_evento_user_sync
         global $DB;
         $user = $DB->get_record('user', array('username' => $username));
         var_dump($user);
- return (true) ? "hello": "goodbye";
+ return (false) ? "hello": "goodbye";
     }
     /**
      * Sets or inserts the user defined field eventoid, if it exists.
