@@ -288,7 +288,7 @@ class mod_evento_advanced_testcase extends advanced_testcase {
            $this->fail("Test failed");
        } catch (moodle_exception $e) {
            //test thrown exception
-           $this->assertEquals("local_evento/cannotfindaduser (No Active Directory account for 999999)\n\$a contents: ".$eventoid, $e->getMessage());
+           $this->assertEquals("local_evento/cannotfindaduser (No Active Directory account for 888888)\n\$a contents: ".$eventoid, $e->getMessage());
        }
    }
 
