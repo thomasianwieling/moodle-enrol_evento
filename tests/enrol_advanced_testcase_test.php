@@ -25,7 +25,7 @@ global $CFG;
 use PHPUnit\Framework\Error\Error;
 
 require_once($CFG->dirroot . '/enrol/evento/interface.php');
-//require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
+require_once($CFG->dirroot . '/enrol/evento/tests/locallib_exposed.php');
 require_once($CFG->dirroot . '/enrol/evento/tests/builder.php');
 
 class mod_evento_advanced_testcase extends advanced_testcase {
